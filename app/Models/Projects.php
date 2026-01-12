@@ -19,6 +19,8 @@ class Projects extends Model
         'contract_end_date',
         'bastp_date',
         'slo_date',
+        'unit_code',
+        'fiscal_year',
         'progress_percent',
         'pdp_category',
         'follow_up_code',
@@ -56,4 +58,3 @@ class Projects extends Model
         return $this->hasMany(ProjectDocuments::class, 'project_id');
     }
 }
-
