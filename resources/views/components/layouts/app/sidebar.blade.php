@@ -19,6 +19,18 @@
                     wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
+                @if (auth()->user()->role === 'logistik')
+                    <flux:sidebar.item icon="document-plus" :href="route('logistik.upload-sap')"
+                        :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
+                        {{ __('Upload SAP') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (auth()->user()->role === 'konstruksi')
+                    <flux:sidebar.item icon="document-plus" :href="route('konstruksi.my-take-list')"
+                        :current="request()->routeIs('konstruksi.my-take-list')" wire:navigate>
+                        {{ __('My Take List') }}
+                    </flux:sidebar.item>
+                @endif
             </flux:sidebar.group>
         </flux:sidebar.nav>
 

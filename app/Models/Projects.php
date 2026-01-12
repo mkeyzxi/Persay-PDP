@@ -19,12 +19,15 @@ class Projects extends Model
         'contract_end_date',
         'bastp_date',
         'slo_date',
+        'unit_code',
+        'fiscal_year',
         'progress_percent',
         'pdp_category',
         'follow_up_code',
         'constraint_note',
         'status',
         'created_by',
+        'target_completion_date',
     ];
 
     protected $casts = [
@@ -56,4 +59,3 @@ class Projects extends Model
         return $this->hasMany(ProjectDocuments::class, 'project_id');
     }
 }
-

@@ -12,14 +12,12 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
+     * Password statis biar hemat hashing 😄
      */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
+     * Default state
      */
     public function definition(): array
     {
@@ -27,8 +25,11 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('12345678'),
+            'role' => 'user', // default
             'remember_token' => Str::random(10),
+
+            // Fortify / Jetstream safe
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
@@ -36,21 +37,52 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Email belum diverifikasi
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn() => [
             'email_verified_at' => null,
         ]);
     }
 
     /**
-     * Indicate that the model has two-factor authentication configured.
+     * Role states 🌱
+     */
+    public function admin(): static
+    {
+        return $this->state(fn() => [
+            'role' => 'admin',
+        ]);
+    }
+
+    public function logistik(): static
+    {
+        return $this->state(fn() => [
+            'role' => 'logistik',
+        ]);
+    }
+
+    public function akuntansi(): static
+    {
+        return $this->state(fn() => [
+            'role' => 'akuntansi',
+        ]);
+    }
+
+    public function konstruksi(): static
+    {
+        return $this->state(fn() => [
+            'role' => 'konstruksi',
+        ]);
+    }
+
+    /**
+     * Two Factor Auth
      */
     public function withTwoFactor(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn() => [
             'two_factor_secret' => encrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
