@@ -27,6 +27,7 @@ class Projects extends Model
         'constraint_note',
         'status',
         'created_by',
+        'target_completion_date',
     ];
 
     protected $casts = [

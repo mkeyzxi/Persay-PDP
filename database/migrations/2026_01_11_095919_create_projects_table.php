@@ -29,6 +29,7 @@ return new class extends Migration
             $table->decimal('contract_value', 18, 2)->nullable(); // Nilai Kontrak Total
             $table->date('contract_start_date')->nullable();
             $table->date('contract_end_date')->nullable();
+            $table->date('target_completion_date')->nullable();
             $table->date('bastp_date')->nullable();
             $table->date('slo_date')->nullable();
             $table->integer('progress_percent')->default(0);
