@@ -1,6 +1,7 @@
 <?php
 
-use App\Livewire\Konstruksi\MyTakeList;
+// use App\Livewire\Konstruksi\MyTakeList;
+
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Logistik\UploadSap;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
@@ -21,15 +22,34 @@ Route::middleware(['auth', 'is.admin'])
     ->post('/register', [RegisteredUserController::class, 'store'])
     ->name('register.store');
 
-//logistik
-Route::prefix('logistik')->middleware(['auth', 'role:logistik'])->group(function () {
-    Route::get('/upload-sap', UploadSap::class)->name('logistik.upload-sap');
+
+
+
+Route::middleware(['auth'])->group(function () {
+    //logistik
+    Route::prefix('logistik')
+    ->middleware(['auth', 'role:logistik'])
+    ->name('logistik.')
+    ->group(function () {
+        Route::get('/upload-sap', UploadSap::class)->name('upload-sap');
+    });
+    Route::prefix('konstruksi')
+        ->middleware('role:konstruksi')
+        ->name('konstruksi.')
+        ->group(function () {
+            Route::get('/my-take-list', App\Livewire\Konstruksi\MyTakeList::class)
+                ->name('my-take-list');
+        });
+
+    Route::prefix('akuntansi')
+        ->middleware('role:akuntansi')
+        ->name('akuntansi.')
+        ->group(function () {
+            Route::get('/my-take-list', App\Livewire\Akuntansi\MyTakeList::class)
+                ->name('my-take-list');
+        });
 });
-//konstruksi
-Route::prefix('konstruksi')->middleware(['auth', 'role:konstruksi'])->group(function () {
-    Route::get('/my-take-list', MyTakeList::class)->name('konstruksi.my-take-list');
-});
-//akuntansi
+
 
 
 

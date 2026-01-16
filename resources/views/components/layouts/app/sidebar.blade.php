@@ -8,6 +8,7 @@
 <body class="min-h-screen bg-white dark:bg-zinc-800">
     <flux:sidebar sticky collapsible="mobile"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+{{-- sesuaikan --}}
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
             <flux:sidebar.collapse class="lg:hidden" />
@@ -29,6 +30,18 @@
                     <flux:sidebar.item icon="document-plus" :href="route('konstruksi.my-take-list')"
                         :current="request()->routeIs('konstruksi.my-take-list')" wire:navigate>
                         {{ __('My Take List') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (auth()->user()->role === 'akuntansi')
+                    <flux:sidebar.item icon="document-plus" :href="route('akuntansi.my-take-list')"
+                        :current="request()->routeIs('akuntansi.my-take-list')" wire:navigate>
+                        {{ __('My Take List') }}
+                    </flux:sidebar.item>
+                @endif
+                @if (auth()->user()->role === 'admin')
+                    <flux:sidebar.item icon="document-plus" :href="route('register')"
+                        :current="request()->routeIs('register')" wire:navigate>
+                        {{ __('Register') }}
                     </flux:sidebar.item>
                 @endif
             </flux:sidebar.group>

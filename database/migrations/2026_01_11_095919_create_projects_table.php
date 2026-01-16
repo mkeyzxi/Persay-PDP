@@ -35,6 +35,7 @@ return new class extends Migration
             $table->integer('progress_percent')->default(0);
 
             // --- DATA INPUTAN AKUNTANSI ---
+            $table->string('category', 10)->nullable(); // D1.1 - D5
             $table->string('pdp_category', 10)->nullable(); // D1.1 - D5
             $table->string('follow_up_code', 10)->nullable(); // TL-1 dst
             $table->text('constraint_note')->nullable(); // Kendala
