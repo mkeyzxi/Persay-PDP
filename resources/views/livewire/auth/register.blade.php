@@ -1,15 +1,14 @@
 {{-- custom layout for admin --}}
 <x-layouts.app.sidebar :title="'Register User'">
-{{-- <x-layouts.auth>  default layout--}}
 
-
-    <div class="flex flex-col gap-6">
+    <div class="mx-auto flex max-w-md flex-col gap-6">
         <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
-        <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
+        <form method="POST" action="{{ route('register.store') }}"
+            class="flex flex-col gap-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
             @csrf
 
             <flux:input name="name" label="Name" type="text" required autofocus autocomplete="name"
@@ -29,16 +28,18 @@
                 <option value="akuntansi">Akuntansi</option>
             </flux:select>
 
-            <flux:button type="submit" variant="primary" class="w-full">
+            <flux:button type="submit" variant="primary"
+                class="!bg-primary-500 hover:!bg-primary-600 w-full !text-white">
                 Create account
             </flux:button>
         </form>
 
 
 
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
+        <div class="space-x-1 text-center text-sm text-zinc-600 rtl:space-x-reverse dark:text-zinc-400">
             <span>{{ __('Already have an account?') }}</span>
-            <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+            <flux:link :href="route('login')" class="text-primary-500 hover:text-primary-600 dark:text-primary-400"
+                wire:navigate>{{ __('Log in') }}</flux:link>
         </div>
     </div>
-</x-layouts.auth>
+</x-layouts.app.sidebar>

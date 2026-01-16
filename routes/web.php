@@ -4,6 +4,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Logistik\UploadSap;
+use App\Livewire\Logistik\ManualInput;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 // global
 Route::get('/', function () {
@@ -28,11 +29,13 @@ Route::middleware(['auth', 'is.admin'])
 Route::middleware(['auth'])->group(function () {
     //logistik
     Route::prefix('logistik')
-    ->middleware(['auth', 'role:logistik'])
-    ->name('logistik.')
-    ->group(function () {
-        Route::get('/upload-sap', UploadSap::class)->name('upload-sap');
-    });
+        ->middleware(['auth', 'role:logistik'])
+        ->name('logistik.')
+        ->group(function () {
+            Route::get('/upload-sap', UploadSap::class)->name('upload-sap');
+            Route::get('/manual-input', ManualInput::class)->name('manual-input');
+        });
+
     Route::prefix('konstruksi')
         ->middleware('role:konstruksi')
         ->name('konstruksi.')

@@ -8,7 +8,7 @@
 <body class="min-h-screen bg-white dark:bg-zinc-800">
     <flux:sidebar sticky collapsible="mobile"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-{{-- sesuaikan --}}
+        {{-- sesuaikan --}}
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
             <flux:sidebar.collapse class="lg:hidden" />
@@ -24,6 +24,10 @@
                     <flux:sidebar.item icon="document-plus" :href="route('logistik.upload-sap')"
                         :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
                         {{ __('Upload SAP') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-plus" :href="route('logistik.manual-input')"
+                        :current="request()->routeIs('logistik.manual-input')" wire:navigate>
+                        {{ __('Manual Input') }}
                     </flux:sidebar.item>
                 @endif
                 @if (auth()->user()->role === 'konstruksi')
