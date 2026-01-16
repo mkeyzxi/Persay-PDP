@@ -25,6 +25,10 @@
                         :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
                         {{ __('Upload SAP') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-plus" :href="route('logistik.manual-input')"
+                        :current="request()->routeIs('logistik.manual-input')" wire:navigate>
+                        {{ __('Manual Input') }}
+                    </flux:sidebar.item>
                 @endif
                 @if (auth()->user()->role === 'konstruksi')
                     <flux:sidebar.item icon="document-plus" :href="route('konstruksi.my-take-list')"
