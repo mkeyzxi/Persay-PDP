@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Konstruksi;
+namespace App\Livewire\Akuntansi;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -232,7 +232,7 @@ class MyTakeList extends Component
             $uploadedDocuments = ProjectDocuments::where('project_id', $this->project_id)->get();
         }
 
-        return view('livewire.konstruksi.my-take-list', [
+        return view('livewire.akuntansi.my-take-list', [
             'uploadedDocuments' => $uploadedDocuments,
         ]);
     }

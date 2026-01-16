@@ -1,4 +1,8 @@
-<x-layouts.auth>
+{{-- custom layout for admin --}}
+<x-layouts.app.sidebar :title="'Register User'">
+{{-- <x-layouts.auth>  default layout--}}
+
+
     <div class="flex flex-col gap-6">
         <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
 
