@@ -13,7 +13,7 @@ class MyTakeList extends Component
 {
     use WithFileUploads;
 
-    public $project_id = null; // ID Project yang sedang diedit
+    public $project_id = null;
 
     // --- 1. DATA HEADER (Form Atas) ---
     public $spk_number;
@@ -24,11 +24,12 @@ class MyTakeList extends Component
     public $contract_value;
     public $contract_start_date;
     public $contract_end_date;
+    public $category;
+    public $pdp_category;
+    public $follow_up_code;
     public $target_completion_date;
-    public $bastp_date;
-    public $slo_date;
-    public $progress_percent = 0;
     public $constraint_note;
+    public $slo_date;
 
     // --- 2. DATA MATERIAL (Tabel Tengah) ---
     public $material_inputs = [];
@@ -42,13 +43,11 @@ class MyTakeList extends Component
 
     public function mount()
     {
-        // Load semua project yang tersedia untuk dropdown SPK
         $this->availableProjects = Projects::select('id', 'spk_number', 'wbs_number', 'project_name', 'vendor_name')
             ->orderBy('spk_number')
             ->get();
     }
 
-    // Ketika user memilih SPK Number
     public function updatedSpkNumber($value)
     {
         if (empty($value)) {
@@ -56,7 +55,6 @@ class MyTakeList extends Component
             return;
         }
 
-        // Cari project berdasarkan spk_number
         $project = Projects::where('spk_number', $value)->first();
 
         if ($project) {
@@ -64,6 +62,9 @@ class MyTakeList extends Component
         } else {
             $this->resetProjectData();
         }
+
+        // Reset form dokumen saat ganti SPK
+        $this->reset(['doc_type', 'doc_file']);
     }
 
     protected function loadProjectData($project)
@@ -74,15 +75,15 @@ class MyTakeList extends Component
         $this->vendor_name = $project->vendor_name;
         $this->location = $project->location;
         $this->contract_value = $project->contract_value;
-        $this->contract_start_date = $project->contract_start_date?->format('Y-m-d');
-        $this->contract_end_date = $project->contract_end_date?->format('Y-m-d');
-        $this->target_completion_date = $project->target_completion_date;
-        $this->bastp_date = $project->bastp_date?->format('Y-m-d');
-        $this->slo_date = $project->slo_date?->format('Y-m-d');
-        $this->progress_percent = $project->progress_percent ?? 0;
+        $this->contract_start_date = $project->contract_start_date ? \Carbon\Carbon::parse($project->contract_start_date)->format('Y-m-d') : null;
+        $this->contract_end_date = $project->contract_end_date ? \Carbon\Carbon::parse($project->contract_end_date)->format('Y-m-d') : null;
+        $this->category = $project->category ?? null;
+        $this->pdp_category = $project->pdp_category;
+        $this->follow_up_code = $project->follow_up_code;
+        $this->target_completion_date = $project->target_completion_date ? \Carbon\Carbon::parse($project->target_completion_date)->format('Y-m-d') : null;
         $this->constraint_note = $project->constraint_note;
+        $this->slo_date = $project->slo_date ? \Carbon\Carbon::parse($project->slo_date)->format('Y-m-d') : null;
 
-        // Load material items
         $this->loadMaterialItems();
     }
 
@@ -90,22 +91,43 @@ class MyTakeList extends Component
     {
         $this->material_inputs = [];
 
-        // Ambil material issues untuk project ini
         $materialIssues = MaterialIssues::where('project_id', $this->project_id)
             ->with(['items.material'])
             ->get();
 
         foreach ($materialIssues as $issue) {
             foreach ($issue->items as $item) {
+                $quantitySap = $item->quantity_sap ?? 0;
+                $quantityInstalled = $item->quantity_installed ?? 0;
+                $selisih = $quantitySap - $quantityInstalled;
+
                 $this->material_inputs[$item->id] = [
-                    'material_name' => $item->material->name ?? 'N/A',
-                    'material_code' => $item->material->code ?? 'N/A',
-                    'quantity_sap' => $item->quantity_sap,
+                    'posting_date' => $issue->posting_date?->format('Y-m-d'),
+                    'sap_doc_no' => $issue->sap_doc_no,
+                    'material_code' => $item->material->sap_material_code ?? 'N/A',
+                    'material_name' => $item->material->material_description ?? 'N/A',
+                    'quantity_sap' => $quantitySap,
+                    'quantity_installed' => $quantityInstalled,
+                    'selisih' => $selisih,
+                    'val_currency' => $item->val_currency ?? 0,
                     'wbs_element' => $item->wbs_element,
-                    'quantity_installed' => $item->quantity_installed,
                     'asset_number' => $item->asset_number,
                     'remarks' => $item->remarks,
                 ];
+            }
+        }
+    }
+
+    public function updatedMaterialInputs($value, $key)
+    {
+        $parts = explode('.', $key);
+        if (count($parts) >= 2) {
+            $itemId = $parts[0];
+            $field = $parts[1] ?? null;
+
+            if ($field === 'quantity_installed' && isset($this->material_inputs[$itemId])) {
+                $quantitySap = $this->material_inputs[$itemId]['quantity_sap'] ?? 0;
+                $this->material_inputs[$itemId]['selisih'] = $quantitySap - floatval($value);
             }
         }
     }
@@ -120,15 +142,15 @@ class MyTakeList extends Component
         $this->contract_value = null;
         $this->contract_start_date = null;
         $this->contract_end_date = null;
+        $this->category = null;
+        $this->pdp_category = null;
+        $this->follow_up_code = null;
         $this->target_completion_date = null;
-        $this->bastp_date = null;
-        $this->slo_date = null;
-        $this->progress_percent = 0;
         $this->constraint_note = null;
+        $this->slo_date = null;
         $this->material_inputs = [];
     }
 
-    // Fungsi Save Header & Material
     public function saveProgress()
     {
         if (!$this->project_id) {
@@ -136,22 +158,23 @@ class MyTakeList extends Component
             return;
         }
 
-        // 1. Simpan Header Project
         $project = Projects::find($this->project_id);
         $project->update([
+            'project_name' => $this->project_name,
+            'vendor_name' => $this->vendor_name,
             'location' => $this->location,
             'contract_value' => $this->contract_value,
             'contract_start_date' => $this->contract_start_date,
             'contract_end_date' => $this->contract_end_date,
+            'category' => $this->category,
+            'pdp_category' => $this->pdp_category,
+            'follow_up_code' => $this->follow_up_code,
             'target_completion_date' => $this->target_completion_date,
-            'bastp_date' => $this->bastp_date,
-            'slo_date' => $this->slo_date,
-            'progress_percent' => $this->progress_percent,
             'constraint_note' => $this->constraint_note,
+            'slo_date' => $this->slo_date,
             'status' => 'OPEN'
         ]);
 
-        // 2. Simpan Loop Material (Banyak Baris)
         foreach ($this->material_inputs as $itemId => $data) {
             MaterialIssuesItems::where('id', $itemId)->update([
                 'quantity_installed' => $data['quantity_installed'],
@@ -163,9 +186,15 @@ class MyTakeList extends Component
         session()->flash('message', 'Progress berhasil disimpan!');
     }
 
-    // Fungsi Upload Dokumen
     public function uploadDocument()
     {
+        // dd([
+        //     'project_id' => $this->project_id,
+        //     'doc_type' => $this->doc_type,
+        //     'file' => $this->doc_file,
+        //     'user_id' => auth()->id(),
+        // ]);
+
         if (!$this->project_id) {
             session()->flash('error', 'Silakan pilih SPK Number terlebih dahulu!');
             return;
@@ -176,30 +205,34 @@ class MyTakeList extends Component
             'doc_file' => 'required|file|max:10240',
         ]);
 
-        // Simpan File
-        $path = $this->doc_file->store('project_docs/' . $this->spk_number);
+        $path = $this->doc_file->store(
+            'project_docs/' . $this->spk_number,
+            'public'
+        );
 
         ProjectDocuments::create([
             'project_id' => $this->project_id,
             'document_type' => $this->doc_type,
             'file_path' => $path,
             'original_filename' => $this->doc_file->getClientOriginalName(),
-            'uploaded_by' => auth()->id,
+            'uploaded_by' => auth()->id(), // ← FIX UTAMA
+            'uploaded_at' => now(),
         ]);
 
         $this->reset(['doc_type', 'doc_file']);
         session()->flash('message', 'Dokumen berhasil diupload!');
     }
 
+
     public function render()
     {
-        $documents = [];
+        $uploadedDocuments = collect();
         if ($this->project_id) {
-            $documents = ProjectDocuments::where('project_id', $this->project_id)->get();
+            $uploadedDocuments = ProjectDocuments::where('project_id', $this->project_id)->get();
         }
 
         return view('livewire.konstruksi.my-take-list', [
-            'documents' => $documents,
+            'uploadedDocuments' => $uploadedDocuments,
         ]);
     }
 }

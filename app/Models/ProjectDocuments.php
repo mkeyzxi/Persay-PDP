@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProjectDocuments extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'project_id',
         'document_type',
@@ -30,4 +32,3 @@ class ProjectDocuments extends Model
         return $this->belongsTo(User::class, 'uploaded_by');
     }
 }
-

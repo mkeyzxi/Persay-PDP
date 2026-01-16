@@ -22,6 +22,7 @@ class Projects extends Model
         'unit_code',
         'fiscal_year',
         'progress_percent',
+        'category',
         'pdp_category',
         'follow_up_code',
         'constraint_note',
