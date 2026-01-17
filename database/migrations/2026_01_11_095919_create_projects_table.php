@@ -41,7 +41,7 @@ return new class extends Migration
             $table->text('constraint_note')->nullable(); // Kendala
 
             // --- SYSTEM ---
-            $table->enum('status', ['DRAFT', 'OPEN', 'CLOSED'])->default('DRAFT');
+            $table->enum('status', ['sukses', 'gagal', 'draft'])->default('draft');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
