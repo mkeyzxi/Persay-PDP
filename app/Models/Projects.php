@@ -21,7 +21,7 @@ class Projects extends Model
         'slo_date',
         'unit_code',
         'fiscal_year',
-        'progress_percent',
+        'proggress_percent',
         'category',
         'pdp_category',
         'follow_up_code',
@@ -33,7 +33,7 @@ class Projects extends Model
 
     protected $casts = [
         'contract_value' => 'decimal:2',
-        'progress_percent' => 'integer',
+        'proggress_percent' => 'integer',
         'contract_start_date' => 'date',
         'contract_end_date' => 'date',
         'bastp_date' => 'date',

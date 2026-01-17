@@ -32,7 +32,7 @@ return new class extends Migration
             $table->date('target_completion_date')->nullable();
             $table->date('bastp_date')->nullable();
             $table->date('slo_date')->nullable();
-            $table->integer('progress_percent')->default(0);
+            $table->integer('proggress_percent')->default(0);
 
             // --- DATA INPUTAN AKUNTANSI ---
             $table->string('category', 10)->nullable(); // D1.1 - D5
@@ -41,7 +41,7 @@ return new class extends Migration
             $table->text('constraint_note')->nullable(); // Kendala
 
             // --- SYSTEM ---
-            $table->enum('status', ['sukses', 'gagal', 'draft'])->default('draft');
+            $table->enum('status', ['OPEN', 'CLOSED', 'DRAFT'])->default('DRAFT');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
