@@ -193,6 +193,10 @@
                                     class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900">
                                     <div>NILAI PDP</div>
                                 </th>
+                                <th
+                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900">
+                                    <div>Nomor Asset</div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-600 dark:bg-[#2d2d3d]">
@@ -222,6 +226,23 @@
                                         class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-gray-600">
                                         Rp {{ number_format($item['val_currency'] ?? 0, 0, ',', '.') }}
                                     </td>
+                                    <td
+                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-gray-600">
+                                        @if (!empty($item['asset_number']))
+                                            {{-- {{ $item['asset_number'] }} --}}
+                                            <input type="text"
+                                                wire:model="material_inputs.{{ $itemId }}.asset_number"
+                                                class="w-full rounded-lg    px-2 py-1
+                   focus:ring-1 border-0 focus:ring-yellow-500 focus:border-yellow-500 focus:border-2"
+                                                placeholder={{ $item['asset_number'] }}>
+                                        @else
+                                            <input type="text"
+                                                wire:model="material_inputs.{{ $itemId }}.asset_number"
+                                                class="w-full rounded-lg border border-yellow-300 bg-white px-2 py-1
+                   focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
+                                                placeholder="Masukkan Nomor Asset">
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -234,12 +255,13 @@
             @endif
         </div>
 
-        <!-- SECTION 3: Upload Dokumen -->
-        <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
 
 
-            <!-- List Dokumen yang sudah diupload -->
-            @if (count($uploadedDocuments) > 0)
+        <!-- List Dokumen yang sudah diupload -->
+        @if (count($uploadedDocuments) > 0)
+            <!-- SECTION 3: Upload Dokumen -->
+            <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
+
                 <div class="mt-6">
                     <h3 class="mb-3 text-lg font-medium text-gray-800">Dokumen Terupload:</h3>
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -264,8 +286,9 @@
                         @endforeach
                     </div>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
+
 
 
     </div>

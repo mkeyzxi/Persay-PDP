@@ -368,7 +368,7 @@
                                                 class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Kategori</label>
                                             <input type="text" wire:model="mi_new_material_category"
                                                 class="w-full rounded-lg border border-orange-300 bg-white px-4 py-2 dark:border-orange-600 dark:bg-gray-700 dark:text-white"
-                                                placeholder="KABEL">
+                                                placeholder="MDU/NON-MDU/JASA">
                                         </div>
                                     </div>
                                 @endif
@@ -519,7 +519,7 @@
                                         class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Kategori</label>
                                     <input type="text" wire:model="material_category"
                                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                        placeholder="KABEL">
+                                        placeholder="MDU/NON-MDU/JASA">
                                 </div>
                             </div>
                         @endif
@@ -767,7 +767,7 @@
                                             class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Kategori</label>
                                         <input type="text" wire:model="item_new_material_category"
                                             class="w-full rounded-lg border border-purple-300 bg-white px-4 py-2 dark:border-purple-600 dark:bg-gray-700 dark:text-white"
-                                            placeholder="KABEL">
+                                            placeholder="MDU/NON-MDU/JASA">
                                     </div>
                                 </div>
                             @endif

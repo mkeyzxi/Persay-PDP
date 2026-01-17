@@ -156,6 +156,37 @@
                     <input type="date" wire:model="slo_date"
                         class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
                 </div>
+
+
+
+                   @if($spk_number !== null)
+    <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
+        <div class="flex justify-between items-center mb-1">
+            <label class="text-sm font-medium text-green-800">Progress</label>
+            <span class="text-sm font-bold text-green-700">
+                {{ $proggress_percent }}%
+            </span>
+        </div>
+
+        <input
+            type="range"
+            min="0"
+            max="100"
+            wire:model.live="proggress_percent"
+            class="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+            value="{{ $proggress_percent }}"
+        >
+
+        <div class="flex justify-between text-xs text-green-600 mt-1">
+            <span>0%</span>
+            <span>50%</span>
+            <span>100%</span>
+        </div>
+    </div>
+@endif
+
+
+                </div>
             </div>
 
             <!-- Kendala Note -->

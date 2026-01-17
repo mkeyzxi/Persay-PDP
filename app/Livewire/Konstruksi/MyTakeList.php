@@ -26,6 +26,7 @@ class MyTakeList extends Component
     public $contract_end_date;
     public $category;
     public $pdp_category;
+    public $proggress_percent = 0;
     public $follow_up_code;
     public $target_completion_date;
     public $constraint_note;
@@ -80,6 +81,7 @@ class MyTakeList extends Component
         $this->contract_end_date = $project->contract_end_date ? \Carbon\Carbon::parse($project->contract_end_date)->format('Y-m-d') : null;
         $this->category = $project->category ?? null;
         $this->pdp_category = $project->pdp_category;
+        $this->proggress_percent = $project->proggress_percent;
         $this->follow_up_code = $project->follow_up_code;
         $this->target_completion_date = $project->target_completion_date ? \Carbon\Carbon::parse($project->target_completion_date)->format('Y-m-d') : null;
         $this->constraint_note = $project->constraint_note;
@@ -145,6 +147,7 @@ class MyTakeList extends Component
         $this->contract_end_date = null;
         $this->category = null;
         $this->pdp_category = null;
+        $this->proggress_percent = 0;
         $this->follow_up_code = null;
         $this->target_completion_date = null;
         $this->constraint_note = null;
@@ -169,6 +172,7 @@ class MyTakeList extends Component
             'contract_end_date' => $this->contract_end_date,
             'category' => $this->category,
             'pdp_category' => $this->pdp_category,
+            'proggress_percent' => $this->proggress_percent,
             'follow_up_code' => $this->follow_up_code,
             'target_completion_date' => $this->target_completion_date,
             'constraint_note' => $this->constraint_note,
