@@ -35,6 +35,10 @@
                         :current="request()->routeIs('konstruksi.my-take-list')" wire:navigate>
                         {{ __('My Take List') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-plus" :href="route('konstruksi.real-work')"
+                        :current="request()->routeIs('konstruksi.real-work')" wire:navigate>
+                        {{ __('Real Work') }}
+                    </flux:sidebar.item>
                 @endif
                 @if (auth()->user()->role === 'akuntansi')
                     <flux:sidebar.item icon="document-plus" :href="route('akuntansi.my-take-list')"

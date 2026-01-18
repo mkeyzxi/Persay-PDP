@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-7xl">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Manual Input - Logistik</h1>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Manual Input</h1>
             <p class="mt-2 text-gray-600 dark:text-gray-400">Input data Project, Material Issue, Material, dan Item
                 secara manual</p>
         </div>
