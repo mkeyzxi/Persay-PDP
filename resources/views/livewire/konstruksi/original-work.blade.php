@@ -56,7 +56,7 @@
                     <input type="text" wire:model="project_name"
                         class="w-full rounded-lg border border-yellow-300 bg-yellow-100 px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
                         placeholder="Terisi Otomatis" readonly>
-   <span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Nama Vendor -->
@@ -65,7 +65,7 @@
                     <input type="text" wire:model="vendor_name"
                         class="w-full rounded-lg border border-yellow-300 bg-yellow-100 px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
                         placeholder="Terisi Otomatis" readonly>
-<span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Lokasi -->
@@ -74,7 +74,7 @@
                     <input type="text" wire:model="location"
                         class="w-full rounded-lg border border-yellow-300 bg-yellow-100 px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
                         placeholder="Terisi Otomatis" readonly>
-<span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Nilai Kontrak -->
@@ -83,7 +83,7 @@
                     <input type="number" wire:model="contract_value"
                         class="w-full rounded-lg border border-yellow-300 bg-yellow-100 px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
                         placeholder="Terisi Otomatis" readonly>
-<span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Tanggal Kontrak -->
@@ -91,7 +91,7 @@
                     <label class="mb-1 block text-sm font-medium text-yellow-800">Tanggal Kontrak</label>
                     <input type="text" placeholder="Terisi Otomatis" wire:model="contract_start_date" readonly
                         class="w-full rounded-lg border border-yellow-300 bg-yellow-100 px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500">
-<span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Tanggal Selesai -->
@@ -99,53 +99,53 @@
                     <label class="mb-1 block text-sm font-medium text-yellow-800">Tanggal Selesai</label>
                     <input type="text" wire:model="contract_end_date" placeholder="Terisi Otomatis" readonly
                         class="w-full rounded-lg border border-yellow-300 bg-yellow-100 px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500">
-<span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-yellow-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Kategori -->
                 <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
                     <label class="mb-1 block text-sm font-medium text-green-800">Kategori</label>
-                    <input wire:model="category" readonly
-                       placeholder="Terisi Otomatis" class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                    <input wire:model="category" readonly placeholder="Terisi Otomatis"
+                        class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
 
                     </input>
-<span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Kategori PDP -->
                 <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
                     <label class="mb-1 block text-sm font-medium text-green-800">Kategori PDP</label>
-                    <input wire:model="pdp_category" readonly
-                      placeholder="Terisi Otomatis"  class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                    <input wire:model="pdp_category" readonly placeholder="Terisi Otomatis"
+                        class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
 
                     </input>
-<span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Tindak Lanjut -->
                 <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
                     <label class="mb-1 block text-sm font-medium text-green-800">Tindak Lanjut</label>
-                    <input wire:model="follow_up_code" readonly
-                     placeholder="Terisi Otomatis"   class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                    <input wire:model="follow_up_code" readonly placeholder="Terisi Otomatis"
+                        class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
 
                     </input>
-<span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Target Penyelesaian -->
                 <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
                     <label class="mb-1 block text-sm font-medium text-green-800">Target Penyelesaian</label>
-                    <input type="text" wire:model="target_completion_date" readonly
-                     placeholder="Terisi Otomatis"   class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
-<span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
+                    <input type="text" wire:model="target_completion_date" readonly placeholder="Terisi Otomatis"
+                        class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                    <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Tanggal SLO -->
                 <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
                     <label class="mb-1 block text-sm font-medium text-green-800">Tanggal SLO</label>
-                    <input type="text" wire:model="slo_date" readonly
-                      placeholder="Terisi Otomatis"  class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
-<span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
+                    <input type="text" wire:model="slo_date" readonly placeholder="Terisi Otomatis"
+                        class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                    <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
                 </div>
 
 
@@ -161,42 +161,41 @@
                             <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
                     </div>
                 </div> --}}
-<div class="rounded-xl border-2 border-green-500 bg-green-50 p-4 shadow-sm">
-    <!-- Header -->
-    <div class="mb-2 flex items-center justify-between">
-        <span class="text-sm font-medium text-green-800">
-            Progress Pekerjaan
-        </span>
+                <div class="rounded-xl border-2 border-green-500 bg-green-50 p-4 shadow-sm">
+                    <!-- Header -->
+                    <div class="mb-2 flex items-center justify-between">
+                        <span class="text-sm font-medium text-green-800">
+                            Progress Pekerjaan
+                        </span>
 
-        <span class="text-lg font-bold text-green-700">
-            {{ $proggress_percent ?? 0 }}%
-        </span>
-    </div>
+                        <span class="text-lg font-bold text-green-700">
+                            {{ $proggress_percent ?? 0 }}%
+                        </span>
+                    </div>
 
-    <!-- Progress Bar -->
-    <div class="h-3 w-full overflow-hidden rounded-full bg-green-200">
-        <div
-            class="h-full rounded-full bg-green-500 transition-all duration-700 ease-out"
-            style="width: {{ $proggress_percent ?? 0 }}%">
-        </div>
-    </div>
+                    <!-- Progress Bar -->
+                    <div class="h-3 w-full overflow-hidden rounded-full bg-green-200">
+                        <div class="h-full rounded-full bg-green-500 transition-all duration-700 ease-out"
+                            style="width: {{ $proggress_percent ?? 0 }}%">
+                        </div>
+                    </div>
 
-    <!-- Footer -->
-    <div class="mt-2 flex justify-between text-xs text-green-700">
-        <span>0%</span>
-        <span>100%</span>
-    </div>
+                    <!-- Footer -->
+                    <div class="mt-2 flex justify-between text-xs text-green-700">
+                        <span>0%</span>
+                        <span>100%</span>
+                    </div>
 
-    @if ($spk_number)
-        <p class="mt-2 text-xs italic text-green-600">
-            Terisi otomatis dari data SPK
-        </p>
-    @else
-        <p class="mt-2 text-xs italic text-gray-400">
-            Pilih SPK untuk melihat progress
-        </p>
-    @endif
-</div>
+                    @if ($spk_number)
+                        <p class="mt-2 text-xs italic text-green-600">
+                            Terisi otomatis dari data SPK
+                        </p>
+                    @else
+                        <p class="mt-2 text-xs italic text-gray-400">
+                            Pilih SPK untuk melihat progress
+                        </p>
+                    @endif
+                </div>
 
                 <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
                     <label class="mb-1 block text-sm font-medium text-green-800">Tanggal BASTP</label>
@@ -212,7 +211,7 @@
                 <textarea wire:model="constraint_note" rows="3"
                     class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500"
                     placeholder="Terisi Otomatis" readonly></textarea>
-<span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
+                <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
             </div>
         </div>
 
@@ -303,15 +302,18 @@
     </div>
     <!-- Save Button -->
     <div class="flex justify-end mb-5">
+
         <button wire:click="saveProgress"
+
             class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
             wire:loading.attr="disabled">
             <span wire:loading.remove wire:target="saveProgress">
 
-Nyatakan Selesai
+                Nyatakan Selesai
             </span>
             <span wire:loading wire:target="saveProgress">Menyimpan...</span>
         </button>
+
     </div>
     <!-- SECTION 3: Upload Dokumen -->
     <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">

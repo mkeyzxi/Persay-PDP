@@ -35,7 +35,9 @@ class OriginalWork extends Component
     public $slo_date;
     public $bastp_date;
 
-
+    //variabel finish project
+    public $selisih;
+    public bool $finish_project = false;
     // --- 2. DATA MATERIAL (Tabel Tengah) ---
     public $material_inputs = [];
 
@@ -65,8 +67,6 @@ class OriginalWork extends Component
         } else {
             $this->resetProjectData();
         }
-
-
     }
 
     protected function loadProjectData($project)
@@ -94,7 +94,7 @@ class OriginalWork extends Component
     protected function loadMaterialItems()
     {
         $this->material_inputs = [];
-
+        $this->selisih = 0;
         $materialIssues = MaterialIssues::where('project_id', $this->project_id)
             ->with(['items.material'])
             ->get();
@@ -104,7 +104,7 @@ class OriginalWork extends Component
                 $quantitySap = $item->quantity_sap ?? 0;
                 $quantityInstalled = $item->quantity_installed ?? 0;
                 $selisih = $quantitySap - $quantityInstalled;
-
+                $this->selisih += $selisih;
                 $this->material_inputs[$item->id] = [
                     'posting_date' => $issue->posting_date?->format('Y-m-d'),
                     'sap_doc_no' => $issue->sap_doc_no,
@@ -132,6 +132,9 @@ class OriginalWork extends Component
             if ($field === 'quantity_installed' && isset($this->material_inputs[$itemId])) {
                 $quantitySap = $this->material_inputs[$itemId]['quantity_sap'] ?? 0;
                 $this->material_inputs[$itemId]['selisih'] = $quantitySap - floatval($value);
+                // dd($this->material_inputs[$itemId]['selisih']);
+                $this->selisih = collect($this->material_inputs)
+                    ->sum(fn($item) => $item['selisih']);
             }
         }
     }
@@ -163,25 +166,32 @@ class OriginalWork extends Component
             session()->flash('error', 'Silakan pilih SPK Number terlebih dahulu!');
             return;
         }
+        if (round($this->selisih, 2) == 0 && $this->proggress_percent >= 100) {
 
-        $project = Projects::find($this->project_id);
-        $project->update([
+            $this->finish_project = true;
+            $project = Projects::find($this->project_id);
+            $project->update([
 
-            'proggress_percent' => $this->proggress_percent,
+                'proggress_percent' => $this->proggress_percent,
 
-            'bastp_date' => $this->bastp_date,
-            'status' => 'OPEN'
-        ]);
-
-        foreach ($this->material_inputs as $itemId => $data) {
-            MaterialIssuesItems::where('id', $itemId)->update([
-                'quantity_installed' => $data['quantity_installed'],
-                'asset_number' => $data['asset_number'] ?? null,
-                'remarks' => $data['remarks'] ?? null,
+                'bastp_date' => $this->bastp_date,
+                'status' => 'OPEN'
             ]);
-        }
 
-        session()->flash('message', 'Pekerjaan berhasil disimpan!');
+            foreach ($this->material_inputs as $itemId => $data) {
+                MaterialIssuesItems::where('id', $itemId)->update([
+                    'quantity_installed' => $data['quantity_installed'],
+                    'asset_number' => $data['asset_number'] ?? null,
+                    'remarks' => $data['remarks'] ?? null,
+                ]);
+            }
+
+
+            session()->flash('message', 'Pekerjaan berhasil disimpan!');
+        } else {
+            session()->flash('error', 'Untuk menyelesaikan proyek, pastikan selisih material adalah 0 dan progress adalah 100%!');
+            return;
+        }
     }
 
 
