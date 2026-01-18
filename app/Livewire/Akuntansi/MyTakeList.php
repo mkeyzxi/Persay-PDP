@@ -186,6 +186,18 @@ class MyTakeList extends Component
 
         session()->flash('message', 'Progress berhasil disimpan!');
     }
+    public function updateMaterialItem($itemId)
+    {
+        if (!isset($this->material_inputs[$itemId])) {
+            return;
+        }
+
+        MaterialIssuesItems::where('id', $itemId)->update([
+            'asset_number' => $this->material_inputs[$itemId]['asset_number'] ?? null,
+        ]);
+
+        session()->flash('message', "Asset number item $itemId berhasil disimpan");
+    }
 
     public function uploadDocument()
     {

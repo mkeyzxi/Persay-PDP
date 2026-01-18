@@ -36,7 +36,7 @@
                         {{ number_format($p->saldo_pdp, 0, ',', '.') }}
                     </td>
                     <td class="px-4 py-3 text-center">
-                        {{ $p->umur_hari }} Hari
+                        {{ round($p->umur_hari) }} Hari
                     </td>
                     <td class="px-4 py-3 text-center">
                         <span
