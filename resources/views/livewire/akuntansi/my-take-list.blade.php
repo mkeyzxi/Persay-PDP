@@ -229,18 +229,19 @@
                                     <td
                                         class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-gray-600">
                                         @if (!empty($item['asset_number']))
-                                            {{-- {{ $item['asset_number'] }} --}}
                                             <input type="text"
-                                                wire:model="material_inputs.{{ $itemId }}.asset_number"
-                                                class="w-full rounded-lg    px-2 py-1
-                   focus:ring-1 border-0 focus:ring-yellow-500 focus:border-yellow-500 focus:border-2"
-                                                placeholder={{ $item['asset_number'] }}>
+                                                wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
+                                                wire:blur="updateMaterialItem({{ $itemId }})"
+                                                class="w-full rounded-lg border border-green-300 bg-white px-4 py-2
+           focus:border-green-500 focus:ring-2 focus:ring-green-500"
+                                                placeholder="Masukkan Nomor Asset" />
                                         @else
                                             <input type="text"
-                                                wire:model="material_inputs.{{ $itemId }}.asset_number"
-                                                class="w-full rounded-lg border border-yellow-300 bg-white px-2 py-1
-                   focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
-                                                placeholder="Masukkan Nomor Asset">
+                                                wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
+                                                wire:blur="updateMaterialItem({{ $itemId }})"
+                                                class="w-full rounded-lg border border-green-300 bg-green-200 px-4 py-2
+           focus:border-green-500 focus:ring-2 focus:ring-green-500"
+                                                placeholder="Masukkan Nomor Asset" />
                                         @endif
                                     </td>
                                 </tr>

@@ -11,9 +11,10 @@
         <div
             class="flex w-full max-w-md flex-col gap-4 rounded-2xl bg-white p-8 shadow-xl dark:bg-[#2d2d3d] dark:shadow-2xl">
             <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
-                <span class="bg-primary-500 mb-1 flex h-12 w-12 items-center justify-center rounded-xl">
+                {{-- Logo LAravel --}}
+                {{-- <span class="bg-primary-500 mb-1 flex h-12 w-12 items-center justify-center rounded-xl">
                     <x-app-logo-icon class="size-8 fill-current text-white" />
-                </span>
+                </span> --}}
                 <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
             </a>
             <div class="flex flex-col gap-6">

@@ -186,16 +186,16 @@
 @endif
 
 
-                </div>
+</div>
+<!-- Kendala Note -->
+<div class="mt-4 rounded-lg border-2 border-green-500 bg-green-50 p-3">
+    <label class="mb-1 block text-sm font-medium text-green-800">Kendala / Catatan</label>
+    <textarea wire:model="constraint_note" rows="3"
+        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500"
+        placeholder="Jelaskan kendala yang dihadapi (jika ada)"></textarea>
+</div>
             </div>
 
-            <!-- Kendala Note -->
-            <div class="mt-4 rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                <label class="mb-1 block text-sm font-medium text-green-800">Kendala / Catatan</label>
-                <textarea wire:model="constraint_note" rows="3"
-                    class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                    placeholder="Jelaskan kendala yang dihadapi (jika ada)"></textarea>
-            </div>
         </div>
 
         <!-- SECTION 2: Material Table -->

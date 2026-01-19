@@ -2,6 +2,7 @@
 
 // use App\Livewire\Konstruksi\MyTakeList;
 
+use App\Livewire\Konstruksi\OriginalWork;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Logistik\UploadSap;
 use App\Livewire\Logistik\ManualInput;
@@ -42,6 +43,13 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/my-take-list', App\Livewire\Konstruksi\MyTakeList::class)
                 ->name('my-take-list');
+        });
+Route::prefix('konstruksi')
+        ->middleware('role:konstruksi')
+        ->name('konstruksi.')
+        ->group(function () {
+            Route::get('/real-work', OriginalWork::class)
+                ->name('real-work');
         });
 
     Route::prefix('akuntansi')
