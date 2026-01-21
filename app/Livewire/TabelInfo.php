@@ -4,19 +4,22 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
+use App\Models\Projects;
 use Livewire\WithPagination;
-use App\Models\Projects; // Pastikan nama Model sesuai (Project atau Projects)
 
-class TabelRekap extends Component
+class TabelInfo extends Component
 {
     use WithPagination;
 
-    //usepagination]
+    public $search  = '';
+
+
+
     public function render()
     {
 
-        $projects = Projects::with('materialIssues.items')->latest()
-            ->paginate(5);
+        $projects = Projects::with('materialIssues.items')->search($this->search)->latest()
+            ->paginate(40);
         $projects->getCollection()->transform(function ($project) {
 
             $saldoPdp = $project->materialIssues
@@ -66,7 +69,7 @@ class TabelRekap extends Component
                 'status' => $project->status,
             ];
         });
-        return view('livewire.tabel-rekap', [
+        return view('livewire.tabel-info', [
             'projects' => $projects,
         ]);
     }

@@ -59,4 +59,15 @@ class Projects extends Model
     {
         return $this->hasMany(ProjectDocuments::class, 'project_id');
     }
+
+    public function scopeSearch($projects, $search)
+    {
+        if (!$search) return $projects;
+
+        return $projects->where(function ($q) use ($search) {
+            $q->where('spk_number', 'like', "%{$search}%")
+                ->orWhere('project_name', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
+        });
+    }
 }
