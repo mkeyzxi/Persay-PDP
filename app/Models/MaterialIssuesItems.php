@@ -33,5 +33,11 @@ class MaterialIssuesItems extends Model
     {
         return $this->belongsTo(Material::class, 'material_id');
     }
+    public function issue()
+    {
+        return $this->belongsTo(
+            MaterialIssues::class,
+            'material_issue_id'
+        );
+    }
 }
-

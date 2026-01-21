@@ -196,8 +196,35 @@ class MyTakeList extends Component
             'asset_number' => $this->material_inputs[$itemId]['asset_number'] ?? null,
         ]);
 
+
         session()->flash('message', "Asset number item $itemId berhasil disimpan");
     }
+    public function updateStatusProject()
+    {
+        if (!$this->project_id) {
+            return;
+        }
+
+        $hasEmptyAsset = MaterialIssuesItems::whereHas('issue', function ($q) {
+            $q->where('project_id', $this->project_id);
+        })
+            ->where(function ($q) {
+                $q->whereNull('asset_number')
+                    ->orWhere('asset_number', '');
+            })
+            ->exists();
+
+        if (!$hasEmptyAsset) {
+            Projects::where('id', $this->project_id)
+                ->update(['status' => 'CLOSED']);
+
+            session()->flash('message', 'Semua asset number lengkap. Project ditutup 🎯');
+        } else {
+            session()->flash('error', 'Masih ada asset number yang belum diisi.');
+        }
+    }
+
+
 
     public function uploadDocument()
     {
