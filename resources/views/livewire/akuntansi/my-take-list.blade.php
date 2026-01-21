@@ -233,13 +233,13 @@
                                             <input type="text"
                                                 wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
                                                 wire:blur="updateMaterialItem({{ $itemId }})"
-                                                class="w-full rounded-lg border border-green-300 bg-white px-4 py-2
+                                                class=" w-[150px] rounded-lg border border-green-300 bg-white px-4 py-2
            focus:border-green-500 focus:ring-2 focus:ring-green-500" />
                                         @else
                                             <input type="text"
                                                 wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
                                                 wire:blur="updateMaterialItem({{ $itemId }})"
-                                                class="w-full rounded-lg border border-green-300 bg-green-200 px-4 py-2
+                                                class=" w-[150px] rounded-lg border border-green-300 bg-green-200 px-4 py-2
            focus:border-green-500 focus:ring-2 focus:ring-green-500" />
                                         @endif
                                     </td>
@@ -261,7 +261,7 @@
         <div class="flex justify-end mb-5">
 
             <button wire:click="updateStatusProject"  @disabled(blank($spk_number)) wire:loading.attr="disabled"
-                class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
+                class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
                 <span wire:loading.remove wire:target="updateStatusProject">
                     Nyatakan Selesai
                 </span>

@@ -2,70 +2,72 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use App\Models\Projects; // Pastikan nama Model sesuai (Project atau Projects)
 use Carbon\Carbon;
+use Livewire\Component;
+use Livewire\WithPagination;
+use App\Models\Projects; // Pastikan nama Model sesuai (Project atau Projects)
 
 class TabelRekap extends Component
 {
+    use WithPagination;
+
+    //usepagination]
     public function render()
     {
-        // Ambil data project beserta relasi ke material issue -> items untuk hitung saldo
-        $projects = Projects::with('materialIssues.items')->get()->map(function ($project) {
 
-            // 1. HITUNG SALDO PDP (Sum dari val_currency semua item)
-            // Mengambil semua material issue, lalu mengambil items-nya, lalu menjumlahkan val_currency
-            $saldoPdp = $project->materialIssues->flatMap(function ($mi) {
-                return $mi->items;
-            })->sum('val_currency');
+        $projects = Projects::with('materialIssues.items')
+            ->paginate(20);
+        $projects->getCollection()->transform(function ($project) {
 
-            // 2. HITUNG UMUR (Hari & Bulan)
-            $start = $project->contract_start_date ? Carbon::parse($project->contract_start_date) : null;
+            $saldoPdp = $project->materialIssues
+                ->flatMap(fn($mi) => $mi->items)
+                ->sum('val_currency');
+
+            $start = $project->contract_start_date
+                ? Carbon::parse($project->contract_start_date)
+                : null;
+
             $now = Carbon::now();
-
-            $umurHari = $start ? $start->diffInDays($now) : 0;
+            $umurHari  = $start ? $start->diffInDays($now) : 0;
             $umurBulan = $start ? $start->diffInMonths($now) : 0;
 
-            // 3. TENTUKAN KLASTER UMUR
-            $klaster = '-';
             if ($umurBulan < 3) {
                 $klaster = '< 3 Bulan';
-            } elseif ($umurBulan >= 3 && $umurBulan <= 6) {
+            } elseif ($umurBulan <= 6) {
                 $klaster = '3 - 6 Bulan';
-            } elseif ($umurBulan > 6 && $umurBulan <= 12) {
+            } elseif ($umurBulan <= 12) {
                 $klaster = '6 - 12 Bulan';
-            } elseif ($umurBulan > 12) {
+            } else {
                 $klaster = '> 1 Tahun';
             }
 
-            // 4. MAPPING KETERANGAN KATEGORI
-            $ketKategori = $this->getKeteranganKategori($project->pdp_category);
-            // MAPPING KETERANGAN TINDAK LANJUT
-            $ketTindakLanjut = $this->getKeteranganTindakLanjut($project->follow_up_code);
-            // Return data custom ke view
             return (object) [
                 'spk_number' => $project->spk_number,
                 'project_name' => $project->project_name,
                 'contract_end_date' => $project->contract_end_date,
+
                 'saldo_pdp' => $saldoPdp,
                 'umur_hari' => $umurHari,
+                'umur_bulan' => $umurBulan,
+                'klaster_umur' => $klaster,
+
                 'proggress_percent' => $project->proggress_percent,
                 'pdp_category' => $project->pdp_category,
-                'ket_kategori' => $ketKategori,
+                'ket_kategori' => $this->getKeteranganKategori($project->pdp_category),
+
                 'bastp_date' => $project->bastp_date,
                 'slo_date' => $project->slo_date,
-                'ket_tindak_lanjut' => $ketTindakLanjut,
                 'constraint_note' => $project->constraint_note,
+
                 'follow_up_code' => $project->follow_up_code,
+                'ket_tindak_lanjut' => $this->getKeteranganTindakLanjut($project->follow_up_code),
+
                 'target_completion_date' => $project->target_completion_date,
-                'remark' => '', // Belum ada kolom remark spesifik di DB
-                'klaster_umur' => $klaster,
-                'umur_bulan' => $umurBulan,
+                'status' => $project->status,
             ];
         });
-
         return view('livewire.tabel-rekap', [
-            'projects' => $projects
+            'projects' => $projects,
         ]);
     }
 

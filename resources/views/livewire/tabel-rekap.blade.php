@@ -31,6 +31,7 @@
                     </td>
                     <td class="px-4 py-3">
                         {{ $p->contract_end_date ? \Carbon\Carbon::parse($p->contract_end_date)->format('d/m/Y') : '-' }}
+                        {{-- {{ $p->contract_end_date ? \Carbon\Carbon::createFromFormat('Y-m-d', $p->contract_end_date)->format('d/m/Y') : '-' }} --}}
                     </td>
                     <td class="px-4 py-3 text-right font-mono font-medium text-gray-800">
                         {{ number_format($p->saldo_pdp, 0, ',', '.') }}
@@ -69,8 +70,8 @@
                     <td class="px-4 py-3">
                         {{ $p->target_completion_date ? \Carbon\Carbon::parse($p->target_completion_date)->format('d/m/Y') : '-' }}
                     </td>
-                    <td class="px-4 py-3 text-gray-400 italic">
-                        {{ $p->remark ?? '-' }}
+                    <td class="px-4 py-3 italic   {{ $p->status == 'CLOSED' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }} {{ $p->status == 'OPEN' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800' }}">
+                        {{ $p->status ?? '-' }}
                     </td>
                     <td class="px-4 py-3 text-center">
                         {{ $p->klaster_umur }}
@@ -93,4 +94,13 @@
             @endforelse
         </tbody>
     </table>
+ <div>
+    <div>
+        @foreach ($projects as $project)
+            <!-- ... -->
+        @endforeach
+    </div>
+
+    {{ $projects->links() }}
+</div>
 </div>
