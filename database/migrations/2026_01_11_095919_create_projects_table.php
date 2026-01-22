@@ -41,7 +41,8 @@ return new class extends Migration
             $table->text('constraint_note')->nullable(); // Kendala
 
             // --- SYSTEM ---
-            $table->enum('status', ['OPEN', 'CLOSED', 'DRAFT'])->default('DRAFT');
+            // Project Status: Lancar/Selesai jika status closed dan pdp_category d1.1, macet jika status open dan pdp_category d3.2, project batal total jika status canceled;:
+            $table->enum('status', ['OPEN', 'CLOSED', 'DRAFT', 'CANCELED'])->default('DRAFT');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });

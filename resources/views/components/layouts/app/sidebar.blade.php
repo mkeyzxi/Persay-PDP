@@ -52,6 +52,10 @@
                         {{ __('Register') }}
                     </flux:sidebar.item>
                 @endif
+ <flux:sidebar.item icon="document-plus" :href="route('tabel-info')"
+                        :current="request()->routeIs('tabel-info')" wire:navigate>
+                        {{ __('Tabel Info') }}
+                    </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 

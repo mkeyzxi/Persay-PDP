@@ -2,11 +2,14 @@
 
 // use App\Livewire\Konstruksi\MyTakeList;
 
-use App\Livewire\Konstruksi\OriginalWork;
-use Illuminate\Support\Facades\Route;
+use Laravel\Prompts\Table;
+use App\Livewire\TabelInfo;
 use App\Livewire\Logistik\UploadSap;
+use Illuminate\Support\Facades\Route;
 use App\Livewire\Logistik\ManualInput;
+use App\Livewire\Konstruksi\OriginalWork;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
+
 // global
 Route::get('/', function () {
     return view('welcome');
@@ -15,6 +18,11 @@ Route::get('/', function () {
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::get('/tabel-info', TabelInfo::class)
+    ->middleware(['auth', 'verified'])
+    ->name('tabel-info');
+
 // admin
 Route::middleware(['auth', 'is.admin'])
     ->get('/register', [RegisteredUserController::class, 'create'])

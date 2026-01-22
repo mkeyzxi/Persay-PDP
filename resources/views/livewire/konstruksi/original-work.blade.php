@@ -6,20 +6,7 @@
             <p class="mt-2 text-gray-600 dark:text-gray-400">Kelola pekerjaan nyata proyek dan material</p>
         </div>
 
-        <!-- Flash Messages -->
-        @if (session()->has('message'))
-            <div
-                class="mb-4 rounded-lg border border-green-400 bg-green-100 p-4 text-green-700 dark:border-green-600 dark:bg-green-900/30 dark:text-green-400">
-                {{ session('message') }}
-            </div>
-        @endif
 
-        @if (session()->has('error'))
-            <div
-                class="mb-4 rounded-lg border border-red-400 bg-red-100 p-4 text-red-700 dark:border-red-600 dark:bg-red-900/30 dark:text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- SECTION 1: Pilih SPK & Header Info -->
         <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
@@ -217,7 +204,20 @@
 
 
     </div>
+    <!-- Flash Messages -->
+    @if (session()->has('message'))
+        <div
+            class="mb-4 rounded-lg border border-green-400 bg-green-100 p-4 text-green-700 dark:border-green-600 dark:bg-green-900/30 dark:text-green-400">
+            {{ session('message') }}
+        </div>
+    @endif
 
+    @if (session()->has('error'))
+        <div
+            class="mb-4 rounded-lg border border-red-400 bg-red-100 p-4 text-red-700 dark:border-red-600 dark:bg-red-900/30 dark:text-red-400">
+            {{ session('error') }}
+        </div>
+    @endif
     <!-- SECTION 2: Material Table -->
     <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
         <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white">
@@ -304,7 +304,6 @@
     <div class="flex justify-end mb-5">
 
         <button wire:click="saveProgress"
-
             class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
             wire:loading.attr="disabled">
             <span wire:loading.remove wire:target="saveProgress">

@@ -6,20 +6,7 @@
             <p class="mt-2 text-gray-600 dark:text-gray-400">Kelola progress proyek dan material</p>
         </div>
 
-        <!-- Flash Messages -->
-        @if (session()->has('message'))
-            <div
-                class="mb-4 rounded-lg border border-green-400 bg-green-100 p-4 text-green-700 dark:border-green-600 dark:bg-green-900/30 dark:text-green-400">
-                {{ session('message') }}
-            </div>
-        @endif
 
-        @if (session()->has('error'))
-            <div
-                class="mb-4 rounded-lg border border-red-400 bg-red-100 p-4 text-red-700 dark:border-red-600 dark:bg-red-900/30 dark:text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- SECTION 1: Pilih SPK & Header Info -->
         <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
@@ -108,10 +95,9 @@
                 <!-- Kategori PDP -->
                 <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
                     <label class="mb-1 block text-sm font-medium text-green-800">Kategori PDP</label>
-                    <input type="text" wire:model="pdp_category"
-                        placeholder="Terisi otomatis readonly
-                        class="w-full rounded-lg border
-                        border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                    <input type="text" wire:model="pdp_category" placeholder="Terisi otomatis" readonly
+                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500" />
+
                 </div>
 
                 <!-- Tindak Lanjut -->
@@ -134,6 +120,8 @@
                     <input type="date" wire:model="slo_date"placeholder="Terisi otomatis" readonly
                         class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
                 </div>
+
+
             </div>
 
             <!-- Kendala Note -->
@@ -144,7 +132,20 @@
                     placeholder="Terisi otomatis" readonly></textarea>
             </div>
         </div>
+        <!-- Flash Messages -->
+        @if (session()->has('message'))
+            <div
+                class="mb-4 rounded-lg border border-green-400 bg-green-100 p-4 text-green-700 dark:border-green-600 dark:bg-green-900/30 dark:text-green-400">
+                {{ session('message') }}
+            </div>
+        @endif
 
+        @if (session()->has('error'))
+            <div
+                class="mb-4 rounded-lg border border-red-400 bg-red-100 p-4 text-red-700 dark:border-red-600 dark:bg-red-900/30 dark:text-red-400">
+                {{ session('error') }}
+            </div>
+        @endif
         <!-- SECTION 2: Material Table -->
         <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
             <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white">
@@ -219,7 +220,7 @@
                                         {{ number_format($item['quantity_installed'], 2) }}</td>
                                     </td>
                                     <td
-                                        class="{{ ($item['selisih'] ?? 0) > 0 ? 'text-red-600' : 'text-green-600' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
+                                        class="{{ ($item['selisih'] ?? 0) > 0 || ($item['selisih'] ?? 0) < 0 ? 'text-red-600' : 'text-green-600' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
                                         {{ number_format($item['selisih'] ?? 0, 2) }}
                                     </td>
                                     <td
@@ -232,31 +233,45 @@
                                             <input type="text"
                                                 wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
                                                 wire:blur="updateMaterialItem({{ $itemId }})"
-                                                class="w-full rounded-lg border border-green-300 bg-white px-4 py-2
-           focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                                                placeholder="Masukkan Nomor Asset" />
+                                                class=" w-[150px] rounded-lg border border-green-300 bg-white px-4 py-2
+           focus:border-green-500 focus:ring-2 focus:ring-green-500" />
                                         @else
                                             <input type="text"
                                                 wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
                                                 wire:blur="updateMaterialItem({{ $itemId }})"
-                                                class="w-full rounded-lg border border-green-300 bg-green-200 px-4 py-2
-           focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                                                placeholder="Masukkan Nomor Asset" />
+                                                class=" w-[150px] rounded-lg border border-green-300 bg-green-200 px-4 py-2
+           focus:border-green-500 focus:ring-2 focus:ring-green-500" />
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+
                 </div>
             @else
                 <div class="py-8 text-center text-gray-500 dark:text-gray-400">
                     <p class="mt-2">Pilih SPK Number untuk melihat data material</p>
                 </div>
             @endif
+
         </div>
 
+        <!-- Save Button -->
+        <div class="flex justify-end mb-5">
 
+            <button wire:click="updateStatusProject"  @disabled(blank($spk_number)) wire:loading.attr="disabled"
+                class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
+                <span wire:loading.remove wire:target="updateStatusProject">
+                    Nyatakan Selesai
+                </span>
+                <span wire:loading wire:target="updateStatusProject">
+                    Menyimpan...
+                </span>
+            </button>
+
+
+        </div>
 
         <!-- List Dokumen yang sudah diupload -->
         @if (count($uploadedDocuments) > 0)

@@ -59,4 +59,27 @@ class Projects extends Model
     {
         return $this->hasMany(ProjectDocuments::class, 'project_id');
     }
+
+    public function scopeSearch($projects, $search)
+    {
+        if (!$search) return $projects;
+
+        return $projects->where(function ($q) use ($search) {
+            $q->where('spk_number', 'like', "%{$search}%")
+                ->orWhere('project_name', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
+        });
+    }
+    public function scopeSortContractDate($projects, $sortFieldContract)
+    {
+        if (!$sortFieldContract) return $projects;
+
+        return $projects->orderBy('contract_end_date', $sortFieldContract);
+    }
+ public function scopeSortContractValue($projects, $sortFieldBalance)
+    {
+        if (!$sortFieldBalance) return $projects;
+
+        return $projects->orderBy('contract_end_date', $sortFieldBalance);
+    }
 }
