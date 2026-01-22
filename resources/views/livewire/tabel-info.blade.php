@@ -7,10 +7,32 @@
         </div>
     </div>
     <div class="">
-        <div class="flex items-center justify-end border-b border-gray-200 bg-white ">
-            <div class=""></div>
-            <div class=""><input type="text" wire:model.live="search" placeholder="Cari Proyek/SPK/Status."
+        <div class="flex items-center justify-between border-b border-gray-200  ">
+            <div class="flex items-center justify-between space-x-2 p-4 ">
+                <p>Urutkan</p>
+                <div class="">
+                    <select name="tanggalContract" id="tanggalContract" wire:model.live="fieldContractDate"
+                        class="py-2 px-4 border border-gray-300 rounded-md">
+                        <option value="" disabled selected hidden>Tgl Berakhir Kontrak</option>
+                        <option value="asc">Tgl Berakhir Kontrak Terbaru</option>
+                        <option value="desc">Tgl Berakhir Kontrak Terlama</option>
+
+
+                    </select>
+                    <select name="saldoPDP" id="saldoPDP" wire:model.live="fieldContractValue"
+                        class="py-2 px-4 border border-gray-300 rounded-md">
+                        <option value="" disabled selected hidden>Saldo PDP</option>
+                        <option value="asc">Saldo PDP Terbesar</option>
+                        <option value="desc">Saldo PDP Terkecil</option>
+
+
+                    </select>
+                </div>
+            </div>
+            <div class="">
+                <input type="text" wire:model.live="search" placeholder="Cari Proyek/SPK/Status."
                     class="md:w-60 py-2 px-4  border border-gray-300 rounded-md">
+                <button class="bg-blue-600 text-white px-4 py-2 " wire:click="cleanSort">Bersihkan Filter</button>
 
             </div>
         </div>

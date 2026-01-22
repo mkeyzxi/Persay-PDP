@@ -12,13 +12,19 @@ class TabelInfo extends Component
     use WithPagination;
 
     public $search  = '';
+    public $fieldContractDate = '';
+    public $fieldContractValue = '';
 
-
-
+    public function cleanSort()
+    {
+        $this->fieldContractDate = '';
+        $this->fieldContractValue = '';
+        $this->search = '';
+    }
     public function render()
     {
 
-        $projects = Projects::with('materialIssues.items')->search($this->search)->latest()
+        $projects = Projects::with('materialIssues.items')->search($this->search)->sortContractDate($this->fieldContractDate)->sortContractValue($this->fieldContractValue)->latest()
             ->paginate(40);
         $projects->getCollection()->transform(function ($project) {
 

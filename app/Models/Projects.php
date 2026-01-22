@@ -70,4 +70,16 @@ class Projects extends Model
                 ->orWhere('status', 'like', "%{$search}%");
         });
     }
+    public function scopeSortContractDate($projects, $sortFieldContract)
+    {
+        if (!$sortFieldContract) return $projects;
+
+        return $projects->orderBy('contract_end_date', $sortFieldContract);
+    }
+ public function scopeSortContractValue($projects, $sortFieldBalance)
+    {
+        if (!$sortFieldBalance) return $projects;
+
+        return $projects->orderBy('contract_end_date', $sortFieldBalance);
+    }
 }
