@@ -20,15 +20,27 @@
                     wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
-                @if (auth()->user()->role === 'logistik')
-                    <flux:sidebar.item icon="document-plus" :href="route('logistik.upload-sap')"
-                        :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
-                        {{ __('Upload SAP') }}
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="document-plus" :href="route('logistik.manual-input')"
-                        :current="request()->routeIs('logistik.manual-input')" wire:navigate>
-                        {{ __('Manual Input') }}
-                    </flux:sidebar.item>
+                @if (auth()->user()->role === 'logistik' || auth()->user()->role === 'akuntansi')
+                    @if (auth()->user()->role === 'logistik')
+                        <flux:sidebar.item icon="document-plus" :href="route('logistik.upload-sap')"
+                            :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
+                            {{ __('Upload SAP') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="document-plus" :href="route('logistik.manual-input')"
+                            :current="request()->routeIs('logistik.manual-input')" wire:navigate>
+                            {{ __('Manual Input') }}
+                        </flux:sidebar.item>
+                    @else
+                        <flux:sidebar.item icon="document-plus" :href="route('akuntansi.upload-sap')"
+                            :current="request()->routeIs('akuntansi.upload-sap')" wire:navigate>
+                            {{ __('Upload SAP') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="document-plus" :href="route('akuntansi.manual-input')"
+                            :current="request()->routeIs('akuntansi.manual-input')" wire:navigate>
+                            {{ __('Manual Input') }}
+
+                        </flux:sidebar.item>
+                    @endif
                 @endif
                 @if (auth()->user()->role === 'konstruksi')
                     <flux:sidebar.item icon="document-plus" :href="route('konstruksi.my-take-list')"
@@ -45,6 +57,10 @@
                         :current="request()->routeIs('akuntansi.my-take-list')" wire:navigate>
                         {{ __('My Take List') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-plus" :href="route('akuntansi.project-execution')"
+                        :current="request()->routeIs('akuntansi.project-execution')" wire:navigate>
+                        {{ __('Project Execution') }}
+                    </flux:sidebar.item>
                 @endif
                 @if (auth()->user()->role === 'admin')
                     <flux:sidebar.item icon="document-plus" :href="route('register')"
@@ -52,10 +68,10 @@
                         {{ __('Register') }}
                     </flux:sidebar.item>
                 @endif
- <flux:sidebar.item icon="document-plus" :href="route('tabel-info')"
-                        :current="request()->routeIs('tabel-info')" wire:navigate>
-                        {{ __('Tabel Info') }}
-                    </flux:sidebar.item>
+                <flux:sidebar.item icon="document-plus" :href="route('tabel-info')"
+                    :current="request()->routeIs('tabel-info')" wire:navigate>
+                    {{ __('Tabel Info') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 

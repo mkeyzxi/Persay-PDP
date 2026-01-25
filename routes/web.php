@@ -2,6 +2,7 @@
 
 // use App\Livewire\Konstruksi\MyTakeList;
 
+use App\Livewire\Akuntansi\ProjectExecution;
 use Laravel\Prompts\Table;
 use App\Livewire\TabelInfo;
 use App\Livewire\Logistik\UploadSap;
@@ -52,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/my-take-list', App\Livewire\Konstruksi\MyTakeList::class)
                 ->name('my-take-list');
         });
-Route::prefix('konstruksi')
+    Route::prefix('konstruksi')
         ->middleware('role:konstruksi')
         ->name('konstruksi.')
         ->group(function () {
@@ -66,6 +67,14 @@ Route::prefix('konstruksi')
         ->group(function () {
             Route::get('/my-take-list', App\Livewire\Akuntansi\MyTakeList::class)
                 ->name('my-take-list');
+
+            Route::get('/upload-sap', App\Livewire\Akuntansi\UploadSap::class)
+                ->name('upload-sap');
+
+            Route::get('/manual-input', App\Livewire\Akuntansi\ManualInput::class)
+                ->name('manual-input');
+            Route::get('/project-execution', ProjectExecution::class)
+                ->name('project-execution');
         });
 });
 
