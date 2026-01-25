@@ -29,6 +29,7 @@ class Projects extends Model
         'status',
         'created_by',
         'target_completion_date',
+'contract_number',
     ];
 
     protected $casts = [
