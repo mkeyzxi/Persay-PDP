@@ -180,6 +180,7 @@ class MyTakeList extends Component
             MaterialIssuesItems::where('id', $itemId)->update([
                 'quantity_installed' => $data['quantity_installed'],
                 'asset_number' => $data['asset_number'] ?? null,
+                'asset_number_date' => $data['asset_number_date'] ?? now(),
                 'remarks' => $data['remarks'] ?? null,
             ]);
         }
@@ -194,6 +195,7 @@ class MyTakeList extends Component
 
         MaterialIssuesItems::where('id', $itemId)->update([
             'asset_number' => $this->material_inputs[$itemId]['asset_number'] ?? null,
+            'asset_number_date' => $this->material_inputs[$itemId]['asset_number_date'] ?? now(),
         ]);
 
 

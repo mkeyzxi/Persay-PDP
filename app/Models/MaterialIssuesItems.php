@@ -15,6 +15,7 @@ class MaterialIssuesItems extends Model
         'wbs_element',
         'quantity_installed',
         'asset_number',
+  'asset_number_date',
         'remarks',
     ];
 
