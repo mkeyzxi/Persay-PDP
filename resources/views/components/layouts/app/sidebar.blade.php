@@ -3,6 +3,10 @@
 
 <head>
     @include('partials.head')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-800">

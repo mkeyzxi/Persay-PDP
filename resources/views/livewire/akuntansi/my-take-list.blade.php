@@ -212,7 +212,8 @@
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
                                         {{ $item['sap_doc_no'] ?? '-' }}</td>
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
-                                        {{ $item['material_code'] }}</td>
+                                        {{ $item['material_code'] ?? '-' }}
+
                                     <td class="px-3 py-3 text-sm text-gray-600">{{ $item['material_name'] }}</td>
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
                                         {{ number_format($item['quantity_sap'], 2) }}</td>
@@ -260,7 +261,7 @@
         <!-- Save Button -->
         <div class="flex justify-end mb-5">
 
-            <button wire:click="updateStatusProject"  @disabled(blank($spk_number)) wire:loading.attr="disabled"
+            <button wire:click="updateStatusProject" @disabled(blank($spk_number)) wire:loading.attr="disabled"
                 class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
                 <span wire:loading.remove wire:target="updateStatusProject">
                     Nyatakan Selesai

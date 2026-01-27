@@ -31,6 +31,7 @@ class MyTakeList extends Component
     public $target_completion_date;
     public $constraint_note;
     public $slo_date;
+    public $quantitySap;
 
 
     // --- 2. DATA MATERIAL (Tabel Tengah) ---
