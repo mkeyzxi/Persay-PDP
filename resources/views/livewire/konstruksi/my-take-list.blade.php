@@ -259,10 +259,10 @@
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
                                         {{ $item['sap_doc_no'] ?? '-' }}</td>
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
-                                        {{ $item['material_code'] }}</td>
-                                    <td class="px-3 py-3 text-sm text-gray-600">{{ $item['material_name'] }}</td>
+                                        {{ $item['material_code'] ?? '-' }}</td>
+                                    <td class="px-3 py-3 text-sm text-gray-600">{{ $item['material_name'] ?? '-' }}</td>
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
-                                        {{ number_format($item['quantity_sap'], 2) }}</td>
+                                        {{ number_format($item['quantity_sap'], 2) ?? '-'}}</td>
                                     <td class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center">
                                         <input type="number" step="0.01"
                                             wire:model.live="material_inputs.{{ $itemId }}.quantity_installed"

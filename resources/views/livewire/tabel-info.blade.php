@@ -22,8 +22,8 @@
                     <select name="saldoPDP" id="saldoPDP" wire:model.live="fieldContractValue"
                         class="py-2 px-4 border border-gray-300 rounded-md">
                         <option value="" disabled selected hidden>Saldo PDP</option>
-                        <option value="asc">Saldo PDP Terbesar</option>
-                        <option value="desc">Saldo PDP Terkecil</option>
+                        <option value="asc">Saldo PDP Terkecil</option>
+                        <option value="desc">Saldo PDP Terbesar</option>
 
 
                     </select>
