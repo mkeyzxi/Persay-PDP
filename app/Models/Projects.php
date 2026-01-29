@@ -30,7 +30,7 @@ class Projects extends Model
         'status',
         'created_by',
         'target_completion_date',
-'contract_number',
+        'contract_number',
     ];
 
     protected $casts = [
@@ -78,65 +78,74 @@ class Projects extends Model
 
         return $projects->orderBy('contract_end_date', $sortFieldContract);
     }
- public function scopeSortContractValue($projects, $sortFieldBalance)
+    public function scopeSortContractValue($projects, $sortFieldBalance)
     {
         if (!$sortFieldBalance) return $projects;
 
-        return $projects->orderBy('contract_end_date', $sortFieldBalance);
+        return $projects->orderBy('contract_value', $sortFieldBalance);
     }
-//Cjart
-public static function getGlobalTrend($year)
-{
-    // 1. Ambil TOTAL Nilai Kontrak dari SEMUA Proyek (Pagu Perusahaan)
-    // Opsional: Filter hanya proyek yang statusnya OPEN/CLOSED tahun ini
-    $totalBudget = self::sum('contract_value') ?? 0;
+    //Cjart
+    public static function getGlobalTrend($year)
+    {
+        // 1. Ambil TOTAL Nilai Kontrak dari SEMUA Proyek (Pagu Perusahaan)
+        // Opsional: Filter hanya proyek yang statusnya OPEN/CLOSED tahun ini
+        $totalBudget = self::sum('contract_value') ?? 0;
 
-    // 2. Ambil SEMUA Pengeluaran Material dari SEMUA Proyek
-    // Hapus baris ->where('material_issues.project_id', $this->id)
-    $monthlyExpenses = DB::table('material_issues_items')
-        ->join('material_issues', 'material_issues_items.material_issue_id', '=', 'material_issues.id')
-        ->whereYear('material_issues.posting_date', $year) // Hanya tahun berjalan
-        ->selectRaw('MONTH(material_issues.posting_date) as month, SUM(material_issues_items.val_currency) as total')
-        ->groupBy('month')
-        ->pluck('total', 'month')
-        ->toArray();
+        // 2. Ambil SEMUA Pengeluaran Material dari SEMUA Proyek
+        // Hapus baris ->where('material_issues.project_id', $this->id)
+        $monthlyExpenses = DB::table('material_issues_items')
+            ->join('material_issues', 'material_issues_items.material_issue_id', '=', 'material_issues.id')
+            ->whereYear('material_issues.posting_date', $year) // Hanya tahun berjalan
+            ->selectRaw('MONTH(material_issues.posting_date) as month, SUM(material_issues_items.val_currency) as total')
+            ->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
 
-    $trendData = [];
-    $cumulativeExpense = 0;
+        $trendData = [];
+        $cumulativeExpense = 0;
 
-    // Logic untuk menghitung "Dosa Masa Lalu" (Pengeluaran tahun-tahun sebelumnya)
-    // Agar saldo awal Januari benar
-    $previousYearsExpense = DB::table('material_issues_items')
-        ->join('material_issues', 'material_issues_items.material_issue_id', '=', 'material_issues.id')
-        ->whereYear('material_issues.posting_date', '<', $year)
-        ->sum('material_issues_items.val_currency');
+        // Logic untuk menghitung "Dosa Masa Lalu" (Pengeluaran tahun-tahun sebelumnya)
+        // Agar saldo awal Januari benar
+        $previousYearsExpense = DB::table('material_issues_items')
+            ->join('material_issues', 'material_issues_items.material_issue_id', '=', 'material_issues.id')
+            ->whereYear('material_issues.posting_date', '<', $year)
+            ->sum('material_issues_items.val_currency');
 
-    $cumulativeExpense = $previousYearsExpense;
+        $cumulativeExpense = $previousYearsExpense;
 
-    $indoMonths = [
-        1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
-        7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-    ];
+        $indoMonths = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
 
-    for ($i = 1; $i <= 12; $i++) {
-        $expenseThisMonth = $monthlyExpenses[$i] ?? 0;
-        $cumulativeExpense += $expenseThisMonth;
+        for ($i = 1; $i <= 12; $i++) {
+            $expenseThisMonth = $monthlyExpenses[$i] ?? 0;
+            $cumulativeExpense += $expenseThisMonth;
 
-        // Sisa Saldo Global (Total Pagu Semua Proyek - Total Pengeluaran Semua Proyek)
-        $currentBalance = $totalBudget - $cumulativeExpense;
+            // Sisa Saldo Global (Total Pagu Semua Proyek - Total Pengeluaran Semua Proyek)
+            $currentBalance = $totalBudget - $cumulativeExpense;
 
-        $trendData[] = [
-            'month_name' => $indoMonths[$i],
-            'expense' => $expenseThisMonth,
-            'cumulative_expense' => $cumulativeExpense,
-            'remaining_balance' => $currentBalance
+            $trendData[] = [
+                'month_name' => $indoMonths[$i],
+                'expense' => $expenseThisMonth,
+                'cumulative_expense' => $cumulativeExpense,
+                'remaining_balance' => $currentBalance
+            ];
+        }
+
+        return [
+            'total_budget' => $totalBudget,
+            'trend' => $trendData
         ];
     }
-
-    return [
-        'total_budget' => $totalBudget,
-        'trend' => $trendData
-    ];
-}
-
 }
