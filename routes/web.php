@@ -2,13 +2,14 @@
 
 // use App\Livewire\Konstruksi\MyTakeList;
 
-use App\Livewire\Akuntansi\ProjectExecution;
 use Laravel\Prompts\Table;
 use App\Livewire\TabelInfo;
 use App\Livewire\Logistik\UploadSap;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Logistik\ManualInput;
 use App\Livewire\Konstruksi\OriginalWork;
+use App\Livewire\Akuntansi\ProjectExecution;
+use App\Livewire\Akuntansi\ProjectExecutionExport;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 // global
@@ -75,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
                 ->name('manual-input');
             Route::get('/project-execution', ProjectExecution::class)
                 ->name('project-execution');
+            Route::get('/project-execution-export', ProjectExecutionExport::class)
+                ->name('project-execution-export');
         });
 });
 

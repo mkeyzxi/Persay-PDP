@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Projects extends Model
 {
@@ -50,6 +51,17 @@ class Projects extends Model
     public function wbsLogs(): HasMany
     {
         return $this->hasMany(ProjectWbsLog::class, 'project_id');
+    }
+    public function materialItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            MaterialIssuesItems::class, // Model Tujuan (Detail Barang)
+            MaterialIssues::class,      // Model Perantara (Header Transaksi)
+            'project_id',               // FK di tabel Perantara
+            'material_issue_id',        // FK di tabel Tujuan
+            'id',                       // PK Lokal (Projects)
+            'id'                        // PK Perantara (MaterialIssues)
+        );
     }
 
     public function materialIssues(): HasMany

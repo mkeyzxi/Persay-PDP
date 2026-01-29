@@ -65,6 +65,10 @@
                         :current="request()->routeIs('akuntansi.project-execution')" wire:navigate>
                         {{ __('Project Execution') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-plus" :href="route('akuntansi.project-execution-export')"
+                        :current="request()->routeIs('akuntansi.project-execution-export')" wire:navigate>
+                        {{ __('Project Export') }}
+                    </flux:sidebar.item>
                 @endif
                 @if (auth()->user()->role === 'admin')
                     <flux:sidebar.item icon="document-plus" :href="route('register')"
