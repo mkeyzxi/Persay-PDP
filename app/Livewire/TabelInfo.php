@@ -11,23 +11,64 @@ class TabelInfo extends Component
 {
     use WithPagination;
 
-    public $search  = '';
-    public $fieldContractDate = '';
-    public $fieldContractValue = '';
+    public $search = '';
+    public $sortField = '';
+    public $perPage = 25;
+
+    // Reset pagination when filters change
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSortField()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
 
     public function cleanSort()
     {
-        $this->fieldContractDate = '';
-        $this->fieldContractValue = '';
+        $this->sortField = '';
         $this->search = '';
+        $this->resetPage();
     }
+
     public function render()
     {
+        $query = Projects::with('materialIssues.items')->search($this->search);
 
-        $projects = Projects::with('materialIssues.items')->search($this->search)->sortContractDate($this->fieldContractDate)->sortContractValue($this->fieldContractValue)->latest()
-            ->paginate(40);
+        // Apply sorting based on sortField
+        switch ($this->sortField) {
+            case 'contract_end_date_asc':
+                $query->orderBy('contract_end_date', 'asc');
+                break;
+            case 'contract_end_date_desc':
+                $query->orderBy('contract_end_date', 'desc');
+                break;
+            case 'saldo_pdp_asc':
+            case 'saldo_pdp_desc':
+                // For saldo PDP, we need to sort after transformation
+                // Will handle this in collection
+                break;
+            case 'umur_asc':
+                $query->orderBy('contract_start_date', 'desc'); // newer = less age
+                break;
+            case 'umur_desc':
+                $query->orderBy('contract_start_date', 'asc'); // older = more age
+                break;
+            default:
+                $query->latest();
+                break;
+        }
+
+        $projects = $query->paginate($this->perPage);
+
         $projects->getCollection()->transform(function ($project) {
-
             $saldoPdp = $project->materialIssues
                 ->flatMap(fn($mi) => $mi->items)
                 ->sum('val_currency');
@@ -75,6 +116,16 @@ class TabelInfo extends Component
                 'status' => $project->status,
             ];
         });
+
+        // Sort by saldo_pdp if needed (after transformation)
+        if ($this->sortField === 'saldo_pdp_asc') {
+            $sorted = $projects->getCollection()->sortBy('saldo_pdp')->values();
+            $projects->setCollection($sorted);
+        } elseif ($this->sortField === 'saldo_pdp_desc') {
+            $sorted = $projects->getCollection()->sortByDesc('saldo_pdp')->values();
+            $projects->setCollection($sorted);
+        }
+
         return view('livewire.tabel-info', [
             'projects' => $projects,
         ]);
@@ -98,6 +149,7 @@ class TabelInfo extends Component
 
         return $list[$code] ?? '-';
     }
+
     // Fungsi Helper untuk Deskripsi TindakLanjut
     private function getKeteranganTindakLanjut($code)
     {
