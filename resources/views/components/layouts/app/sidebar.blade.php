@@ -19,64 +19,87 @@
         </flux:sidebar.header>
 
         <flux:sidebar.nav>
-            <flux:sidebar.group :heading="__('Platform')" class="grid">
+            {{-- Dashboard - Selalu tampil untuk semua role --}}
+            <flux:sidebar.group :heading="__('Menu Utama')" class="grid">
                 <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                     wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
-                @if (auth()->user()->role === 'logistik' || auth()->user()->role === 'akuntansi')
-                    @if (auth()->user()->role === 'logistik')
-                        <flux:sidebar.item icon="document-plus" :href="route('logistik.upload-sap')"
-                            :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
-                            {{ __('Upload SAP') }}
-                        </flux:sidebar.item>
-                        <flux:sidebar.item icon="document-plus" :href="route('logistik.manual-input')"
-                            :current="request()->routeIs('logistik.manual-input')" wire:navigate>
-                            {{ __('Manual Input') }}
-                        </flux:sidebar.item>
-                    @else
-                        <flux:sidebar.item icon="document-plus" :href="route('akuntansi.upload-sap')"
-                            :current="request()->routeIs('akuntansi.upload-sap')" wire:navigate>
-                            {{ __('Upload SAP') }}
-                        </flux:sidebar.item>
-                        <flux:sidebar.item icon="document-plus" :href="route('akuntansi.manual-input')"
-                            :current="request()->routeIs('akuntansi.manual-input')" wire:navigate>
-                            {{ __('Manual Input') }}
+            </flux:sidebar.group>
 
-                        </flux:sidebar.item>
-                    @endif
-                @endif
-                @if (auth()->user()->role === 'konstruksi')
-                    <flux:sidebar.item icon="document-plus" :href="route('konstruksi.my-take-list')"
-                        :current="request()->routeIs('konstruksi.my-take-list')" wire:navigate>
-                        {{ __('My Take List') }}
+            {{-- Menu Logistik --}}
+            @if (auth()->user()->role === 'logistik')
+                <flux:sidebar.group :heading="__('Input Data')" class="grid">
+                    <flux:sidebar.item icon="cloud-arrow-up" :href="route('logistik.upload-sap')"
+                        :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
+                        {{ __('Upload SAP') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="document-plus" :href="route('konstruksi.real-work')"
-                        :current="request()->routeIs('konstruksi.real-work')" wire:navigate>
-                        {{ __('Real Work') }}
+                    <flux:sidebar.item icon="pencil-square" :href="route('logistik.manual-input')"
+                        :current="request()->routeIs('logistik.manual-input')" wire:navigate>
+                        {{ __('Manual Input') }}
                     </flux:sidebar.item>
-                @endif
-                @if (auth()->user()->role === 'akuntansi')
-                    <flux:sidebar.item icon="document-plus" :href="route('akuntansi.my-take-list')"
+                </flux:sidebar.group>
+            @endif
+
+            {{-- Menu Akuntansi --}}
+            @if (auth()->user()->role === 'akuntansi')
+                <flux:sidebar.group :heading="__('Input Data')" class="grid">
+                    <flux:sidebar.item icon="cloud-arrow-up" :href="route('akuntansi.upload-sap')"
+                        :current="request()->routeIs('akuntansi.upload-sap')" wire:navigate>
+                        {{ __('Upload SAP') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="pencil-square" :href="route('akuntansi.manual-input')"
+                        :current="request()->routeIs('akuntansi.manual-input')" wire:navigate>
+                        {{ __('Manual Input') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+
+                <flux:sidebar.group :heading="__('Manajemen Project')" class="grid">
+                    <flux:sidebar.item icon="clipboard-document-list" :href="route('akuntansi.my-take-list')"
                         :current="request()->routeIs('akuntansi.my-take-list')" wire:navigate>
                         {{ __('My Take List') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="document-plus" :href="route('akuntansi.project-execution')"
+                    <flux:sidebar.item icon="chart-bar" :href="route('akuntansi.project-execution')"
                         :current="request()->routeIs('akuntansi.project-execution')" wire:navigate>
                         {{ __('Project Execution') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="document-plus" :href="route('akuntansi.project-execution-export')"
+                </flux:sidebar.group>
+
+                <flux:sidebar.group :heading="__('Laporan')" class="grid">
+                    <flux:sidebar.item icon="arrow-down-tray" :href="route('akuntansi.project-execution-export')"
                         :current="request()->routeIs('akuntansi.project-execution-export')" wire:navigate>
-                        {{ __('Project Export') }}
+                        {{ __('Export Project') }}
                     </flux:sidebar.item>
-                @endif
-                @if (auth()->user()->role === 'admin')
-                    <flux:sidebar.item icon="document-plus" :href="route('register')"
+                </flux:sidebar.group>
+            @endif
+
+            {{-- Menu Konstruksi --}}
+            @if (auth()->user()->role === 'konstruksi')
+                <flux:sidebar.group :heading="__('Manajemen Project')" class="grid">
+                    <flux:sidebar.item icon="clipboard-document-list" :href="route('konstruksi.my-take-list')"
+                        :current="request()->routeIs('konstruksi.my-take-list')" wire:navigate>
+                        {{ __('My Take List') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="wrench-screwdriver" :href="route('konstruksi.real-work')"
+                        :current="request()->routeIs('konstruksi.real-work')" wire:navigate>
+                        {{ __('Real Work') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+            @endif
+
+            {{-- Menu Admin --}}
+            @if (auth()->user()->role === 'admin')
+                <flux:sidebar.group :heading="__('Administrasi')" class="grid">
+                    <flux:sidebar.item icon="user-plus" :href="route('register')"
                         :current="request()->routeIs('register')" wire:navigate>
-                        {{ __('Register') }}
+                        {{ __('Tambah User') }}
                     </flux:sidebar.item>
-                @endif
-                <flux:sidebar.item icon="document-plus" :href="route('tabel-info')"
+                </flux:sidebar.group>
+            @endif
+
+            {{-- Menu Informasi - Selalu tampil untuk semua role --}}
+            <flux:sidebar.group :heading="__('Informasi')" class="grid">
+                <flux:sidebar.item icon="information-circle" :href="route('tabel-info')"
                     :current="request()->routeIs('tabel-info')" wire:navigate>
                     {{ __('Tabel Info') }}
                 </flux:sidebar.item>

@@ -1,0 +1,636 @@
+================================================================================
+                    DOKUMENTASI STRUKTUR DATABASE
+                         SISTEM PRISAY-PDP
+================================================================================
+Versi Dokumen   : 1.0
+Tanggal         : 31 Januari 2026
+Pembuat         : AI Assistant
+Target Pembaca  : Developer / Auditor Sistem
+================================================================================
+
+
+================================================================================
+DAFTAR ISI
+================================================================================
+1. Gambaran Umum Sistem
+2. Daftar Tabel Database
+3. Analisis Detail Setiap Tabel
+4. Relasi Antar Tabel
+5. Alur Data dan Proses Bisnis
+6. Analisis Normalisasi dan Potensi Masalah
+7. Rekomendasi Perbaikan
+
+================================================================================
+1. GAMBARAN UMUM SISTEM
+================================================================================
+
+Sistem Prisay-PDP merupakan aplikasi manajemen proyek terintegrasi yang 
+mengelola data proyek konstruksi, pengeluaran material, dan dokumen-dokumen 
+terkait. Sistem ini mengintegrasikan data dari SAP dan memiliki empat 
+departemen utama yang menggunakan aplikasi ini:
+
+- Admin       : Mengelola pengguna dan konfigurasi sistem
+- Logistik    : Menginput data header proyek dan pengeluaran material
+- Konstruksi  : Menginput data pelaksanaan kontrak dan progress proyek
+- Akuntansi   : Mengelola kategorisasi PDP dan tindak lanjut
+
+Database menggunakan MySQL/MariaDB dengan Laravel Eloquent ORM.
+
+
+================================================================================
+2. DAFTAR TABEL DATABASE
+================================================================================
+
+No.  Nama Tabel              Fungsi Utama
+---  ----------------------  ------------------------------------------------
+1    users                   Master data pengguna sistem
+2    sessions                Menyimpan sesi aktif pengguna
+3    password_reset_tokens   Token untuk reset password
+4    cache                   Caching sistem (Laravel Cache)
+5    jobs                    Antrian pekerjaan (Laravel Queue)
+6    projects                Master data proyek
+7    project_wbs_logs        Log perubahan WBS Element proyek
+8    materials               Master data material/barang SAP
+9    project_documents       Dokumen-dokumen proyek
+10   material_issues         Header transaksi pengeluaran material
+11   material_issues_items   Detail item pengeluaran material
+
+
+================================================================================
+3. ANALISIS DETAIL SETIAP TABEL
+================================================================================
+
+--------------------------------------------------------------------------------
+3.1 TABEL: users
+--------------------------------------------------------------------------------
+Deskripsi: Menyimpan data pengguna sistem untuk autentikasi dan otorisasi.
+
+| Nama Kolom             | Tipe Data         | Kunci  | Deskripsi                        |
+|------------------------|-------------------|--------|----------------------------------|
+| id                     | BIGINT UNSIGNED   | PK     | Primary key auto-increment       |
+| name                   | VARCHAR(255)      | -      | Nama lengkap pengguna            |
+| email                  | VARCHAR(255)      | UNIQUE | Email untuk login (unik)         |
+| email_verified_at      | TIMESTAMP         | -      | Waktu verifikasi email           |
+| password               | VARCHAR(255)      | -      | Password terenkripsi             |
+| role                   | ENUM              | -      | Role: admin/logistik/konstruksi  |
+|                        |                   |        | /akuntansi                       |
+| status                 | ENUM              | -      | Status: active/inactive          |
+| two_factor_secret      | TEXT              | -      | Kunci rahasia 2FA                |
+| two_factor_recovery    | TEXT              | -      | Kode recovery 2FA                |
+| two_factor_confirmed_at| TIMESTAMP         | -      | Waktu konfirmasi 2FA             |
+| remember_token         | VARCHAR(100)      | -      | Token "Remember Me"              |
+| created_at             | TIMESTAMP         | -      | Waktu pembuatan record           |
+| updated_at             | TIMESTAMP         | -      | Waktu update terakhir            |
+
+Catatan:
+- Mendukung Two-Factor Authentication (2FA)
+- Role menentukan akses menu dan fitur
+
+
+--------------------------------------------------------------------------------
+3.2 TABEL: sessions
+--------------------------------------------------------------------------------
+Deskripsi: Menyimpan data sesi pengguna untuk session management.
+
+| Nama Kolom     | Tipe Data      | Kunci  | Deskripsi                         |
+|----------------|----------------|--------|-----------------------------------|
+| id             | VARCHAR(255)   | PK     | Session ID unik                   |
+| user_id        | BIGINT UNSIGNED| FK     | Referensi ke tabel users          |
+| ip_address     | VARCHAR(45)    | -      | IP address pengguna               |
+| user_agent     | TEXT           | -      | Browser/device information        |
+| payload        | LONGTEXT       | -      | Data sesi terenkripsi             |
+| last_activity  | INTEGER        | INDEX  | UNIX timestamp aktivitas terakhir |
+
+
+--------------------------------------------------------------------------------
+3.3 TABEL: password_reset_tokens
+--------------------------------------------------------------------------------
+Deskripsi: Menyimpan token sementara untuk fitur lupa password.
+
+| Nama Kolom   | Tipe Data     | Kunci | Deskripsi                          |
+|--------------|---------------|-------|------------------------------------|
+| email        | VARCHAR(255)  | PK    | Email pengguna (Primary Key)       |
+| token        | VARCHAR(255)  | -     | Token reset yang digenerate        |
+| created_at   | TIMESTAMP     | -     | Waktu token dibuat                 |
+
+
+--------------------------------------------------------------------------------
+3.4 TABEL: projects
+--------------------------------------------------------------------------------
+Deskripsi: Master data proyek yang menjadi entitas utama sistem. Menyimpan 
+informasi kontrak, progress, kategorisasi PDP, dan status proyek.
+
+| Nama Kolom              | Tipe Data        | Kunci  | Deskripsi                      |
+|-------------------------|------------------|--------|--------------------------------|
+| id                      | BIGINT UNSIGNED  | PK     | Primary key auto-increment     |
+| spk_number              | VARCHAR(100)     | UNIQUE | Nomor SPK/Unloading Point SAP  |
+| wbs_number              | VARCHAR(100)     | -      | WBS Element dari SAP           |
+| project_name            | VARCHAR(255)     | -      | Nama proyek (PO Text SAP)      |
+| vendor_name             | VARCHAR(255)     | -      | Nama vendor/kontraktor         |
+| unit_code               | VARCHAR(50)      | -      | Kode unit bisnis (BusA SAP)    |
+| fiscal_year             | YEAR             | -      | Tahun fiskal proyek            |
+| contract_number         | VARCHAR(100)     | INDEX  | Nomor kontrak                  |
+| location                | VARCHAR(255)     | -      | Lokasi detail proyek           |
+| contract_value          | DECIMAL(18,2)    | -      | Nilai kontrak total (Rupiah)   |
+| contract_start_date     | DATE             | -      | Tanggal mulai kontrak          |
+| contract_end_date       | DATE             | -      | Tanggal akhir kontrak          |
+| target_completion_date  | DATE             | -      | Target selesai proyek          |
+| bastp_date              | DATE             | -      | Tanggal BASTP                  |
+| slo_date                | DATE             | -      | Tanggal SLO                    |
+| proggress_percent       | INTEGER          | -      | Progress proyek dalam persen   |
+| category                | VARCHAR(10)      | -      | Kategori proyek (D1.1 - D5)    |
+| pdp_category            | VARCHAR(10)      | -      | Kategori PDP (D1.1 - D5)       |
+| follow_up_code          | VARCHAR(10)      | -      | Kode tindak lanjut (TL-1 dst)  |
+| constraint_note         | TEXT             | -      | Catatan kendala proyek         |
+| status                  | ENUM             | -      | Status: OPEN/CLOSED/DRAFT/     |
+|                         |                  |        | CANCELED                       |
+| created_by              | BIGINT UNSIGNED  | FK     | User yang membuat record       |
+| created_at              | TIMESTAMP        | -      | Waktu pembuatan record         |
+| updated_at              | TIMESTAMP        | -      | Waktu update terakhir          |
+
+Catatan:
+- Kolom dengan awalan 'sap' atau berasal dari logistik adalah data import SAP
+- Kolom 'contract_*' diinput oleh departemen Konstruksi
+- Kolom 'category', 'pdp_category', 'follow_up_code' diinput oleh Akuntansi
+
+
+--------------------------------------------------------------------------------
+3.5 TABEL: project_wbs_logs
+--------------------------------------------------------------------------------
+Deskripsi: Mencatat histori perubahan WBS Number pada proyek untuk audit trail.
+
+| Nama Kolom  | Tipe Data       | Kunci | Deskripsi                          |
+|-------------|-----------------|-------|------------------------------------|
+| id          | BIGINT UNSIGNED | PK    | Primary key auto-increment         |
+| project_id  | BIGINT UNSIGNED | FK    | Referensi ke tabel projects        |
+| wbs_number  | VARCHAR(100)    | -     | Nilai WBS Number yang diset        |
+| set_by      | BIGINT UNSIGNED | FK    | User yang mengubah WBS             |
+| set_at      | TIMESTAMP       | -     | Waktu perubahan WBS                |
+
+Catatan:
+- Tabel ini TIDAK menggunakan timestamps Laravel standar
+- set_at menggunakan nilai current timestamp secara default
+
+
+--------------------------------------------------------------------------------
+3.6 TABEL: materials
+--------------------------------------------------------------------------------
+Deskripsi: Master data material/barang dari SAP untuk digunakan di transaksi 
+pengeluaran material.
+
+| Nama Kolom            | Tipe Data     | Kunci  | Deskripsi                      |
+|-----------------------|---------------|--------|--------------------------------|
+| id                    | BIGINT UNSIGNED| PK    | Primary key auto-increment     |
+| sap_material_code     | VARCHAR(50)   | UNIQUE | Kode material SAP (unik)       |
+| material_description  | VARCHAR(255)  | -      | Deskripsi/nama material        |
+| uom                   | VARCHAR(20)   | -      | Unit of Measure (Unit/EA/M/dll)|
+| category              | ENUM          | -      | Kategori: MDU/NON-MDU/JASA     |
+| created_at            | TIMESTAMP     | -      | Waktu pembuatan record         |
+| updated_at            | TIMESTAMP     | -      | Waktu update terakhir          |
+
+
+--------------------------------------------------------------------------------
+3.7 TABEL: project_documents
+--------------------------------------------------------------------------------
+Deskripsi: Menyimpan metadata dokumen-dokumen yang diupload untuk setiap proyek.
+
+| Nama Kolom         | Tipe Data       | Kunci | Deskripsi                        |
+|--------------------|-----------------|-------|----------------------------------|
+| id                 | BIGINT UNSIGNED | PK    | Primary key auto-increment       |
+| project_id         | BIGINT UNSIGNED | FK    | Referensi ke tabel projects      |
+| document_type      | ENUM            | -     | Jenis: BASTP/KALKIR/TUG9/        |
+|                    |                 |       | TUG10/LAINNYA                    |
+| file_path          | VARCHAR(255)    | -     | Path file di storage             |
+| original_filename  | VARCHAR(255)    | -     | Nama file asli yang diupload     |
+| uploaded_by        | BIGINT UNSIGNED | FK    | User yang mengupload             |
+| uploaded_at        | TIMESTAMP       | -     | Waktu upload                     |
+
+Catatan:
+- Tabel ini TIDAK menggunakan timestamps Laravel standar
+- File fisik disimpan di filesystem, tabel hanya menyimpan metadata
+
+
+--------------------------------------------------------------------------------
+3.8 TABEL: material_issues
+--------------------------------------------------------------------------------
+Deskripsi: Header transaksi pengeluaran material (Material Issue) dari SAP.
+Satu proyek dapat memiliki banyak transaksi material issue.
+
+| Nama Kolom    | Tipe Data       | Kunci | Deskripsi                         |
+|---------------|-----------------|-------|-----------------------------------|
+| id            | BIGINT UNSIGNED | PK    | Primary key auto-increment        |
+| project_id    | BIGINT UNSIGNED | FK    | Referensi ke tabel projects       |
+| sap_doc_no    | VARCHAR(100)    | -     | Nomor dokumen SAP                 |
+| posting_date  | DATE            | -     | Tanggal posting di SAP            |
+| header_text   | VARCHAR(255)    | -     | Teks header dokumen               |
+| created_by    | BIGINT UNSIGNED | FK    | User yang membuat record          |
+| created_at    | TIMESTAMP       | -     | Waktu pembuatan record            |
+| updated_at    | TIMESTAMP       | -     | Waktu update terakhir             |
+
+Catatan:
+- sap_doc_no tidak di-set sebagai unique, memungkinkan duplikasi
+
+
+--------------------------------------------------------------------------------
+3.9 TABEL: material_issues_items
+--------------------------------------------------------------------------------
+Deskripsi: Detail item dalam setiap transaksi material issue. Menyimpan 
+informasi material yang dikeluarkan, jumlah, nilai, dan data asetisasi.
+
+| Nama Kolom         | Tipe Data       | Kunci | Deskripsi                       |
+|--------------------|-----------------|-------|---------------------------------|
+| id                 | BIGINT UNSIGNED | PK    | Primary key auto-increment      |
+| material_issue_id  | BIGINT UNSIGNED | FK    | Referensi ke material_issues    |
+| material_id        | BIGINT UNSIGNED | FK    | Referensi ke tabel materials    |
+| quantity_sap       | DECIMAL(12,2)   | -     | Jumlah material dari SAP        |
+| val_currency       | DECIMAL(18,2)   | -     | Nilai dalam mata uang (Rupiah)  |
+| wbs_element        | VARCHAR(100)    | -     | WBS Element item                |
+| quantity_installed | DECIMAL(12,2)   | -     | Jumlah terpasang di lapangan    |
+| asset_number       | VARCHAR(100)    | -     | Nomor aset (untuk kapitalisasi) |
+| asset_number_date  | DATE            | -     | Tanggal asetisasi               |
+| remarks            | TEXT            | -     | Catatan/keterangan              |
+| created_at         | TIMESTAMP       | -     | Waktu pembuatan record          |
+| updated_at         | TIMESTAMP       | -     | Waktu update terakhir           |
+
+
+================================================================================
+4. RELASI ANTAR TABEL
+================================================================================
+
+4.1 DIAGRAM RELASI (Entity Relationship)
+-----------------------------------------
+
+    +----------------+
+    |     users      |
+    +----------------+
+           |
+           | 1:N (created_by, set_by, uploaded_by)
+           |
+    +------+-------+-------+-------+
+    |      |       |       |       |
+    v      v       v       v       v
++---------+ +--------+ +--------+ +-------------+ +----------+
+| projects| |sessions| |proj_wbs| |proj_docs    | |mat_issues|
+|         | |        | |_logs   | |             | |          |
++---------+ +--------+ +--------+ +-------------+ +----------+
+    |                                                   |
+    | 1:N                                               | 1:N
+    |                                                   |
+    +---------------------------------------------------+
+    |                                                   |
+    v                                                   v
++-------------------+                          +------------------+
+| project_documents |                          | material_issues  |
++-------------------+                          +------------------+
+                                                        |
+                                                        | 1:N
+                                                        v
+                                               +---------------------+
+                                               | material_issues_    |
+                                               | items               |
+                                               +---------------------+
+                                                        |
+                                                        | N:1
+                                                        v
+                                               +------------------+
+                                               |    materials     |
+                                               +------------------+
+
+
+4.2 DETAIL RELASI
+-----------------
+
+A. users → projects (One-to-Many)
+   - Kolom: projects.created_by → users.id
+   - Constraint: ON DELETE SET NULL
+   - Keterangan: Satu user dapat membuat banyak proyek
+
+B. users → sessions (One-to-Many)
+   - Kolom: sessions.user_id → users.id
+   - Keterangan: Satu user dapat memiliki banyak sesi
+
+C. projects → project_wbs_logs (One-to-Many)
+   - Kolom: project_wbs_logs.project_id → projects.id
+   - Constraint: ON DELETE CASCADE
+   - Keterangan: Satu proyek dapat memiliki banyak log WBS
+
+D. users → project_wbs_logs (One-to-Many)
+   - Kolom: project_wbs_logs.set_by → users.id
+   - Constraint: ON DELETE RESTRICT
+   - Keterangan: Setiap log WBS dicatat oleh satu user
+
+E. projects → project_documents (One-to-Many)
+   - Kolom: project_documents.project_id → projects.id
+   - Constraint: ON DELETE CASCADE
+   - Keterangan: Satu proyek dapat memiliki banyak dokumen
+
+F. users → project_documents (One-to-Many)
+   - Kolom: project_documents.uploaded_by → users.id
+   - Constraint: ON DELETE SET NULL
+   - Keterangan: Dokumen mengetahui siapa yang upload
+
+G. projects → material_issues (One-to-Many)
+   - Kolom: material_issues.project_id → projects.id
+   - Constraint: ON DELETE CASCADE
+   - Keterangan: Satu proyek dapat memiliki banyak transaksi material
+
+H. users → material_issues (One-to-Many)
+   - Kolom: material_issues.created_by → users.id
+   - Constraint: ON DELETE SET NULL
+   - Keterangan: Transaksi material dicatat oleh user
+
+I. material_issues → material_issues_items (One-to-Many)
+   - Kolom: material_issues_items.material_issue_id → material_issues.id
+   - Constraint: ON DELETE CASCADE
+   - Keterangan: Satu header transaksi memiliki banyak item
+
+J. materials → material_issues_items (One-to-Many)
+   - Kolom: material_issues_items.material_id → materials.id
+   - Constraint: ON DELETE RESTRICT
+   - Keterangan: Satu material dapat digunakan di banyak transaksi
+
+K. projects → material_issues_items (HasManyThrough)
+   - Melalui: material_issues
+   - Keterangan: Akses langsung dari proyek ke detail item material
+
+
+================================================================================
+5. ALUR DATA DAN PROSES BISNIS
+================================================================================
+
+5.1 ALUR PROSES UTAMA
+---------------------
+
+TAHAP 1: INISIASI PROYEK (Departemen Logistik)
+----------------------------------------------
+1. Data proyek diimport dari SAP atau diinput manual
+2. Kolom yang diisi:
+   - spk_number (wajib, unique)
+   - wbs_number
+   - project_name
+   - vendor_name
+   - unit_code
+   - fiscal_year
+3. Status awal: DRAFT
+
+TAHAP 2: PELENGKAPAN DATA KONTRAK (Departemen Konstruksi)
+---------------------------------------------------------
+1. Konstruksi melengkapi data kontrak:
+   - contract_number
+   - contract_value
+   - contract_start_date
+   - contract_end_date
+   - target_completion_date
+   - location
+2. Update progress secara berkala:
+   - proggress_percent
+3. Input tanggal milestone:
+   - bastp_date (BAST Pendahuluan)
+   - slo_date (Sertifikat Laik Operasi)
+4. Upload dokumen proyek ke project_documents
+
+TAHAP 3: PENGELUARAN MATERIAL (Departemen Logistik)
+---------------------------------------------------
+1. Import data Material Issue dari SAP:
+   - Header: material_issues (sap_doc_no, posting_date)
+   - Detail: material_issues_items (quantity_sap, val_currency)
+2. Master material dikelola di tabel materials
+3. Konstruksi melengkapi data instalasi:
+   - quantity_installed
+   - asset_number
+   - asset_number_date
+
+TAHAP 4: MONITORING PDP (Departemen Akuntansi)
+----------------------------------------------
+1. Akuntansi menganalisis dan mengkategorikan proyek:
+   - category
+   - pdp_category
+   - follow_up_code
+   - constraint_note
+2. Mengupdate status proyek:
+   - OPEN: Proyek masih berjalan
+   - CLOSED: Proyek selesai
+   - CANCELED: Proyek dibatalkan
+
+
+5.2 DEPENDENSI DATA
+-------------------
+
+A. Tabel yang harus ada terlebih dahulu (Master Data):
+   - users (wajib ada untuk autentikasi)
+   - materials (wajib ada sebelum input item material issue)
+
+B. Urutan pengisian data:
+   1. users → wajib ada
+   2. projects → dapat dibuat
+   3. materials → dapat dibuat kapan saja
+   4. project_wbs_logs → setelah projects ada
+   5. project_documents → setelah projects ada
+   6. material_issues → setelah projects ada
+   7. material_issues_items → setelah material_issues dan materials ada
+
+
+================================================================================
+6. ANALISIS NORMALISASI DAN POTENSI MASALAH
+================================================================================
+
+6.1 STATUS NORMALISASI
+----------------------
+
+A. First Normal Form (1NF): TERPENUHI
+   - Semua kolom bersifat atomik
+   - Tidak ada repeating groups
+
+B. Second Normal Form (2NF): TERPENUHI
+   - Semua tabel memiliki primary key
+   - Atribut non-key bergantung penuh pada primary key
+
+C. Third Normal Form (3NF): SEBAGIAN TERPENUHI
+   - Ditemukan beberapa potensi transitive dependency
+
+
+6.2 POTENSI MASALAH TERIDENTIFIKASI
+-----------------------------------
+
+MASALAH #1: Duplikasi WBS Number
+--------------------------------
+Lokasi: projects.wbs_number dan material_issues_items.wbs_element
+Deskripsi: WBS Element disimpan di dua tempat berbeda
+Risiko: Inkonsistensi data jika WBS diubah di salah satu tempat
+Tingkat: MEDIUM
+
+MASALAH #2: Tidak Ada Unique Constraint pada sap_doc_no
+-------------------------------------------------------
+Lokasi: material_issues.sap_doc_no
+Deskripsi: Nomor dokumen SAP seharusnya unique per proyek
+Risiko: Duplikasi data transaksi material
+Tingkat: HIGH
+
+MASALAH #3: Typo pada Nama Kolom
+--------------------------------
+Lokasi: projects.proggress_percent
+Deskripsi: Penulisan "proggress" seharusnya "progress"
+Risiko: Kesulitan maintenance dan query
+Tingkat: LOW
+
+MASALAH #4: Duplikasi Field Category
+------------------------------------
+Lokasi: projects.category dan projects.pdp_category
+Deskripsi: Kedua kolom menyimpan value yang sama (D1.1 - D5)
+Risiko: Redundansi dan potensi inkonsistensi
+Tingkat: MEDIUM (Perlu klarifikasi apakah berbeda fungsi)
+
+MASALAH #5: Tidak Ada Soft Delete
+---------------------------------
+Lokasi: Semua tabel utama
+Deskripsi: Tidak ada mekanisme soft delete (deleted_at)
+Risiko: Data yang dihapus tidak dapat di-recover, audit trail hilang
+Tingkat: MEDIUM
+
+MASALAH #6: Relasi material() dan issue() Duplikat
+--------------------------------------------------
+Lokasi: MaterialIssuesItems model
+Deskripsi: Ada dua method yang sama: materialIssue() dan issue()
+Risiko: Kebingungan dalam penggunaan dan maintenance
+Tingkat: LOW
+
+MASALAH #7: Bug pada Migration Down Method
+------------------------------------------
+Lokasi: 2026_01_26_174448_add_asset_number_date_to_material_issues_items
+Deskripsi: Method down() menggunakan addColumn bukan dropColumn
+Risiko: Rollback migration akan gagal/salah
+Tingkat: HIGH
+
+
+================================================================================
+7. REKOMENDASI PERBAIKAN
+================================================================================
+
+7.1 PERBAIKAN PRIORITAS TINGGI
+------------------------------
+
+[R1] Tambahkan Unique Constraint pada sap_doc_no
+Deskripsi: Kombinasi project_id dan sap_doc_no harus unik
+Implementasi:
+    $table->unique(['project_id', 'sap_doc_no']);
+
+[R2] Perbaiki Migration Rollback Bug
+Deskripsi: Ubah method down() pada migration asset_number_date
+Kode yang salah:
+    $table->date('asset_number_date')->nullable()->after('asset_number');
+Kode yang benar:
+    $table->dropColumn('asset_number_date');
+
+
+7.2 PERBAIKAN PRIORITAS MENENGAH
+--------------------------------
+
+[R3] Implementasi Soft Delete
+Deskripsi: Tambahkan SoftDeletes trait pada model utama
+Tabel yang perlu diubah:
+    - projects
+    - materials
+    - material_issues
+    - material_issues_items
+Implementasi:
+    $table->softDeletes(); // pada migration
+    use SoftDeletes;        // pada model
+
+[R4] Normalisasi WBS Element
+Deskripsi: Pertimbangkan untuk menghapus wbs_element dari 
+material_issues_items dan mengacu ke projects.wbs_number
+Alternatif: Jika berbeda konteks, dokumentasikan perbedaannya
+
+[R5] Klarifikasi Category vs PDP Category
+Deskripsi: Jika berbeda fungsi, tambahkan komentar pada migration
+dan dokumentasi. Jika sama, hapus salah satu.
+
+
+7.3 PERBAIKAN PRIORITAS RENDAH
+------------------------------
+
+[R6] Perbaiki Typo proggress_percent
+Deskripsi: Rename kolom menjadi progress_percent
+Catatan: Perlu migration khusus dan update semua referensi
+
+[R7] Hapus Method Duplikat di Model
+Deskripsi: Hapus method issue() di MaterialIssuesItems, 
+gunakan hanya materialIssue()
+
+[R8] Tambahkan Index untuk Optimasi Query
+Kolom yang disarankan di-index:
+    - projects.status
+    - projects.fiscal_year
+    - material_issues.posting_date
+    - material_issues_items.asset_number
+
+
+7.4 REKOMENDASI TAMBAHAN
+------------------------
+
+[R9] Audit Trail yang Lebih Lengkap
+Deskripsi: Pertimbangkan package seperti Laravel Auditable
+untuk tracking perubahan di semua tabel penting
+
+[R10] Validasi Data Lebih Ketat
+Deskripsi: Tambahkan CHECK constraint pada database level:
+    - proggress_percent harus 0-100
+    - contract_end_date >= contract_start_date
+    - quantity_sap dan quantity_installed >= 0
+
+[R11] Dokumentasi Schema di Level Database
+Deskripsi: Tambahkan COMMENT pada kolom-kolom di MySQL
+untuk dokumentasi langsung di database
+
+
+================================================================================
+RINGKASAN
+================================================================================
+
+Database Prisay-PDP memiliki struktur yang cukup baik dengan:
+- 11 tabel utama
+- Relasi yang jelas antar entitas
+- Penggunaan foreign key constraint yang konsisten
+- Mendukung multi-departemen dengan role-based access
+
+Hal yang perlu diperbaiki:
+- 2 masalah dengan prioritas TINGGI (unique constraint, migration bug)
+- 4 masalah dengan prioritas MENENGAH (soft delete, duplikasi data)
+- 2 masalah dengan prioritas RENDAH (typo, method duplikat)
+
+Total rekomendasi: 11 item perbaikan
+
+================================================================================
+LAMPIRAN: QUERY VERIFIKASI
+================================================================================
+
+-- Cek proyek dengan material issue tertinggi
+SELECT p.spk_number, p.project_name, COUNT(mi.id) as total_issues
+FROM projects p
+LEFT JOIN material_issues mi ON p.id = mi.project_id
+GROUP BY p.id
+ORDER BY total_issues DESC
+LIMIT 10;
+
+-- Cek total nilai pengeluaran per proyek
+SELECT p.spk_number, p.contract_value, 
+       SUM(mii.val_currency) as total_expense,
+       p.contract_value - SUM(mii.val_currency) as remaining
+FROM projects p
+LEFT JOIN material_issues mi ON p.id = mi.project_id
+LEFT JOIN material_issues_items mii ON mi.id = mii.material_issue_id
+GROUP BY p.id;
+
+-- Cek material yang paling sering digunakan
+SELECT m.sap_material_code, m.material_description, 
+       COUNT(mii.id) as usage_count,
+       SUM(mii.quantity_sap) as total_qty
+FROM materials m
+LEFT JOIN material_issues_items mii ON m.id = mii.material_id
+GROUP BY m.id
+ORDER BY usage_count DESC
+LIMIT 10;
+
+================================================================================
+                         AKHIR DOKUMEN
+================================================================================

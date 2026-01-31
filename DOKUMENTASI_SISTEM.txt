@@ -1,0 +1,356 @@
+
+DOKUMENTASI SISTEM PRISAY-PDP
+Sistem Informasi Manajemen Pekerjaan Dalam Pelaksanaan
+
+
+--------------------------------------------------------------------------------
+1. JUDUL SISTEM
+--------------------------------------------------------------------------------
+
+Nama Sistem       : PRISAY-PDP (Project Information System - Pekerjaan Dalam Pelaksanaan)
+Jenis Aplikasi    : Sistem Informasi Berbasis Website
+Tahun Pembuatan   : 2026
+
+
+--------------------------------------------------------------------------------
+2. LATAR BELAKANG
+--------------------------------------------------------------------------------
+
+Dalam pengelolaan proyek-proyek konstruksi dan pengadaan barang atau jasa di 
+perusahaan, terdapat berbagai tantangan yang dihadapi, antara lain:
+
+a. Sulitnya memantau progress proyek secara real-time karena data tersebar di 
+   berbagai dokumen dan sistem yang berbeda.
+
+b. Kesulitan dalam mengelola data material yang digunakan dalam setiap proyek, 
+   termasuk pencatatan material issue dari sistem SAP.
+
+c. Tidak adanya sistem terpusat yang dapat mengintegrasikan data dari bagian 
+   Logistik, Konstruksi, dan Akuntansi dalam satu platform.
+
+d. Proses pencatatan asset number untuk setiap material yang terpasang masih 
+   dilakukan secara manual, sehingga rawan terjadi kesalahan dan keterlambatan.
+
+e. Kesulitan dalam membuat laporan rekapitulasi proyek yang akurat dan tepat 
+   waktu untuk keperluan manajemen dan audit.
+
+Berdasarkan permasalahan tersebut, dikembangkanlah sistem Prisay-PDP yang 
+bertujuan untuk mengintegrasikan seluruh proses pengelolaan Pekerjaan Dalam 
+Pelaksanaan (PDP) dalam satu platform berbasis website.
+
+
+--------------------------------------------------------------------------------
+3. TUJUAN SISTEM
+--------------------------------------------------------------------------------
+
+Tujuan Utama:
+a. Menyediakan platform terpusat untuk mengelola seluruh proyek pekerjaan dalam 
+   pelaksanaan secara efisien dan transparan.
+
+b. Mengintegrasikan data proyek dari berbagai divisi (Logistik, Konstruksi, dan 
+   Akuntansi) dalam satu sistem yang saling terhubung.
+
+c. Mempermudah proses pencatatan, pemantauan, dan pelaporan proyek.
+
+Dampak yang Diharapkan:
+a. Peningkatan efisiensi operasional dalam pengelolaan proyek.
+b. Pengurangan kesalahan pencatatan data secara signifikan.
+c. Percepatan proses penutupan proyek dengan kelengkapan data yang tervalidasi.
+d. Kemudahan akses informasi proyek secara real-time oleh seluruh pihak terkait.
+e. Peningkatan akurasi pelaporan untuk keperluan manajemen dan audit.
+
+
+--------------------------------------------------------------------------------
+4. DESKRIPSI UMUM SISTEM
+--------------------------------------------------------------------------------
+
+Prisay-PDP adalah sistem informasi berbasis website yang dirancang untuk 
+mengelola Pekerjaan Dalam Pelaksanaan (PDP) di perusahaan. Sistem ini dapat 
+diakses melalui browser internet seperti Google Chrome, Mozilla Firefox, 
+Microsoft Edge, atau browser modern lainnya.
+
+Sistem ini mengintegrasikan tiga divisi utama yang terlibat dalam pengelolaan 
+proyek, yaitu:
+
+a. Divisi Logistik: Bertugas mengunggah data material issue dari SAP dan 
+   melakukan input data material secara manual bila diperlukan.
+
+b. Divisi Konstruksi: Bertugas mencatat progress pekerjaan, fisik terpasang, 
+   dan dokumentasi proyek di lapangan.
+
+c. Divisi Akuntansi: Bertugas memvalidasi data, mencatat nomor asset, dan 
+   melakukan penutupan proyek setelah semua data lengkap.
+
+Sistem menggunakan arsitektur modern dengan teknologi Laravel dan Livewire yang 
+memungkinkan interaksi real-time tanpa perlu me-refresh halaman.
+
+
+--------------------------------------------------------------------------------
+5. KEGUNAAN DAN MANFAAT SISTEM
+--------------------------------------------------------------------------------
+
+Manfaat bagi Pengguna Utama:
+a. Mempermudah proses input dan validasi data proyek.
+b. Menyediakan tampilan dashboard yang informatif dan mudah dipahami.
+c. Memberikan notifikasi status proyek secara real-time.
+d. Mempercepat proses pencarian data proyek tertentu.
+
+Manfaat bagi Pengelola atau Administrator:
+a. Memudahkan pengelolaan hak akses pengguna berdasarkan divisi.
+b. Menyediakan log aktivitas untuk keperluan audit.
+c. Memungkinkan pengelolaan data master (WBS, material, dan lain-lain).
+d. Mempermudah proses backup dan pemeliharaan data.
+
+Manfaat Jangka Panjang bagi Organisasi:
+a. Menciptakan database proyek yang terstruktur dan mudah diakses.
+b. Meningkatkan akuntabilitas dalam pengelolaan proyek.
+c. Mendukung proses pengambilan keputusan berbasis data.
+d. Mengurangi ketergantungan pada dokumen fisik (paperless).
+e. Mempermudah proses audit internal maupun eksternal.
+
+
+--------------------------------------------------------------------------------
+6. PENGGUNA SISTEM
+--------------------------------------------------------------------------------
+
+Sistem Prisay-PDP memiliki beberapa jenis pengguna dengan hak akses berbeda:
+
+a. Administrator
+   Memiliki akses penuh ke seluruh fitur sistem. Dapat mengelola pengguna, 
+   konfigurasi sistem, dan melihat seluruh data dari semua divisi.
+
+b. User Logistik
+   Dapat mengunggah data material issue dari SAP dalam format Excel. Dapat 
+   melakukan input data material secara manual. Dapat melihat dan mengelola 
+   data proyek yang berkaitan dengan material.
+
+c. User Konstruksi
+   Dapat melihat daftar proyek yang ditangani. Dapat mencatat progress fisik 
+   terpasang untuk setiap material. Dapat mengunggah dokumentasi proyek dan 
+   mencatat kendala yang dihadapi.
+
+d. User Akuntansi
+   Dapat melihat seluruh data proyek dan material. Dapat mencatat nomor asset 
+   untuk setiap material yang terpasang. Dapat melakukan validasi dan penutupan 
+   proyek setelah semua data lengkap.
+
+
+--------------------------------------------------------------------------------
+7. FITUR UTAMA SISTEM
+--------------------------------------------------------------------------------
+
+a. Dashboard Proyek
+   Menampilkan ringkasan status seluruh proyek dalam bentuk grafik dan tabel. 
+   Terdapat informasi total proyek, proyek berjalan, dan proyek selesai.
+
+b. Manajemen Proyek
+   Fitur untuk menambah, mengubah, dan melihat detail proyek. Mencakup informasi 
+   SPK, WBS, vendor, lokasi, nilai kontrak, dan tanggal pelaksanaan.
+
+c. Upload Data SAP
+   Fitur untuk mengunggah data material issue dari SAP dalam format Excel. 
+   Sistem akan melakukan parsing otomatis dan menyimpan data ke database.
+
+d. Input Manual Data
+   Fitur bagi pengguna untuk memasukkan data material secara manual apabila 
+   diperlukan, termasuk pembuatan proyek baru dan material issue header.
+
+e. My Take List
+   Fitur untuk setiap divisi mengelola data proyek yang menjadi tanggung 
+   jawabnya. Konstruksi dapat input fisik terpasang, Akuntansi dapat input 
+   nomor asset.
+
+f. Pencatatan Asset Number
+   Fitur khusus untuk divisi Akuntansi mencatat nomor asset setiap material 
+   yang telah terpasang. Dilengkapi validasi dan loading indicator.
+
+g. Rekapitulasi Proyek
+   Fitur untuk menampilkan rekap data proyek dalam bentuk tabel yang dapat 
+   diurutkan dan dicari. Mendukung filter berdasarkan berbagai kriteria.
+
+h. Grafik Tren Keuangan
+   Menampilkan grafik tren pengeluaran bulanan dibandingkan dengan total pagu 
+   anggaran. Membantu manajemen dalam memantau kesehatan keuangan proyek.
+
+i. Manajemen Dokumen
+   Fitur untuk mengunggah dan melihat dokumen pendukung proyek seperti SPK, 
+   BASTP, SLO, dan dokumen lainnya.
+
+j. Penutupan Proyek
+   Fitur untuk menutup proyek setelah semua asset number telah diisi lengkap. 
+   Sistem akan memvalidasi kelengkapan data sebelum mengizinkan penutupan.
+
+
+--------------------------------------------------------------------------------
+8. ALUR KERJA SINGKAT SISTEM
+--------------------------------------------------------------------------------
+
+Berikut adalah alur kerja sistem Prisay-PDP dari awal hingga akhir:
+
+Tahap 1: Input Data Proyek
+Divisi Logistik mengunggah data material issue dari SAP atau melakukan input 
+manual data proyek dan material ke dalam sistem.
+
+Tahap 2: Verifikasi Data Material
+Sistem menyimpan data proyek beserta header material issue dan detail item 
+material. Data dapat dilihat dan diverifikasi oleh pengguna.
+
+Tahap 3: Pencatatan Progress Konstruksi
+Divisi Konstruksi membuka fitur My Take List untuk mencatat fisik terpasang 
+dan mengunggah dokumentasi proyek di lapangan.
+
+Tahap 4: Pencatatan Asset Number
+Divisi Akuntansi membuka fitur My Take List untuk mencatat nomor asset setiap 
+material yang telah terpasang berdasarkan data dari SAP.
+
+Tahap 5: Validasi Kelengkapan
+Sistem memeriksa apakah seluruh asset number telah diisi untuk semua material 
+dalam proyek tersebut.
+
+Tahap 6: Penutupan Proyek
+Setelah semua data lengkap, Divisi Akuntansi dapat melakukan penutupan proyek 
+dengan mengklik tombol Nyatakan Selesai. Status proyek berubah menjadi CLOSED.
+
+Tahap 7: Pelaporan
+Data proyek yang telah selesai dapat dilihat di dashboard dan diekspor untuk 
+keperluan pelaporan manajemen dan audit.
+
+
+--------------------------------------------------------------------------------
+9. TEKNOLOGI YANG DIGUNAKAN
+--------------------------------------------------------------------------------
+
+Bahasa Pemrograman:
+- PHP versi 8.2 atau lebih tinggi
+- JavaScript
+- HTML5 dan CSS3
+
+Framework Utama:
+- Laravel versi 12 sebagai backend framework
+- Livewire Volt versi 1.7 untuk komponen interaktif real-time
+- Livewire Flux versi 2.9 untuk komponen UI modern
+
+Database:
+- MySQL atau MariaDB sebagai sistem manajemen database relasional
+- SQLite untuk pengembangan lokal (opsional)
+
+Teknologi Pendukung:
+- Vite sebagai build tool untuk asset frontend
+- TailwindCSS untuk styling komponen
+- Maatwebsite Excel untuk import dan export file Excel
+- Laravel Fortify untuk autentikasi dua faktor
+- Composer untuk package manager PHP
+- NPM untuk package manager JavaScript
+
+
+--------------------------------------------------------------------------------
+10. KELEBIHAN SISTEM
+--------------------------------------------------------------------------------
+
+Dibandingkan dengan proses manual atau sistem sebelumnya, Prisay-PDP memiliki 
+beberapa keunggulan:
+
+a. Integrasi Data Terpusat
+   Semua data proyek dari berbagai divisi tersimpan dalam satu database yang 
+   saling terhubung, menghilangkan duplikasi dan inkonsistensi data.
+
+b. Akses Real-Time
+   Perubahan data dapat langsung terlihat oleh pengguna lain tanpa perlu 
+   me-refresh halaman berkat teknologi Livewire.
+
+c. Validasi Otomatis
+   Sistem melakukan validasi otomatis terhadap kelengkapan data sebelum 
+   mengizinkan penutupan proyek, mengurangi kesalahan manusia.
+
+d. Loading Indicator
+   Setiap proses penyimpanan data dilengkapi dengan indikator loading sehingga 
+   pengguna tahu kapan proses selesai.
+
+e. Error Handling
+   Sistem memiliki penanganan error yang baik sehingga jika terjadi kesalahan, 
+   pengguna akan menerima pesan yang informatif.
+
+f. Responsif
+   Tampilan sistem menyesuaikan dengan ukuran layar perangkat, dapat diakses 
+   melalui komputer desktop, laptop, tablet, maupun smartphone.
+
+g. Mode Gelap
+   Tersedia mode gelap (dark mode) untuk kenyamanan pengguna saat bekerja di 
+   lingkungan dengan pencahayaan rendah.
+
+h. Import Excel
+   Kemampuan untuk mengimpor data langsung dari file Excel yang diekspor dari 
+   SAP, mempercepat proses input data.
+
+
+--------------------------------------------------------------------------------
+11. PENGEMBANGAN DI MASA DEPAN
+--------------------------------------------------------------------------------
+
+Beberapa potensi pengembangan sistem yang dapat dilakukan ke depannya:
+
+a. Integrasi API SAP
+   Mengembangkan integrasi langsung dengan sistem SAP melalui API sehingga 
+   data dapat tersinkronisasi secara otomatis tanpa perlu unggah manual.
+
+b. Notifikasi Push
+   Menambahkan fitur notifikasi push melalui email atau aplikasi mobile ketika 
+   ada proyek yang mendekati tenggat waktu atau memerlukan tindakan.
+
+c. Aplikasi Mobile
+   Mengembangkan aplikasi mobile native atau Progressive Web App (PWA) untuk 
+   kemudahan akses di lapangan oleh tim konstruksi.
+
+d. Dashboard Analitik Lanjutan
+   Menambahkan fitur analitik lanjutan dengan visualisasi data yang lebih 
+   komprehensif untuk keperluan Business Intelligence.
+
+e. Modul Approval Workflow
+   Menambahkan alur persetujuan berjenjang untuk proses-proses kritis seperti 
+   penutupan proyek atau perubahan data signifikan.
+
+f. Integrasi Barcode atau QR Code
+   Mengintegrasikan sistem dengan barcode scanner untuk mempermudah pencatatan 
+   asset number di lapangan.
+
+g. Modul Pelaporan Otomatis
+   Mengembangkan fitur untuk membuat laporan otomatis secara berkala dan 
+   mengirimkannya kepada stakeholder terkait.
+
+h. Audit Trail Lengkap
+   Menambahkan fitur pencatatan riwayat perubahan data secara lengkap untuk 
+   keperluan audit dan akuntabilitas.
+
+
+--------------------------------------------------------------------------------
+12. KESIMPULAN
+--------------------------------------------------------------------------------
+
+Sistem Prisay-PDP merupakan solusi teknologi informasi yang dirancang untuk 
+mengatasi berbagai tantangan dalam pengelolaan Pekerjaan Dalam Pelaksanaan di 
+perusahaan. Dengan mengintegrasikan data dan proses dari Divisi Logistik, 
+Konstruksi, dan Akuntansi dalam satu platform berbasis website, sistem ini 
+memberikan kemudahan akses, efisiensi operasional, dan akurasi data yang lebih 
+baik dibandingkan proses manual.
+
+Fitur-fitur utama seperti upload data SAP, pencatatan asset number dengan 
+loading indicator, validasi otomatis, serta dashboard yang informatif menjadi 
+nilai tambah yang signifikan bagi pengguna. Teknologi modern yang digunakan 
+seperti Laravel dan Livewire memastikan sistem berjalan dengan responsif dan 
+dapat diandalkan.
+
+Dengan adanya sistem Prisay-PDP, diharapkan proses pengelolaan proyek menjadi 
+lebih transparan, akuntabel, dan efisien. Sistem ini juga memberikan fondasi 
+yang kuat untuk pengembangan fitur-fitur lanjutan di masa depan sesuai dengan 
+kebutuhan organisasi yang terus berkembang.
+
+
+
+                              AKHIR DOKUMEN
+
+
+Dokumen ini dibuat pada: Januari 2026
+Versi Dokumen: 1.0
+Status: Final
+
+

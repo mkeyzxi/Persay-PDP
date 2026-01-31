@@ -15,9 +15,7 @@ class ManualInput extends Component
     // Active Tab: 'project', 'material_issue', 'material', 'item'
     public $activeTab = 'project';
 
-    // ========================================
     // PROJECT TAB
-    // ========================================
     public $project_mode = 'new'; // 'new' or 'existing'
     public $selected_project_id;
     public $spk_number;
@@ -27,9 +25,7 @@ class ManualInput extends Component
     public $unit_code;
     public $fiscal_year;
 
-    // ========================================
     // MATERIAL ISSUE TAB
-    // ========================================
     public $mi_project_mode = 'existing'; // 'new_project' or 'existing'
     public $mi_selected_project_id;
     // For new project within MI
@@ -55,9 +51,7 @@ class ManualInput extends Component
     public $mi_val_currency;
     public $mi_item_wbs_element;
 
-    // ========================================
     // MATERIAL TAB
-    // ========================================
     public $material_mode = 'new'; // 'new', 'edit', 'add_to_mi'
     public $selected_material_id;
     public $material_code;
@@ -70,9 +64,7 @@ class ManualInput extends Component
     public $mat_val_currency;
     public $mat_wbs_element;
 
-    // ========================================
     // ITEM TAB
-    // ========================================
     public $item_mi_mode = 'existing_mi'; // 'existing_mi', 'new_mi'
     public $item_selected_mi_id;
     // For new MI
@@ -91,9 +83,7 @@ class ManualInput extends Component
     public $item_val_currency;
     public $item_wbs_element;
 
-    // ========================================
     // DROPDOWN DATA
-    // ========================================
     public $projects = [];
     public $materialIssues = [];
     public $materials = [];
@@ -136,9 +126,7 @@ class ManualInput extends Component
         }
     }
 
-    // ========================================
     // SAVE METHODS
-    // ========================================
 
     public function saveProject()
     {

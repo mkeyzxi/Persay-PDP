@@ -213,12 +213,13 @@
                                         {{ $item['sap_doc_no'] ?? '-' }}</td>
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
                                         {{ $item['material_code'] ?? '-' }}
-
+                                    </td>
                                     <td class="px-3 py-3 text-sm text-gray-600">{{ $item['material_name'] }}</td>
                                     <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
-                                        {{ number_format($item['quantity_sap'], 2) }}</td>
+                                        {{ number_format($item['quantity_sap'], 2) }}
+                                    </td>
                                     <td class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center">
-                                        {{ number_format($item['quantity_installed'], 2) }}</td>
+                                        {{ number_format($item['quantity_installed'], 2) }}
                                     </td>
                                     <td
                                         class="{{ ($item['selisih'] ?? 0) > 0 || ($item['selisih'] ?? 0) < 0 ? 'text-red-600' : 'text-green-600' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
@@ -230,19 +231,42 @@
                                     </td>
                                     <td
                                         class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-gray-600">
-                                        @if (!empty($item['asset_number']))
+                                        <div class="relative">
                                             <input type="text"
-                                                wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
-                                                wire:blur="updateMaterialItem({{ $itemId }})"
-                                                class=" w-[150px] rounded-lg border border-green-300 bg-white px-4 py-2
-           focus:border-green-500 focus:ring-2 focus:ring-green-500" />
-                                        @else
-                                            <input type="text"
-                                                wire:model.defer="material_inputs.{{ $itemId }}.asset_number"
-                                                wire:blur="updateMaterialItem({{ $itemId }})"
-                                                class=" w-[150px] rounded-lg border border-green-300 bg-green-200 px-4 py-2
-           focus:border-green-500 focus:ring-2 focus:ring-green-500" />
-                                        @endif
+                                                wire:model.blur="material_inputs.{{ $itemId }}.asset_number"
+                                                wire:change.debounce.500ms="updateMaterialItem({{ $itemId }})"
+                                                class="{{ !empty($item['asset_number'])
+                                                    ? 'border-green-300 bg-white focus:border-green-500 focus:ring-green-500'
+                                                    : 'border-green-300 bg-green-200 focus:border-green-500 focus:ring-green-500' }} w-[150px] rounded-lg border px-4 py-2 pr-8 focus:ring-2"
+                                                placeholder="Masukkan asset" />
+                                            {{-- Loading indicator per-item --}}
+                                            <div wire:loading wire:target="updateMaterialItem({{ $itemId }})"
+                                                class="absolute right-2 top-1/2 -translate-y-1/2">
+                                                <svg class="h-4 w-4 animate-spin text-green-500"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                            {{-- Success indicator --}}
+                                            <div wire:loading.remove
+                                                wire:target="updateMaterialItem({{ $itemId }})">
+                                                @if (!empty($item['asset_number']))
+                                                    <span
+                                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-green-500">
+                                                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -259,7 +283,7 @@
         </div>
 
         <!-- Save Button -->
-        <div class="flex justify-end mb-5">
+        <div class="mb-5 flex justify-end">
 
             <button wire:click="updateStatusProject" @disabled(blank($spk_number)) wire:loading.attr="disabled"
                 class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
