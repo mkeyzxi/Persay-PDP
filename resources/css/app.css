@@ -85,6 +85,22 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
+@keyframes bounce-x {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+}
+
+.animate-bounce-x {
+    animation: bounce-x 1s infinite;
+}
+
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */

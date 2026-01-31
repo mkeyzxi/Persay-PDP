@@ -8,10 +8,10 @@ use App\Exports\ProjectExport;
 
 class ProjectExecutionExport extends Component
 {
-public $selectedStatus = 'SEMUA';
+    public $selectedStatus = 'SEMUA';
     public function export()
     {
-        return Excel::download(new ProjectExport($this->selectedStatus), 'Laporan_Proyek_Open_Closed_' . date('Y-m-d') . '.xlsx');
+        return Excel::download(new ProjectExport($this->selectedStatus), "Laporan_Proyek_{$this->selectedStatus}_" . date('Y-m-d') . '.xlsx');
     }
     public function render()
     {

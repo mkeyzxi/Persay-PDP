@@ -4,7 +4,7 @@
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                Download Project Data – Akuntansi
+                Download Project Data
             </h1>
             <p class="mt-2 text-gray-600 dark:text-gray-400">
                 Export data project ke file Excel berdasarkan status yang dipilih

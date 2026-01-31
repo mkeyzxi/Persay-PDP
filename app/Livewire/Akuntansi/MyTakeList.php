@@ -2,30 +2,69 @@
 
 namespace App\Livewire\Akuntansi;
 
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use App\Models\Projects;
 use App\Models\MaterialIssues;
 use App\Models\MaterialIssuesItems;
 use App\Models\ProjectDocuments;
+use Illuminate\Support\Facades\Log;
 
 class MyTakeList extends Component
 {
     public $project_id;
 
     // HEADER
+    #[Validate('required|string|min:3|max:100')]
     public $spk_number;
+
+    #[Validate([
+        'required',
+        'string',
+        'regex:/^[A-Z]\.\d{4}\.\d{2}\.\d{2}\.\d{4}\.\d{3}\.\d{2}$/'
+    ])]
     public $wbs_number;
+
+    #[Validate('required|string|min:5|max:255')]
     public $project_name;
+
+    #[Validate('nullable|string|min:3|max:255')]
     public $vendor_name;
+
+    #[Validate('nullable|string|max:255')]
     public $location;
+
+    #[Validate('nullable|numeric|min:0')]
     public $contract_value;
+
+    #[Validate('nullable|date')]
     public $contract_start_date;
+
+    #[Validate('nullable|date|after_or_equal:contract_start_date')]
     public $contract_end_date;
-    public $pdp_category;
-    public $follow_up_code;
+
+    #[Validate('nullable|date')]
     public $target_completion_date;
-    public $constraint_note;
+
+    #[Validate('nullable|date')]
     public $slo_date;
+
+    #[Validate([
+        'nullable',
+        'string',
+        'in:D1.1,D1.2,D1.3,D2.1,D2.2'
+    ])]
+    public $pdp_category;
+
+    #[Validate([
+        'nullable',
+        'string',
+        'in:TL-1,TL-2,TL-3,TL-4'
+    ])]
+    public $follow_up_code;
+
+    #[Validate('nullable|string|max:1000')]
+    public $constraint_note;
 
     // MATERIAL
     public $material_inputs = [];
@@ -95,8 +134,8 @@ class MyTakeList extends Component
                 $this->material_inputs[$item->id] = [
                     'posting_date' => optional($issue->posting_date)?->format('Y-m-d'),
                     'sap_doc_no'   => $issue->sap_doc_no,
-                    'material_code'=> optional($item->material)->sap_material_code ?? '-',
-                    'material_name'=> optional($item->material)->material_description ?? '-',
+                    'material_code' => optional($item->material)->sap_material_code ?? '-',
+                    'material_name' => optional($item->material)->material_description ?? '-',
                     'quantity_sap' => $qtySap,
                     'quantity_installed' => $qtyInstalled,
                     'selisih' => $qtySap - $qtyInstalled,
@@ -109,39 +148,61 @@ class MyTakeList extends Component
 
     public function updateMaterialItem($itemId)
     {
+        // Validate itemId exists in material_inputs
         if (!isset($this->material_inputs[$itemId])) {
             return;
         }
 
-        MaterialIssuesItems::where('id', $itemId)->update([
-            'asset_number' => $this->material_inputs[$itemId]['asset_number'],
-            'asset_number_date' => now(),
-        ]);
+        $assetNumber = trim($this->material_inputs[$itemId]['asset_number'] ?? '');
 
-        session()->flash('message', "Asset number berhasil disimpan");
+        // Skip if asset_number is empty (allow clearing)
+        // But validate format if not empty (optional: add regex validation)
+        if (!empty($assetNumber) && strlen($assetNumber) > 50) {
+            session()->flash('error', "Asset number terlalu panjang (max 50 karakter)");
+            return;
+        }
+
+        try {
+            $updated = MaterialIssuesItems::where('id', $itemId)->update([
+                'asset_number' => $assetNumber ?: null,
+                'asset_number_date' => !empty($assetNumber) ? now() : null,
+            ]);
+
+            if ($updated) {
+                // Refresh the local data to reflect saved state
+                $this->material_inputs[$itemId]['asset_number'] = $assetNumber;
+                session()->flash('message', "Asset number berhasil disimpan");
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', "Gagal menyimpan asset number: " . $e->getMessage());
+            Log::error("Error updating asset number for item {$itemId}: " . $e->getMessage());
+        }
     }
 
     public function updateStatusProject()
     {
         if (!$this->project_id) return;
 
-        $hasEmptyAsset = MaterialIssuesItems::whereHas('issue', fn ($q) =>
+        $hasEmptyAsset = MaterialIssuesItems::whereHas(
+            'issue',
+            fn($q) =>
             $q->where('project_id', $this->project_id)
         )
-            ->where(fn ($q) =>
+            ->where(
+                fn($q) =>
                 $q->whereNull('asset_number')->orWhere('asset_number', '')
             )
             ->exists();
 
         if ($hasEmptyAsset) {
-            session()->flash('error', 'Masih ada asset number yang belum diisi.');
+            session()->flash('error', 'Masih ada asset number yang belum diisi!.');
             return;
         }
 
         Projects::where('id', $this->project_id)
             ->update(['status' => 'CLOSED']);
 
-        session()->flash('message', 'Project ditutup. Semua asset lengkap 🎯');
+        session()->flash('message', 'Project ditutup. Semua asset lengkap');
     }
 
     protected function resetProjectData()
