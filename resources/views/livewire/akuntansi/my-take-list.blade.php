@@ -6,9 +6,7 @@
             <p class="mt-2 text-zinc-600 dark:text-zinc-400">Kelola progress proyek dan material</p>
         </div>
 
-
-
-        <!-- SECTION 1: Pilih SPK & Header Info -->
+        <!-- Pilih SPK & Header Info -->
         <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
             <h2
                 class="mb-4 border-b border-zinc-200 pb-2 text-xl font-semibold text-zinc-800 dark:border-zinc-700 dark:text-zinc-100">
@@ -21,7 +19,7 @@
                     <label class="text-primary-800 dark:text-primary-300 mb-1 block text-sm font-medium">Nomor SPBJ/SPK
                         *</label>
                     <select wire:model.lazy="spk_number"
-                        class="border-primary-300 dark:border-primary-600 focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border bg-white px-4 py-2 focus:ring-2 dark:bg-zinc-700 dark:text-zinc-100">
+                        class="border-primary-300 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-600 w-full rounded-lg border bg-white px-4 py-2 focus:ring-2 dark:bg-zinc-700 dark:text-zinc-100">
                         <option value="">PILIH NOMOR KONTRAK</option>
                         @foreach ($availableProjects as $proj)
                             <option value="{{ $proj->spk_number }}">{{ $proj->spk_number }}</option>
@@ -30,109 +28,116 @@
                 </div>
 
                 <!-- WBS Number -->
-                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-green-800">Nomor WBS</label>
+                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3 dark:bg-green-900/20">
+                    <label class="mb-1 block text-sm font-medium text-green-800 dark:text-green-300">Nomor WBS</label>
                     <input type="text" wire:model="wbs_number" readonly
-                        class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 text-green-700"
+                        class="w-full rounded-lg border border-green-300 bg-green-100 px-4 py-2 text-green-700 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100"
                         placeholder="Terisi Otomatis">
-                    <span class="mt-1 text-xs text-green-600">Terisi Otomatis dari SPK</span>
+                    <span class="mt-1 text-xs text-green-600 dark:text-green-400">Terisi Otomatis dari SPK</span>
                 </div>
 
                 <!-- Judul Pekerjaan -->
-                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-yellow-800">Judul Pekerjaan</label>
+                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3 dark:bg-yellow-900/20">
+                    <label class="mb-1 block text-sm font-medium text-yellow-800 dark:text-yellow-300">Judul
+                        Pekerjaan</label>
                     <input type="text" readonly wire:model="project_name"
-                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
-                        placeholder="Terisi otomatis ">
+                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 dark:border-yellow-600 dark:bg-zinc-700 dark:text-zinc-100"
+                        placeholder="Terisi otomatis">
                 </div>
 
                 <!-- Nama Vendor -->
-                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-yellow-800">Nama Vendor</label>
+                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3 dark:bg-yellow-900/20">
+                    <label class="mb-1 block text-sm font-medium text-yellow-800 dark:text-yellow-300">Nama
+                        Vendor</label>
                     <input type="text" wire:model="vendor_name"
-                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
-                        placeholder="Terisi otomatis " readonly>
+                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 dark:border-yellow-600 dark:bg-zinc-700 dark:text-zinc-100"
+                        placeholder="Terisi otomatis" readonly>
                 </div>
 
                 <!-- Lokasi -->
-                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-yellow-800">Lokasi</label>
+                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3 dark:bg-yellow-900/20">
+                    <label class="mb-1 block text-sm font-medium text-yellow-800 dark:text-yellow-300">Lokasi</label>
                     <input type="text" wire:model="location"
-                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
+                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 dark:border-yellow-600 dark:bg-zinc-700 dark:text-zinc-100"
                         placeholder="Terisi otomatis" readonly>
                 </div>
 
                 <!-- Nilai Kontrak -->
-                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-yellow-800">Nilai Kontrak (Rp)</label>
+                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3 dark:bg-yellow-900/20">
+                    <label class="mb-1 block text-sm font-medium text-yellow-800 dark:text-yellow-300">Nilai Kontrak
+                        (Rp)</label>
                     <input type="number" wire:model="contract_value"
-                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
+                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 dark:border-yellow-600 dark:bg-zinc-700 dark:text-zinc-100"
                         placeholder="Terisi otomatis" readonly>
                 </div>
 
                 <!-- Tanggal Kontrak -->
-                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-yellow-800">Tanggal Kontrak</label>
+                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3 dark:bg-yellow-900/20">
+                    <label class="mb-1 block text-sm font-medium text-yellow-800 dark:text-yellow-300">Tanggal
+                        Kontrak</label>
                     <input type="text" wire:model="contract_start_date"
-                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
+                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 dark:border-yellow-600 dark:bg-zinc-700 dark:text-zinc-100"
                         readonly placeholder="Terisi otomatis">
                 </div>
 
                 <!-- Tanggal Selesai -->
-                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-yellow-800">Tanggal Selesai</label>
+                <div class="rounded-lg border-2 border-yellow-500 bg-yellow-50 p-3 dark:bg-yellow-900/20">
+                    <label class="mb-1 block text-sm font-medium text-yellow-800 dark:text-yellow-300">Tanggal
+                        Selesai</label>
                     <input type="text" wire:model="contract_end_date" readonly
-                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
+                        class="w-full rounded-lg border border-yellow-300 bg-white px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 dark:border-yellow-600 dark:bg-zinc-700 dark:text-zinc-100"
                         placeholder="Terisi otomatis">
                 </div>
 
                 <!-- Kategori -->
-                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-green-800">Kategori</label>
+                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3 dark:bg-green-900/20">
+                    <label class="mb-1 block text-sm font-medium text-green-800 dark:text-green-300">Kategori</label>
                     <input type="text" wire:model="category" placeholder="Terisi otomatis" readonly
-                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100">
                 </div>
 
                 <!-- Kategori PDP -->
-                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-green-800">Kategori PDP</label>
+                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3 dark:bg-green-900/20">
+                    <label class="mb-1 block text-sm font-medium text-green-800 dark:text-green-300">Kategori
+                        PDP</label>
                     <input type="text" wire:model="pdp_category" placeholder="Terisi otomatis" readonly
-                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500" />
-
+                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100" />
                 </div>
 
                 <!-- Tindak Lanjut -->
-                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-green-800">Tindak Lanjut</label>
+                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3 dark:bg-green-900/20">
+                    <label class="mb-1 block text-sm font-medium text-green-800 dark:text-green-300">Tindak
+                        Lanjut</label>
                     <input type="text" wire:model="follow_up_code" placeholder="Terisi otomatis" readonly
-                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100">
                 </div>
 
                 <!-- Target Penyelesaian -->
-                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-green-800">Target Penyelesaian</label>
+                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3 dark:bg-green-900/20">
+                    <label class="mb-1 block text-sm font-medium text-green-800 dark:text-green-300">Target
+                        Penyelesaian</label>
                     <input type="date" wire:model="target_completion_date" placeholder="Terisi otomatis" readonly
-                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100">
                 </div>
 
                 <!-- Tanggal SLO -->
-                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                    <label class="mb-1 block text-sm font-medium text-green-800">Tanggal SLO</label>
-                    <input type="date" wire:model="slo_date"placeholder="Terisi otomatis" readonly
-                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500">
+                <div class="rounded-lg border-2 border-green-500 bg-green-50 p-3 dark:bg-green-900/20">
+                    <label class="mb-1 block text-sm font-medium text-green-800 dark:text-green-300">Tanggal SLO</label>
+                    <input type="date" wire:model="slo_date" placeholder="Terisi otomatis" readonly
+                        class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100">
                 </div>
-
-
             </div>
 
             <!-- Kendala Note -->
-            <div class="mt-4 rounded-lg border-2 border-green-500 bg-green-50 p-3">
-                <label class="mb-1 block text-sm font-medium text-green-800">Kendala / Catatan</label>
+            <div class="mt-4 rounded-lg border-2 border-green-500 bg-green-50 p-3 dark:bg-green-900/20">
+                <label class="mb-1 block text-sm font-medium text-green-800 dark:text-green-300">Kendala /
+                    Catatan</label>
                 <textarea wire:model="constraint_note" rows="3"
-                    class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500"
+                    class="w-full rounded-lg border border-green-300 bg-white px-4 py-2 focus:border-green-500 focus:ring-2 focus:ring-green-500 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100"
                     placeholder="Terisi otomatis" readonly></textarea>
             </div>
         </div>
+
         <!-- Flash Messages -->
         @if (session()->has('message'))
             <div
@@ -147,6 +152,7 @@
                 {{ session('error') }}
             </div>
         @endif
+
         <!-- SECTION 2: Material Table -->
         <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
             <h2
@@ -184,20 +190,19 @@
                                     <div>FISIK KELUAR</div>
                                 </th>
                                 <th
-                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900">
+                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900 dark:bg-yellow-500/80">
                                     <div>FISIK TERPASANG</div>
-
                                 </th>
                                 <th
                                     class="px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">
                                     <div>SELISIH</div>
                                 </th>
                                 <th
-                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900">
+                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900 dark:bg-yellow-500/80">
                                     <div>NILAI PDP</div>
                                 </th>
                                 <th
-                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900">
+                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900 dark:bg-yellow-500/80">
                                     <div>Nomor Asset</div>
                                 </th>
                             </tr>
@@ -212,35 +217,40 @@
                                     <td
                                         class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ $item['posting_date'] ?? '-' }}</td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ $item['sap_doc_no'] ?? '-' }}</td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ $item['material_code'] ?? '-' }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-zinc-600 dark:text-zinc-400">{{ $item['material_name'] }}</td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                                    <td class="px-3 py-3 text-sm text-zinc-600 dark:text-zinc-400">
+                                        {{ $item['material_name'] }}</td>
+                                    <td
+                                        class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ number_format($item['quantity_sap'], 2) }}
                                     </td>
-                                    <td class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center">
+                                    <td
+                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-zinc-700 dark:bg-yellow-900/20 dark:text-zinc-300">
                                         {{ number_format($item['quantity_installed'], 2) }}
                                     </td>
                                     <td
-                                        class="{{ ($item['selisih'] ?? 0) > 0 || ($item['selisih'] ?? 0) < 0 ? 'text-red-600' : 'text-green-600' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
+                                        class="{{ ($item['selisih'] ?? 0) > 0 || ($item['selisih'] ?? 0) < 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
                                         {{ number_format($item['selisih'] ?? 0, 2) }}
                                     </td>
                                     <td
-                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:bg-yellow-900/20 dark:text-zinc-300">
                                         Rp {{ number_format($item['val_currency'] ?? 0, 0, ',', '.') }}
                                     </td>
                                     <td
-                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm dark:bg-yellow-900/20">
                                         <div class="relative">
                                             <input type="text"
                                                 wire:model.blur="material_inputs.{{ $itemId }}.asset_number"
                                                 wire:change.debounce.500ms="updateMaterialItem({{ $itemId }})"
                                                 class="{{ !empty($item['asset_number'])
-                                                    ? 'border-green-300 bg-white focus:border-green-500 focus:ring-green-500'
-                                                    : 'border-green-300 bg-green-200 focus:border-green-500 focus:ring-green-500' }} w-[150px] rounded-lg border px-4 py-2 pr-8 focus:ring-2"
+                                                    ? 'border-green-300 bg-white focus:border-green-500 focus:ring-green-500 dark:border-green-600 dark:bg-zinc-700 dark:text-zinc-100'
+                                                    : 'border-green-300 bg-green-200 focus:border-green-500 focus:ring-green-500 dark:border-green-600 dark:bg-green-900/30 dark:text-zinc-100' }} w-[150px] rounded-lg border px-4 py-2 pr-8 focus:ring-2"
                                                 placeholder="Masukkan asset" />
                                             {{-- Loading indicator per-item --}}
                                             <div wire:loading wire:target="updateMaterialItem({{ $itemId }})"
@@ -275,21 +285,18 @@
                             @endforeach
                         </tbody>
                     </table>
-
                 </div>
             @else
-                <div class="py-8 text-center text-zinc-500 dark:text-gray-400">
+                <div class="py-8 text-center text-zinc-500 dark:text-zinc-400">
                     <p class="mt-2">Pilih SPK Number untuk melihat data material</p>
                 </div>
             @endif
-
         </div>
 
         <!-- Save Button -->
         <div class="mb-5 flex justify-end">
-
             <button wire:click="updateStatusProject" @disabled(blank($spk_number)) wire:loading.attr="disabled"
-                class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
+                class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-zinc-800">
                 <span wire:loading.remove wire:target="updateStatusProject">
                     Nyatakan Selesai
                 </span>
@@ -297,29 +304,26 @@
                     Menyimpan...
                 </span>
             </button>
-
-
         </div>
 
         <!-- List Dokumen yang sudah diupload -->
         @if (count($uploadedDocuments) > 0)
-            <!-- SECTION 3: Upload Dokumen -->
             <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
-
                 <div class="mt-6">
-                    <h3 class="mb-3 text-lg font-medium text-gray-800">Dokumen Terupload:</h3>
+                    <h3 class="mb-3 text-lg font-medium text-zinc-800 dark:text-zinc-100">Dokumen Terupload:</h3>
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                         @foreach ($uploadedDocuments as $doc)
-                            <div class="flex items-center rounded-lg border border-gray-200 bg-gray-50 p-3">
+                            <div
+                                class="flex items-center rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-700/50">
                                 <svg class="mr-3 h-8 w-8 flex-shrink-0 text-blue-500" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                 </svg>
                                 <div class="min-w-0 flex-1">
-                                    <p class="truncate text-sm font-medium text-gray-900">
+                                    <p class="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                         {{ $doc->original_filename }}</p>
-                                    <p class="text-xs text-zinc-500">
+                                    <p class="text-xs text-zinc-500 dark:text-zinc-400">
                                         {{ $doc->document_type }}
                                         @if ($doc->uploaded_at)
                                             • {{ \Carbon\Carbon::parse($doc->uploaded_at)->format('d M Y') }}
@@ -332,8 +336,5 @@
                 </div>
             </div>
         @endif
-
-
-
     </div>
 </div>

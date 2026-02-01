@@ -18,7 +18,7 @@
         </flux:sidebar.group>
 
         {{-- Menu Logistik --}}
-        @if (auth()->user()->role === 'logistik')
+        @if (auth()->user()?->role === 'logistik')
             <flux:sidebar.group :heading="__('Input Data')" class="grid">
                 <flux:sidebar.item icon="cloud-arrow-up" :href="route('logistik.upload-sap')"
                     :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
@@ -32,7 +32,7 @@
         @endif
 
         {{-- Menu Akuntansi --}}
-        @if (auth()->user()->role === 'akuntansi')
+        @if (auth()->user()?->role === 'akuntansi')
             <flux:sidebar.group :heading="__('Input Data')" class="grid">
                 <flux:sidebar.item icon="cloud-arrow-up" :href="route('akuntansi.upload-sap')"
                     :current="request()->routeIs('akuntansi.upload-sap')" wire:navigate>
@@ -64,7 +64,7 @@
         @endif
 
         {{-- Menu Konstruksi --}}
-        @if (auth()->user()->role === 'konstruksi')
+        @if (auth()->user()?->role === 'konstruksi')
             <flux:sidebar.group :heading="__('Manajemen Project')" class="grid">
                 <flux:sidebar.item icon="clipboard-document-list" :href="route('konstruksi.my-take-list')"
                     :current="request()->routeIs('konstruksi.my-take-list')" wire:navigate>
@@ -78,7 +78,7 @@
         @endif
 
         {{-- Menu Admin --}}
-        @if (auth()->user()->role === 'admin')
+        @if (auth()->user()?->role === 'admin')
             <flux:sidebar.group :heading="__('Administrasi')" class="grid">
                 <flux:sidebar.item icon="user-plus" :href="route('register')"
                     :current="request()->routeIs('register')" wire:navigate>
