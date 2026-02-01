@@ -1,12 +1,12 @@
-<div class="min-h-screen bg-gray-50 p-6 transition-colors dark:bg-[#1e1e2e]">
+<div class="min-h-screen bg-zinc-50 p-6 transition-colors dark:bg-zinc-900">
     <div class="mx-auto max-w-4xl">
 
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
                 Download Project Data
             </h1>
-            <p class="mt-2 text-gray-600 dark:text-gray-400">
+            <p class="mt-2 text-gray-600 dark:text-zinc-400">
                 Export data project ke file Excel berdasarkan status yang dipilih
             </p>
         </div>
@@ -39,19 +39,19 @@
         </div>
 
         <!-- Export Options Card -->
-        <div class="mt-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
-            <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white">
+        <div class="mt-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+            <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-zinc-700 dark:text-white">
                 Export Data Project
             </h2>
 
             <div class="space-y-6">
                 <!-- Status Selection -->
-                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-600 dark:bg-gray-700/30">
-                    <label for="selectedStatus" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div class="rounded-lg border border-gray-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-700/30">
+                    <label for="selectedStatus" class="mb-2 block text-sm font-medium text-gray-700 dark:text-zinc-300">
                         Pilih Status Project
                     </label>
                     <select id="selectedStatus" wire:model="selectedStatus"
-                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-700 shadow-sm transition-colors focus:border-[#5A6ACF] focus:outline-none focus:ring-2 focus:ring-[#5A6ACF]/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-700 shadow-sm transition-colors focus:border-[#5A6ACF] focus:outline-none focus:ring-2 focus:ring-[#5A6ACF]/20 dark:border-zinc-700 dark:bg-zinc-700 dark:text-white">
                         <option value="SEMUA">SEMUA STATUS</option>
                         <option value="OPEN">OPEN</option>
                         <option value="CLOSED">CLOSED</option>
@@ -70,7 +70,7 @@
                             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
 
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <p class="text-sm text-gray-600 dark:text-zinc-400">
                         Klik tombol di bawah untuk mengunduh data project dalam format Excel
                     </p>
                 </div>
@@ -106,7 +106,7 @@
         </div>
 
         <!-- Footer Note -->
-        <div class="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div class="mt-4 text-center text-sm text-gray-500 dark:text-zinc-400">
             File Excel akan otomatis terunduh setelah tombol Export diklik
         </div>
 
