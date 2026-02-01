@@ -23,29 +23,50 @@
     --color-primary-800: #242a53;
     --color-primary-900: #121529;
 
-    /* Sidebar Colors */
-    --color-sidebar-bg: #979797;
-    --color-sidebar-bg-dark: #1f2937;
+    /* ====== DARK MODE DESIGN TOKENS (Zinc Family) ====== */
 
-    /* Main Background */
-    --color-main-bg: #ffffff;
-    --color-main-bg-dark: #1e1e2e;
+    /* Background Colors */
+    --color-bg-light: #ffffff;
+    --color-bg-dark: #18181b;
+    /* zinc-900 */
 
-    /* Card Background */
-    --color-card-bg: #ffffff;
-    --color-card-bg-dark: #2d2d3d;
+    /* Surface/Card Colors */
+    --color-surface-light: #ffffff;
+    --color-surface-dark: #27272a;
+    /* zinc-800 */
 
+    /* Border Colors */
+    --color-border-light: #e4e4e7;
+    /* zinc-200 */
+    --color-border-dark: #3f3f46;
+    /* zinc-700 */
+
+    /* Text Colors */
+    --color-text-primary-light: #18181b;
+    /* zinc-900 */
+    --color-text-primary-dark: #f4f4f5;
+    /* zinc-100 */
+    --color-text-secondary-light: #52525b;
+    /* zinc-600 */
+    --color-text-secondary-dark: #a1a1aa;
+    /* zinc-400 */
+    --color-text-muted-light: #71717a;
+    /* zinc-500 */
+    --color-text-muted-dark: #71717a;
+    /* zinc-500 */
+
+    /* Zinc Scale for direct usage */
     --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
+    --color-zinc-100: #f4f4f5;
+    --color-zinc-200: #e4e4e7;
+    --color-zinc-300: #d4d4d8;
+    --color-zinc-400: #a1a1aa;
+    --color-zinc-500: #71717a;
+    --color-zinc-600: #52525b;
+    --color-zinc-700: #3f3f46;
+    --color-zinc-800: #27272a;
+    --color-zinc-900: #18181b;
+    --color-zinc-950: #09090b;
 
     --color-accent: var(--color-primary-500);
     --color-accent-content: var(--color-primary-500);

@@ -1,16 +1,17 @@
-<div class="min-h-screen bg-gray-50 p-6 transition-colors dark:bg-[#1e1e2e]">
+<div class="min-h-screen bg-zinc-50 p-6 transition-colors dark:bg-zinc-900">
     <div class="mx-auto max-w-7xl">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Take List - Akuntansi</h1>
-            <p class="mt-2 text-gray-600 dark:text-gray-400">Kelola progress proyek dan material</p>
+            <h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">My Take List - Akuntansi</h1>
+            <p class="mt-2 text-zinc-600 dark:text-zinc-400">Kelola progress proyek dan material</p>
         </div>
 
 
 
         <!-- SECTION 1: Pilih SPK & Header Info -->
-        <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
-            <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white">
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+            <h2
+                class="mb-4 border-b border-zinc-200 pb-2 text-xl font-semibold text-zinc-800 dark:border-zinc-700 dark:text-zinc-100">
                 <span class="text-primary-500">1.</span> Pilih Project & Data Header
             </h2>
 
@@ -20,7 +21,7 @@
                     <label class="text-primary-800 dark:text-primary-300 mb-1 block text-sm font-medium">Nomor SPBJ/SPK
                         *</label>
                     <select wire:model.lazy="spk_number"
-                        class="border-primary-300 dark:border-primary-600 focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border bg-white px-4 py-2 focus:ring-2 dark:bg-gray-700 dark:text-white">
+                        class="border-primary-300 dark:border-primary-600 focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border bg-white px-4 py-2 focus:ring-2 dark:bg-zinc-700 dark:text-zinc-100">
                         <option value="">PILIH NOMOR KONTRAK</option>
                         @foreach ($availableProjects as $proj)
                             <option value="{{ $proj->spk_number }}">{{ $proj->spk_number }}</option>
@@ -147,14 +148,15 @@
             </div>
         @endif
         <!-- SECTION 2: Material Table -->
-        <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
-            <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white">
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+            <h2
+                class="mb-4 border-b border-zinc-200 pb-2 text-xl font-semibold text-zinc-800 dark:border-zinc-700 dark:text-zinc-100">
                 <span class="text-primary-500">2.</span> Data Material
             </h2>
 
             @if (count($material_inputs) > 0)
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                    <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700">
                         <thead class="bg-primary-500">
                             <tr>
                                 <th
@@ -200,22 +202,23 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-600 dark:bg-[#2d2d3d]">
+                        <tbody class="divide-y divide-zinc-200 bg-white dark:divide-zinc-700 dark:bg-zinc-800">
                             @php $no = 1; @endphp
                             @foreach ($material_inputs as $itemId => $item)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-700">
                                     <td
-                                        class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-900 dark:text-gray-100">
+                                        class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-900 dark:text-zinc-100">
                                         {{ $no++ }}</td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
+                                    <td
+                                        class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ $item['posting_date'] ?? '-' }}</td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
+                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ $item['sap_doc_no'] ?? '-' }}</td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
+                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ $item['material_code'] ?? '-' }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-600">{{ $item['material_name'] }}</td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600">
+                                    <td class="px-3 py-3 text-sm text-zinc-600 dark:text-zinc-400">{{ $item['material_name'] }}</td>
+                                    <td class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         {{ number_format($item['quantity_sap'], 2) }}
                                     </td>
                                     <td class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center">
@@ -226,11 +229,11 @@
                                         {{ number_format($item['selisih'] ?? 0, 2) }}
                                     </td>
                                     <td
-                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-gray-600">
+                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         Rp {{ number_format($item['val_currency'] ?? 0, 0, ',', '.') }}
                                     </td>
                                     <td
-                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-gray-600">
+                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                         <div class="relative">
                                             <input type="text"
                                                 wire:model.blur="material_inputs.{{ $itemId }}.asset_number"
@@ -275,7 +278,7 @@
 
                 </div>
             @else
-                <div class="py-8 text-center text-gray-500 dark:text-gray-400">
+                <div class="py-8 text-center text-zinc-500 dark:text-gray-400">
                     <p class="mt-2">Pilih SPK Number untuk melihat data material</p>
                 </div>
             @endif
@@ -301,7 +304,7 @@
         <!-- List Dokumen yang sudah diupload -->
         @if (count($uploadedDocuments) > 0)
             <!-- SECTION 3: Upload Dokumen -->
-            <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
+            <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
 
                 <div class="mt-6">
                     <h3 class="mb-3 text-lg font-medium text-gray-800">Dokumen Terupload:</h3>
@@ -316,7 +319,7 @@
                                 <div class="min-w-0 flex-1">
                                     <p class="truncate text-sm font-medium text-gray-900">
                                         {{ $doc->original_filename }}</p>
-                                    <p class="text-xs text-gray-500">
+                                    <p class="text-xs text-zinc-500">
                                         {{ $doc->document_type }}
                                         @if ($doc->uploaded_at)
                                             • {{ \Carbon\Carbon::parse($doc->uploaded_at)->format('d M Y') }}

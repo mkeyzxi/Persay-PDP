@@ -1,12 +1,12 @@
-<div class="min-h-screen bg-gray-50 p-6 transition-colors dark:bg-[#1e1e2e]">
+<div class="min-h-screen bg-zinc-50 p-6 transition-colors dark:bg-zinc-900">
     <div class="mx-auto max-w-4xl">
 
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
                 Upload Project Execution
             </h1>
-            <p class="mt-2 text-gray-600 dark:text-gray-400">
+            <p class="mt-2 text-gray-600 dark:text-zinc-400">
                 Upload file Excel untuk memperbarui data execution dan akuntansi project
             </p>
         </div>
@@ -40,8 +40,8 @@
         </div>
 
         <!-- Upload File -->
-        <div class="mt-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
-            <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white">
+        <div class="mt-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+            <h2 class="mb-4 border-b pb-2 text-xl font-semibold text-gray-800 dark:border-zinc-700 dark:text-white">
                 Upload File Excel Project Execution
             </h2>
 
@@ -64,7 +64,7 @@
                         </label>
 
                         <input type="file" wire:model="executionFile"
-                            class="mx-auto block w-full max-w-md rounded-lg border border-green-300 bg-white px-4 py-2 text-sm file:mr-4 file:rounded file:border-0 file:bg-green-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-green-600 dark:border-green-600 dark:bg-gray-700 dark:text-white">
+                            class="mx-auto block w-full max-w-md rounded-lg border border-green-300 bg-white px-4 py-2 text-sm file:mr-4 file:rounded file:border-0 file:bg-green-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-green-600 dark:border-green-600 dark:bg-zinc-700 dark:text-white">
 
                         <span class="mt-2 block text-xs text-green-600 dark:text-green-400">
                             Format yang didukung: .xlsx, .xls, .csv
@@ -110,7 +110,7 @@
         </div>
 
         <!-- Footer Note -->
-        <div class="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div class="mt-4 text-center text-sm text-gray-500 dark:text-zinc-400">
             Pastikan <strong>Nomor Kontrak</strong> pada Excel sesuai dengan data project yang sudah terdaftar
         </div>
 
