@@ -84,6 +84,10 @@
                     :current="request()->routeIs('register')" wire:navigate>
                     {{ __('Tambah User') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="user-group" :href="route('admin.management-users')"
+                    :current="request()->routeIs('admin.management-users')" wire:navigate>
+                    {{ __('Management Users') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         @endif
 
