@@ -275,8 +275,8 @@
                                         class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center dark:bg-yellow-900/20">
                                         <input type="number" step="0.01"
                                             wire:model.live="material_inputs.{{ $itemId }}.quantity_installed"
-                                            class="w-24 rounded border-2 border-yellow-400 bg-yellow-50 px-2 py-1 text-center text-sm focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 dark:border-yellow-600 dark:bg-zinc-700 dark:text-zinc-100"
-                                            placeholder="0">
+                                            class="w-24 rounded border-2 border-yellow-400 ...">
+
                                     </td>
                                     <td
                                         class="{{ ($item['selisih'] ?? 0) > 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">

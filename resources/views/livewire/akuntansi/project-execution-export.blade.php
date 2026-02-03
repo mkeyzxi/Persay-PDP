@@ -26,17 +26,7 @@
             </div>
         @endif
 
-        <!-- Info Box -->
-        <div class="mt-6 rounded-lg border border-blue-300 bg-blue-50 p-4 dark:border-blue-600 dark:bg-blue-900/20">
-            <h3 class="mb-2 font-semibold text-blue-800 dark:text-blue-300">
-                Informasi Export
-            </h3>
-            <ul class="list-inside list-disc space-y-1 text-sm text-blue-700 dark:text-blue-400">
-                <li>Pilih status project yang ingin di-export</li>
-                <li>Data akan diunduh dalam format <strong>Excel (.xlsx)</strong></li>
-                <li>Pilih <strong>SEMUA</strong> untuk mengunduh seluruh data project</li>
-            </ul>
-        </div>
+
 
         <!-- Export Options Card -->
         <div class="mt-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
@@ -104,11 +94,22 @@
                 </div>
             </div>
         </div>
-
-        <!-- Footer Note -->
+   <!-- Footer Note -->
         <div class="mt-4 text-center text-sm text-gray-500 dark:text-zinc-400">
             File Excel akan otomatis terunduh setelah tombol Export diklik
         </div>
+    <!-- Info Box -->
+        <div class="mt-6 rounded-lg border border-blue-300 bg-blue-50 p-4 dark:border-blue-600 dark:bg-blue-900/20">
+            <h3 class="mb-2 font-semibold text-blue-800 dark:text-blue-300">
+                Informasi Export
+            </h3>
+            <ul class="list-inside list-disc space-y-1 text-sm text-blue-700 dark:text-blue-400">
+                <li>Pilih status project yang ingin di-export</li>
+                <li>Data akan diunduh dalam format <strong>Excel (.xlsx)</strong></li>
+                <li>Pilih <strong>SEMUA</strong> untuk mengunduh seluruh data project</li>
+            </ul>
+        </div>
+
 
     </div>
 </div>
