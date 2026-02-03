@@ -1,45 +1,78 @@
-{{-- custom layout for admin --}}
-<x-layouts.app.sidebar :title="'Register User'" >
+<x-layouts.app :title="'Register User'">
+    <div class="min-h-screen bg-zinc-50 p-6 dark:bg-zinc-900">
+        <div class="mx-auto max-w-md">
+            <!-- Header -->
+            <div class="mb-8 text-center">
+                <h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100">Tambah User Baru</h1>
+                <p class="mt-2 text-zinc-600 dark:text-zinc-400">Isi form di bawah untuk membuat akun baru</p>
+            </div>
 
-    <div class="mx-auto flex max-w-md flex-col gap-6">
-        <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+            <!-- Session Status -->
+            <x-auth-session-status class="mb-4 text-center" :status="session('status')" />
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+            <!-- Register Form -->
+            <form method="POST" action="{{ route('register.store') }}"
+                class="flex flex-col gap-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+                @csrf
 
-        <form method="POST" action="{{ route('register.store') }}"
-            class="flex flex-col gap-6 rounded-xl bg-white p-6 shadow-lg dark:bg-[#2d2d3d]">
-            @csrf
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Nama Lengkap *</label>
+                    <input type="text" name="name" required autofocus autocomplete="name"
+                        class="focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 focus:ring-2 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100"
+                        placeholder="Masukkan nama lengkap">
+                    @error('name')
+                        <span class="mt-1 text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <flux:input name="name" label="Name" type="text" required autofocus autocomplete="name"
-                placeholder="Full name" />
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Email *</label>
+                    <input type="email" name="email" required autocomplete="email"
+                        class="focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 focus:ring-2 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100"
+                        placeholder="email@example.com">
+                    @error('email')
+                        <span class="mt-1 text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <flux:input name="email" label="Email address" type="email" required autocomplete="email"
-                placeholder="email@example.com" />
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Password *</label>
+                    <input type="password" name="password" required autocomplete="new-password"
+                        class="focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 focus:ring-2 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100"
+                        placeholder="Masukkan password">
+                    @error('password')
+                        <span class="mt-1 text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <flux:input name="password" label="Password" type="password" required autocomplete="new-password"
-                viewable />
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Konfirmasi Password
+                        *</label>
+                    <input type="password" name="password_confirmation" required autocomplete="new-password"
+                        class="focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 focus:ring-2 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100"
+                        placeholder="Ulangi password">
+                </div>
 
-            <flux:input name="password_confirmation" label="Confirm password" type="password" required
-                autocomplete="new-password" viewable />
-            <flux:select name="role" label="Role" wire:model="role" required>
-                <option value="logistik">Logistik</option>
-                <option value="konstruksi">Konstruksi</option>
-                <option value="akuntansi">Akuntansi</option>
-            </flux:select>
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Role *</label>
+                    <select name="role" required
+                        class="focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 focus:ring-2 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100">
+                        <option value="">Pilih Role</option>
+                        <option value="logistik">Logistik</option>
+                        <option value="konstruksi">Konstruksi</option>
+                        <option value="akuntansi">Akuntansi</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    @error('role')
+                        <span class="mt-1 text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <flux:button type="submit" variant="primary"
-                class="!bg-primary-500 hover:!bg-primary-600 w-full !text-white">
-                Create account
-            </flux:button>
-        </form>
-
-
-
-        <div class="space-x-1 text-center text-sm text-zinc-600 rtl:space-x-reverse dark:text-zinc-400">
-            <span>{{ __('Already have an account?') }}</span>
-            <flux:link :href="route('login')" class="text-primary-500 hover:text-primary-600 dark:text-primary-400"
-                wire:navigate>{{ __('Log in') }}</flux:link>
+                <button type="submit"
+                    class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 w-full rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-zinc-800">
+                    Buat Akun
+                </button>
+            </form>
         </div>
     </div>
-</x-layouts.app.sidebar>
+</x-layouts.app>
