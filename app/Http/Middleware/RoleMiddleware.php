@@ -27,6 +27,10 @@ class RoleMiddleware
             // Jika role tidak cocok, tendang keluar (403 Forbidden)
             abort(403, 'AKSES DITOLAK: Anda bukan ' . ucfirst($role));
         }
+ if (Auth::user()->status !== 'active') {
+            // Jika status tidak aktif, tendang keluar (403 Forbidden)
+            abort(403, 'AKSES DITOLAK: Akun Anda tidak aktif.');
+        }
 
         // 3. Jika lolos, silakan lanjut
         return $next($request);

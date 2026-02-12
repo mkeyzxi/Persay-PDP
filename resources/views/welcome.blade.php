@@ -53,7 +53,7 @@
         </div>
     </nav>
 
-    <main class="mx-auto max-w-7xl px-6 pb-24 pt-16 text-center lg:text-left">
+    <main class="mx-auto max-w-7xl px-6 pb-24 pt-16 text-center  lg:text-left">
         <div class="grid items-center gap-16 lg:grid-cols-2">
             <div>
                 <div
@@ -198,13 +198,13 @@
 
     <footer class="bg-slate-50 py-12">
         <div class="mx-auto max-w-7xl px-6 text-center">
-            <div class="flex flex-col items-center justify-between gap-6 border-t border-slate-200 pt-12 md:flex-row">
-                <p class="text-sm font-medium italic text-slate-500">© 2026 PRISAY-PDP • Project Information System</p>
-                <div class="flex gap-8">
+            <div class="flex flex-col items-center justify-center gap-6 border-t border-slate-200 pt-12 md:flex-row">
+                <p class="text-sm font-medium italic text-slate-500">© 2026 PRISAY-PDP - Project Information System</p>
+                {{-- <div class="flex gap-8">
                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Built with Laravel
                         12</span>
                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Livewire Flux</span>
-                </div>
+                </div> --}}
             </div>
         </div>
     </footer>

@@ -94,11 +94,11 @@
                 </div>
             </div>
         </div>
-   <!-- Footer Note -->
+        <!-- Footer Note -->
         <div class="mt-4 text-center text-sm text-gray-500 dark:text-zinc-400">
             File Excel akan otomatis terunduh setelah tombol Export diklik
         </div>
-    <!-- Info Box -->
+        <!-- Info Box -->
         <div class="mt-6 rounded-lg border border-blue-300 bg-blue-50 p-4 dark:border-blue-600 dark:bg-blue-900/20">
             <h3 class="mb-2 font-semibold text-blue-800 dark:text-blue-300">
                 Informasi Export

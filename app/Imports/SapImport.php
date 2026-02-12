@@ -15,11 +15,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class SapImport implements OnEachRow, WithHeadingRow
 {
-    /**
-     * ======================================================
-     * MAIN HANDLER
-     * ======================================================
-     */
+
    public function onRow(Row $row)
 {
     $data = $row->toArray();
@@ -54,9 +50,7 @@ class SapImport implements OnEachRow, WithHeadingRow
 
 
     /**
-     * ======================================================
      * HELPER: PARSE DATE (SAP / EXCEL SAFE)
-     * ======================================================
      */
     private function parseDate($value)
     {
