@@ -34,6 +34,14 @@ Route::middleware(['auth', 'is.admin'])
     ->post('/register', [RegisteredUserController::class, 'store'])
     ->name('register.store');
 
+Route::middleware(['auth', 'is.admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/management-users', App\Livewire\Admin\ManagementUsers::class)
+            ->name('management-users');
+    });
+
 
 
 

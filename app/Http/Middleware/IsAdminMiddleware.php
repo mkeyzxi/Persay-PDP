@@ -15,7 +15,7 @@ class IsAdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!request()->user() || request()->user()->role !== 'admin') {
+        if (!request()->user() || request()->user()->role !== 'admin' || request()->user()->status !== 'active') {
             abort(404, 'Unauthorized');
                                             }
 
