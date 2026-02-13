@@ -194,10 +194,10 @@ class MyTakeList extends Component
             )
             ->exists();
 
-        if ($hasEmptyAsset) {
-            session()->flash('error', 'Masih ada asset number yang belum diisi!.');
-            return;
-        }
+        // if ($hasEmptyAsset) {
+        //     session()->flash('error', 'Masih ada asset number yang belum diisi!.');
+        //     return;
+        // }
 
         Projects::where('id', $this->project_id)
             ->update(['status' => 'CLOSED']);
