@@ -117,6 +117,7 @@ class OriginalWork extends Component
                     'wbs_element' => $item->wbs_element,
                     'asset_number' => $item->asset_number,
                     'remarks' => $item->remarks,
+                    'approval_status' => $item->approval_status,
                 ];
             }
         }
@@ -166,32 +167,26 @@ class OriginalWork extends Component
             session()->flash('error', 'Silakan pilih SPK Number terlebih dahulu!');
             return;
         }
-        if (round($this->selisih, 2) == 0 && $this->proggress_percent >= 100) {
 
-            $this->finish_project = true;
-            $project = Projects::find($this->project_id);
-            $project->update([
 
-                'proggress_percent' => $this->proggress_percent,
 
-                'bastp_date' => $this->bastp_date,
-                'status' => 'OPEN'
+        $project = Projects::find($this->project_id);
+        $project->update([
+            'proggress_percent' => $this->proggress_percent,
+            'bastp_date' => $this->bastp_date,
+            'status' => 'OPEN'
+        ]);
+
+        foreach ($this->material_inputs as $itemId => $data) {
+            MaterialIssuesItems::where('id', $itemId)->update([
+                'quantity_installed' => $data['quantity_installed'],
+                'asset_number' => $data['asset_number'] ?? null,
+                'remarks' => $data['remarks'] ?? null,
+                'approval_status' => 'process',
             ]);
-
-            foreach ($this->material_inputs as $itemId => $data) {
-                MaterialIssuesItems::where('id', $itemId)->update([
-                    'quantity_installed' => $data['quantity_installed'],
-                    'asset_number' => $data['asset_number'] ?? null,
-                    'remarks' => $data['remarks'] ?? null,
-                ]);
-            }
-
-
-            session()->flash('message', 'Pekerjaan berhasil disimpan!');
-        } else {
-            session()->flash('error', 'Untuk menyelesaikan proyek, pastikan selisih material adalah 0 dan progress adalah 100%!');
-            return;
         }
+
+        session()->flash('message', 'Progress berhasil disimpan!');
     }
 
 

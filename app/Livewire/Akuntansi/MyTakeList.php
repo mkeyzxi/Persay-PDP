@@ -141,6 +141,7 @@ class MyTakeList extends Component
                     'selisih' => $qtySap - $qtyInstalled,
                     'val_currency' => $item->val_currency ?? 0,
                     'asset_number' => $item->asset_number,
+                    'approval_status' => $item->approval_status,
                 ];
             }
         }
@@ -161,17 +162,60 @@ class MyTakeList extends Component
             session()->flash('error', "Asset number terlalu panjang (max 50 karakter)");
             return;
         }
+        if ($assetNumber === '') {
+            MaterialIssuesItems::where('id', $itemId)->update([
+                'asset_number' => null,
+                'asset_number_date' => null,
+                'approval_status' => 'pending',
+            ]);
+            $this->material_inputs[$itemId]['approval_status'] = 'pending';
+            session()->flash('error', "Asset number tidak boleh kosong, item akan di set ke status pending!");
+            return;
+        }
 
         try {
             $updated = MaterialIssuesItems::where('id', $itemId)->update([
                 'asset_number' => $assetNumber ?: null,
                 'asset_number_date' => !empty($assetNumber) ? now() : null,
+                'approval_status' => 'approved',
             ]);
 
             if ($updated) {
                 // Refresh the local data to reflect saved state
                 $this->material_inputs[$itemId]['asset_number'] = $assetNumber;
                 session()->flash('message', "Asset number berhasil disimpan");
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', "Gagal menyimpan asset number: " . $e->getMessage());
+            Log::error("Error updating asset number for item {$itemId}: " . $e->getMessage());
+        }
+    }
+    public function updateApprovalStatus($itemId)
+    {
+        // Validate itemId exists in material_inputs
+        if (!isset($this->material_inputs[$itemId])) {
+            return;
+        }
+
+        $assetNumber = trim($this->material_inputs[$itemId]['asset_number'] ?? '');
+
+        // Skip if asset_number is empty (allow clearing)
+        // But validate format if not empty (optional: add regex validation)
+        if (!empty($assetNumber) && strlen($assetNumber) > 50) {
+            session()->flash('error', "Asset number terlalu panjang (max 50 karakter)");
+            return;
+        }
+
+        try {
+            $updated = MaterialIssuesItems::where('id', $itemId)->update([
+                'approval_status' => 'pending',
+
+            ]);
+
+            if ($updated) {
+                // Refresh the local data to reflect saved state
+                $this->material_inputs[$itemId]['approval_status'] = 'pending';
+                session()->flash('message', "Status Item berhasil di Update ke Pending");
             }
         } catch (\Exception $e) {
             session()->flash('error', "Gagal menyimpan asset number: " . $e->getMessage());

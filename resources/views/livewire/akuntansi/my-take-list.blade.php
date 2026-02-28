@@ -205,12 +205,50 @@
                                     class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900 dark:bg-yellow-500/80">
                                     <div>Nomor Asset</div>
                                 </th>
+                                <th
+                                    class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900 dark:bg-yellow-500/80">
+                                    <div>Aksi</div>
+                                </th>
                             </tr>
                         </thead>
+
                         <tbody class="divide-y divide-zinc-200 bg-white dark:divide-zinc-700 dark:bg-zinc-800">
                             @php $no = 1; @endphp
                             @foreach ($material_inputs as $itemId => $item)
                                 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-700">
+                                    @php
+                                        $status = $item['approval_status'] ?? 'initial';
+
+                                        // Color for selisih column based on approval_status
+                                        $statusColor = match ($status) {
+                                            'initial' => 'text-red-600 dark:text-red-400',
+                                            'process' => 'text-yellow-600 dark:text-yellow-400',
+                                            'pending' => 'text-orange-600 dark:text-orange-400',
+                                            'approved' => 'text-green-600 dark:text-green-400',
+                                            default => 'text-gray-500 dark:text-gray-400',
+                                        };
+
+                                        // Badge style for status column
+                                        $badgeClass = match ($status) {
+                                            'initial' => 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+                                            'process'
+                                                => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+                                            'pending'
+                                                => 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+                                            'approved'
+                                                => 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+                                            default
+                                                => 'bg-gray-100 text-gray-700 dark:bg-gray-900/40 dark:text-gray-400',
+                                        };
+
+                                        $badgeLabel = match ($status) {
+                                            'initial' => 'Initial',
+                                            'process' => 'Process',
+                                            'pending' => 'Pending',
+                                            'approved' => 'Approved',
+                                            default => ucfirst($status),
+                                        };
+                                    @endphp
                                     <td
                                         class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-900 dark:text-zinc-100">
                                         {{ $no++ }}</td>
@@ -235,9 +273,43 @@
                                         {{ number_format($item['quantity_installed'], 2) }}
                                     </td>
                                     <td
-                                        class="{{ ($item['selisih'] ?? 0) > 0 || ($item['selisih'] ?? 0) < 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
+                                        class="{{ $statusColor }} whitespace-nowrap px-3 py-3 text-center text-sm font-bold">
                                         {{ number_format($item['selisih'] ?? 0, 2) }}
                                     </td>
+
+                                    @php
+                                        $status = $item['approval_status'] ?? 'initial';
+
+                                        // Color for selisih column based on approval_status
+                                        $statusColor = match ($status) {
+                                            'initial' => 'text-red-600 dark:text-red-400',
+                                            'process' => 'text-yellow-600 dark:text-yellow-400',
+                                            'pending' => 'text-orange-600 dark:text-orange-400',
+                                            'approved' => 'text-green-600 dark:text-green-400',
+                                            default => 'text-gray-500 dark:text-gray-400',
+                                        };
+
+                                        // Badge style for status column
+                                        $badgeClass = match ($status) {
+                                            'initial' => 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+                                            'process'
+                                                => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+                                            'pending'
+                                                => 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+                                            'approved'
+                                                => 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+                                            default
+                                                => 'bg-gray-100 text-gray-700 dark:bg-gray-900/40 dark:text-gray-400',
+                                        };
+
+                                        $badgeLabel = match ($status) {
+                                            'initial' => 'Initial',
+                                            'process' => 'Process',
+                                            'pending' => 'Pending',
+                                            'approved' => 'Approved',
+                                            default => ucfirst($status),
+                                        };
+                                    @endphp
                                     <td
                                         class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:bg-yellow-900/20 dark:text-zinc-300">
                                         Rp {{ number_format($item['val_currency'] ?? 0, 0, ',', '.') }}
@@ -279,62 +351,67 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                        </div>
+                                    <td
+                                        class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:bg-yellow-900/20 dark:text-zinc-300">
+                                        <button wire:click="updateApprovalStatus({{ $itemId }})"
+                                            class="active:scale-80 rounded-md bg-orange-100 px-2 py-1 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400">Pending</button>
                                     </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
                 </div>
-            @else
-                <div class="py-8 text-center text-zinc-500 dark:text-zinc-400">
-                    <p class="mt-2">Pilih SPK Number untuk melihat data material</p>
-                </div>
-            @endif
+                </td>
+                </tr>
+            @endforeach
+            </tbody>
+            </table>
         </div>
-
-        <!-- Save Button -->
-        <div class="mb-5 flex justify-end">
-            <button wire:click="updateStatusProject" @disabled(blank($spk_number)) wire:loading.attr="disabled"
-                class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-zinc-800">
-                <span wire:loading.remove wire:target="updateStatusProject">
-                    Nyatakan Selesai
-                </span>
-                <span wire:loading wire:target="updateStatusProject">
-                    Menyimpan...
-                </span>
-            </button>
+    @else
+        <div class="py-8 text-center text-zinc-500 dark:text-zinc-400">
+            <p class="mt-2">Pilih SPK Number untuk melihat data material</p>
         </div>
-
-        <!-- List Dokumen yang sudah diupload -->
-        @if (count($uploadedDocuments) > 0)
-            <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
-                <div class="mt-6">
-                    <h3 class="mb-3 text-lg font-medium text-zinc-800 dark:text-zinc-100">Dokumen Terupload:</h3>
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        @foreach ($uploadedDocuments as $doc)
-                            <div
-                                class="flex items-center rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-700/50">
-                                <svg class="mr-3 h-8 w-8 flex-shrink-0 text-blue-500" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                </svg>
-                                <div class="min-w-0 flex-1">
-                                    <p class="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                                        {{ $doc->original_filename }}</p>
-                                    <p class="text-xs text-zinc-500 dark:text-zinc-400">
-                                        {{ $doc->document_type }}
-                                        @if ($doc->uploaded_at)
-                                            • {{ \Carbon\Carbon::parse($doc->uploaded_at)->format('d M Y') }}
-                                        @endif
-                                    </p>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
         @endif
     </div>
+
+    <!-- Save Button -->
+    <div class="mb-5 flex justify-end">
+        <button wire:click="updateStatusProject" @disabled(blank($spk_number)) wire:loading.attr="disabled"
+            class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 {{ !$spk_number ? 'hidden' : 'block' }} rounded-lg px-8 py-3 font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-zinc-800">
+            <span wire:loading.remove wire:target="updateStatusProject">
+                Nyatakan Selesai
+            </span>
+            <span wire:loading wire:target="updateStatusProject">
+                Menyimpan...
+            </span>
+        </button>
+    </div>
+
+    <!-- List Dokumen yang sudah diupload -->
+    @if (count($uploadedDocuments) > 0)
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+            <div class="mt-6">
+                <h3 class="mb-3 text-lg font-medium text-zinc-800 dark:text-zinc-100">Dokumen Terupload:</h3>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($uploadedDocuments as $doc)
+                        <div
+                            class="flex items-center rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-700/50">
+                            <svg class="mr-3 h-8 w-8 flex-shrink-0 text-blue-500" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                                    {{ $doc->original_filename }}</p>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                                    {{ $doc->document_type }}
+                                    @if ($doc->uploaded_at)
+                                        • {{ \Carbon\Carbon::parse($doc->uploaded_at)->format('d M Y') }}
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
 </div>
