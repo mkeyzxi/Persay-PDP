@@ -40,7 +40,7 @@
                     </div>
 
                     <select wire:model.live="sortField"
-                        class="rounded-lg border-gray-200 bg-zinc-50 py-2 px-2 text-sm focus:border-[#5A6ACF] focus:ring-[#5A6ACF]/20 dark:border-zinc-700 dark:bg-zinc-700 dark:text-white">
+                        class="rounded-lg border-gray-200 bg-zinc-50 px-2 py-2 text-sm focus:border-[#5A6ACF] focus:ring-[#5A6ACF]/20 dark:border-zinc-700 dark:bg-zinc-700 dark:text-white">
                         <option value="">Urutkan Berdasarkan</option>
                         <option value="contract_end_date_asc">Tgl Berakhir ↑</option>
                         <option value="contract_end_date_desc">Tgl Berakhir ↓</option>
@@ -49,7 +49,7 @@
                     </select>
 
                     <select wire:model.live="perPage"
-                        class="rounded-lg border-gray-200 bg-zinc-50 py-2 px-2 text-sm focus:border-[#5A6ACF] focus:ring-[#5A6ACF]/20 dark:border-zinc-700 dark:bg-zinc-700 dark:text-white">
+                        class="rounded-lg border-gray-200 bg-zinc-50 px-2 py-2 text-sm focus:border-[#5A6ACF] focus:ring-[#5A6ACF]/20 dark:border-zinc-700 dark:bg-zinc-700 dark:text-white">
                         <option value="10">10 Baris</option>
                         <option value="25">25 Baris</option>
                         <option value="50">50 Baris</option>
@@ -97,7 +97,9 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-gray-700 dark:divide-gray-700 dark:text-zinc-300">
                         @forelse($projects as $p)
-                            <tr class="group transition-colors hover:bg-blue-50/30 dark:hover:bg-blue-900/10">
+                            <tr wire:click="$dispatch('navigate-to', { url: '{{ route('project.detail', $p->id) }}' })"
+                                onclick="window.location='{{ route('project.detail', $p->id) }}'"
+                                class="group cursor-pointer transition-colors hover:bg-blue-50/30 dark:hover:bg-blue-900/10">
                                 <td class="px-4 py-4">
                                     <div
                                         class="font-bold text-gray-900 transition-colors group-hover:text-[#5A6ACF] dark:text-white">

@@ -25,6 +25,10 @@ Route::get('/tabel-info', TabelInfo::class)
     ->middleware(['auth', 'verified'])
     ->name('tabel-info');
 
+Route::get('/project/{id}', App\Livewire\ProjectDetail::class)
+    ->middleware(['auth', 'verified'])
+    ->name('project.detail');
+
 // admin
 Route::middleware(['auth', 'is.admin'])
     ->get('/register', [RegisteredUserController::class, 'create'])

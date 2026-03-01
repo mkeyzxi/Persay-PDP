@@ -22,12 +22,12 @@ class RoleMiddleware
         }
 
         // 2. Cek apakah role user sesuai dengan yang diminta di Route?
-        // Ingat kolom di database user Anda adalah 'role'
-        if (Auth::user()->role !== $role) {
-            // Jika role tidak cocok, tendang keluar (403 Forbidden)
+        // Admin bisa mengakses semua fitur, skip pengecekan role
+        if (Auth::user()->role !== 'admin' && Auth::user()->role !== $role) {
+            // Jika role tidak cocok dan bukan admin, tendang keluar (403 Forbidden)
             abort(403, 'AKSES DITOLAK: Anda bukan ' . ucfirst($role));
         }
- if (Auth::user()->status !== 'active') {
+        if (Auth::user()->status !== 'active') {
             // Jika status tidak aktif, tendang keluar (403 Forbidden)
             abort(403, 'AKSES DITOLAK: Akun Anda tidak aktif.');
         }
