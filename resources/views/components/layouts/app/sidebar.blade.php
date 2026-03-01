@@ -28,6 +28,10 @@
                     :current="request()->routeIs('logistik.manual-input')" wire:navigate>
                     {{ __('Manual Input') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="table-cells" :href="route('logistik.data-management')"
+                    :current="request()->routeIs('logistik.data-management')" wire:navigate>
+                    {{ __('Kelola Data') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         @endif
 
@@ -41,6 +45,10 @@
                 <flux:sidebar.item icon="pencil-square" :href="route('akuntansi.manual-input')"
                     :current="request()->routeIs('akuntansi.manual-input')" wire:navigate>
                     {{ __('Manual Input') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="table-cells" :href="route('akuntansi.data-management')"
+                    :current="request()->routeIs('akuntansi.data-management')" wire:navigate>
+                    {{ __('Kelola Data') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
         @endif
@@ -89,6 +97,10 @@
                 <flux:sidebar.item icon="user-group" :href="route('admin.management-users')"
                     :current="request()->routeIs('admin.management-users')" wire:navigate>
                     {{ __('Management Users') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="table-cells" :href="route('admin.data-management')"
+                    :current="request()->routeIs('admin.data-management')" wire:navigate>
+                    {{ __('Kelola Data') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
         @endif

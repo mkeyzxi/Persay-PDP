@@ -7,6 +7,7 @@ use App\Livewire\TabelInfo;
 use App\Livewire\Logistik\UploadSap;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Logistik\ManualInput;
+use App\Livewire\DataManagement;
 use App\Livewire\Konstruksi\OriginalWork;
 use App\Livewire\Akuntansi\ProjectExecution;
 use App\Livewire\Akuntansi\ProjectExecutionExport;
@@ -44,6 +45,8 @@ Route::middleware(['auth', 'is.admin'])
     ->group(function () {
         Route::get('/management-users', App\Livewire\Admin\ManagementUsers::class)
             ->name('management-users');
+        Route::get('/data-management', DataManagement::class)
+            ->name('data-management');
     });
 
 
@@ -57,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/upload-sap', UploadSap::class)->name('upload-sap');
             Route::get('/manual-input', ManualInput::class)->name('manual-input');
+            Route::get('/data-management', DataManagement::class)->name('data-management');
         });
 
     Route::prefix('konstruksi')
@@ -86,6 +90,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/manual-input', App\Livewire\Akuntansi\ManualInput::class)
                 ->name('manual-input');
+            Route::get('/data-management', DataManagement::class)
+                ->name('data-management');
             Route::get('/project-execution', ProjectExecution::class)
                 ->name('project-execution');
             Route::get('/project-execution-export', ProjectExecutionExport::class)
