@@ -18,8 +18,8 @@
         </flux:sidebar.group>
 
         {{-- Menu Logistik --}}
-        @if (auth()->user()?->role === 'logistik')
-            <flux:sidebar.group :heading="__('Input Data')" class="grid">
+        @if (in_array(auth()->user()?->role, ['logistik', 'admin']))
+            <flux:sidebar.group :heading="__('Logistik')" class="grid">
                 <flux:sidebar.item icon="cloud-arrow-up" :href="route('logistik.upload-sap')"
                     :current="request()->routeIs('logistik.upload-sap')" wire:navigate>
                     {{ __('Upload SAP') }}
@@ -27,6 +27,10 @@
                 <flux:sidebar.item icon="pencil-square" :href="route('logistik.manual-input')"
                     :current="request()->routeIs('logistik.manual-input')" wire:navigate>
                     {{ __('Manual Input') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="table-cells" :href="route('logistik.data-management')"
+                    :current="request()->routeIs('logistik.data-management')" wire:navigate>
+                    {{ __('Kelola Data') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
         @endif
@@ -42,8 +46,14 @@
                     :current="request()->routeIs('akuntansi.manual-input')" wire:navigate>
                     {{ __('Manual Input') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="table-cells" :href="route('akuntansi.data-management')"
+                    :current="request()->routeIs('akuntansi.data-management')" wire:navigate>
+                    {{ __('Kelola Data') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
+        @endif
 
+        @if (in_array(auth()->user()?->role, ['akuntansi', 'admin']))
             <flux:sidebar.group :heading="__('Manajemen Project')" class="grid">
                 <flux:sidebar.item icon="clipboard-document-list" :href="route('akuntansi.my-take-list')"
                     :current="request()->routeIs('akuntansi.my-take-list')" wire:navigate>
@@ -64,8 +74,8 @@
         @endif
 
         {{-- Menu Konstruksi --}}
-        @if (auth()->user()?->role === 'konstruksi')
-            <flux:sidebar.group :heading="__('Manajemen Project')" class="grid">
+        @if (in_array(auth()->user()?->role, ['konstruksi', 'admin']))
+            <flux:sidebar.group :heading="__('Konstruksi')" class="grid">
                 <flux:sidebar.item icon="clipboard-document-list" :href="route('konstruksi.my-take-list')"
                     :current="request()->routeIs('konstruksi.my-take-list')" wire:navigate>
                     {{ __('My Take List') }}
@@ -87,6 +97,10 @@
                 <flux:sidebar.item icon="user-group" :href="route('admin.management-users')"
                     :current="request()->routeIs('admin.management-users')" wire:navigate>
                     {{ __('Management Users') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="table-cells" :href="route('admin.data-management')"
+                    :current="request()->routeIs('admin.data-management')" wire:navigate>
+                    {{ __('Kelola Data') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
         @endif

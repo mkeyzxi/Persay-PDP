@@ -92,6 +92,7 @@ class TabelInfo extends Component
             }
 
             return (object) [
+                'id' => $project->id,
                 'spk_number' => $project->spk_number,
                 'project_name' => $project->project_name,
                 'contract_end_date' => $project->contract_end_date,

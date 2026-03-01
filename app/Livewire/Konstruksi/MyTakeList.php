@@ -117,6 +117,7 @@ class MyTakeList extends Component
                     'wbs_element' => $item->wbs_element,
                     'asset_number' => $item->asset_number,
                     'remarks' => $item->remarks,
+                    'approval_status' => $item->approval_status ?? 'initial',
                 ];
             }
         }
@@ -182,11 +183,29 @@ class MyTakeList extends Component
         ]);
 
         foreach ($this->material_inputs as $itemId => $data) {
+            // Determine approval_status:
+            // 1. If asset_number is filled → 'approved'
+            // 2. If still 'initial' and quantity_installed is changed → 'process'
+            // 3. Otherwise keep current status
+            $currentStatus = $data['approval_status'] ?? 'initial';
+            $assetNumber = trim($data['asset_number'] ?? '');
+
+            if (!empty($assetNumber)) {
+                $newStatus = 'approved';
+            } elseif ($currentStatus === 'initial') {
+                $newStatus = 'process';
+            } else {
+                $newStatus = $currentStatus;
+            }
+
             MaterialIssuesItems::where('id', $itemId)->update([
                 'quantity_installed' => $data['quantity_installed'],
-                'asset_number' => $data['asset_number'] ?? null,
-                'remarks' => $data['remarks'] ?? null,
+                'asset_number' => !empty($assetNumber) ? $assetNumber : null,
+                'approval_status' => $newStatus,
             ]);
+
+            // Update the local array so the UI reflects the change immediately
+            $this->material_inputs[$itemId]['approval_status'] = $newStatus;
         }
 
         session()->flash('message', 'Progress berhasil disimpan!');

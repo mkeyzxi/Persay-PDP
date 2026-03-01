@@ -248,11 +248,44 @@
                                     class="bg-yellow-400 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-yellow-900 dark:bg-yellow-500/80">
                                     <div>NILAI PDP</div>
                                 </th>
+
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-200 bg-white dark:divide-zinc-700 dark:bg-zinc-800">
                             @php $no = 1; @endphp
                             @foreach ($material_inputs as $itemId => $item)
+                                @php
+                                    $status = $item['approval_status'] ?? 'initial';
+
+                                    // Color for selisih column based on approval_status
+                                    $statusColor = match ($status) {
+                                        'initial' => 'text-red-600 dark:text-red-400',
+                                        'process' => 'text-yellow-600 dark:text-yellow-400',
+                                        'pending' => 'text-orange-600 dark:text-orange-400',
+                                        'approved' => 'text-green-600 dark:text-green-400',
+                                        default => 'text-gray-500 dark:text-gray-400',
+                                    };
+
+                                    // Badge style for status column
+                                    $badgeClass = match ($status) {
+                                        'initial' => 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+                                        'process'
+                                            => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+                                        'pending'
+                                            => 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+                                        'approved'
+                                            => 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+                                        default => 'bg-gray-100 text-gray-700 dark:bg-gray-900/40 dark:text-gray-400',
+                                    };
+
+                                    $badgeLabel = match ($status) {
+                                        'initial' => 'Initial',
+                                        'process' => 'Process',
+                                        'pending' => 'Pending',
+                                        'approved' => 'Approved',
+                                        default => ucfirst($status),
+                                    };
+                                @endphp
                                 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-700">
                                     <td
                                         class="whitespace-nowrap px-3 py-3 text-center text-sm text-zinc-900 dark:text-zinc-100">
@@ -275,17 +308,23 @@
                                         class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center dark:bg-yellow-900/20">
                                         <input type="number" step="0.01"
                                             wire:model.live="material_inputs.{{ $itemId }}.quantity_installed"
-                                            class="w-24 rounded border-2 border-yellow-400 ...">
-
+                                            class="w-24 rounded border-2 border-yellow-400 bg-white px-2 py-1 text-center text-sm dark:bg-zinc-700 dark:text-zinc-100">
                                     </td>
+
+                                    {{-- Selisih with color based on approval_status --}}
                                     <td
-                                        class="{{ ($item['selisih'] ?? 0) > 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400' }} whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
+                                        class="{{ $statusColor }} whitespace-nowrap px-3 py-3 text-center text-sm font-bold">
                                         {{ number_format($item['selisih'] ?? 0, 2) }}
                                     </td>
+
+                                    {{-- Nilai PDP --}}
                                     <td
                                         class="whitespace-nowrap bg-yellow-50 px-3 py-3 text-center text-sm text-zinc-600 dark:bg-yellow-900/20 dark:text-zinc-300">
                                         Rp {{ number_format($item['val_currency'] ?? 0, 0, ',', '.') }}
                                     </td>
+
+
+
                                 </tr>
                             @endforeach
                         </tbody>
