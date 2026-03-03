@@ -13,9 +13,12 @@
 
         </div>
         <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-700">
-            {{-- <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" /> --}}
-            {{-- <livewire:tabel-rekap /> --}}
-            <livewire:grafik-project />
+            {{-- <livewire:grafik-project /> --}}
+            <livewire:rekap-dashboard />
         </div>
+        {{-- <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-700">
+            <livewire:grafik-project />
+
+        </div> --}}
     </div>
 </x-layouts.app>

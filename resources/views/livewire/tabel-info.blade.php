@@ -92,6 +92,9 @@
                             <th class="px-4 py-4 font-semibold">Kendala</th>
                             <th class="px-4 py-4 text-center font-semibold">Tindak Lanjut</th>
                             <th class="px-4 py-4 text-center font-semibold">Status</th>
+                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'akuntansi')
+                                <th class="px-4 py-4 text-center font-semibold">Pembayaran</th>
+                            @endif
                             <th class="px-4 py-4 text-center font-semibold">Klaster Umur</th>
                         </tr>
                     </thead>
@@ -176,6 +179,29 @@
                                         {{ $p->status ?? '-' }}
                                     </span>
                                 </td>
+                                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'akuntansi')
+                                    <td class="px-4 py-4 text-center">
+                                        @php
+                                            $paymentClass = match ($p->payment_status ?? 'unpaid') {
+                                                'paid'
+                                                    => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+                                                'in_progress'
+                                                    => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                                                default
+                                                    => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                                            };
+                                            $paymentLabel = match ($p->payment_status ?? 'unpaid') {
+                                                'paid' => 'Terbayar',
+                                                'in_progress' => 'In Progress',
+                                                default => 'Belum Bayar',
+                                            };
+                                        @endphp
+                                        <span
+                                            class="{{ $paymentClass }} rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+                                            {{ $paymentLabel }}
+                                        </span>
+                                    </td>
+                                @endif
                                 <td class="px-4 py-4 text-center">
                                     <span
                                         class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/20 dark:text-purple-300">
@@ -185,7 +211,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" class="px-4 py-16 text-center">
+                                <td colspan="13" class="px-4 py-16 text-center">
                                     <div class="flex flex-col items-center">
                                         <div class="rounded-full bg-zinc-50 p-4 dark:bg-gray-800">
                                             <svg class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24"

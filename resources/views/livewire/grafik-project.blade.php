@@ -1,3 +1,7 @@
+{{--
+GRAFIK PROJECT - DIKOMENTARI SEMENTARA
+Diganti dengan komponen rekap-dashboard
+
 <div class="flex h-full flex-col rounded-xl bg-white p-4 shadow-sm dark:bg-zinc-800">
     <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-700">
         <div>
@@ -141,3 +145,4 @@
         }));
     </script>
 @endscript
+--}}

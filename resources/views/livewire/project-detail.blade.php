@@ -20,16 +20,29 @@
                         {{ $project->project_name }}
                     </p>
                 </div>
-                <div>
+                <div class="flex gap-2">
                     @php
                         $statusClass = match ($project->status) {
                             'CLOSED' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
                             'OPEN' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
                             default => 'bg-gray-100 text-gray-600 dark:bg-zinc-700 dark:text-zinc-400',
                         };
+                        $paymentClass = match ($project->payment_status ?? 'unpaid') {
+                            'paid' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+                            'in_progress' => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                            default => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                        };
+                        $paymentLabel = match ($project->payment_status ?? 'unpaid') {
+                            'paid' => 'Terbayar',
+                            'in_progress' => 'Pembayaran In Progress',
+                            default => 'Belum Bayar',
+                        };
                     @endphp
                     <span class="{{ $statusClass }} rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider">
                         {{ $project->status ?? '-' }}
+                    </span>
+                    <span class="{{ $paymentClass }} rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider">
+                        {{ $paymentLabel }}
                     </span>
                 </div>
             </div>

@@ -33,6 +33,7 @@ class DataManagement extends Component
 	public $edit_vendor_name;
 	public $edit_unit_code;
 	public $edit_fiscal_year;
+	public $edit_payment_status;
 
 	// Material Issue edit fields
 	public $edit_sap_doc_no;
@@ -105,6 +106,7 @@ class DataManagement extends Component
 		$this->edit_vendor_name = $project->vendor_name;
 		$this->edit_unit_code = $project->unit_code;
 		$this->edit_fiscal_year = $project->fiscal_year;
+		$this->edit_payment_status = $project->payment_status;
 		$this->showEditModal = true;
 	}
 
@@ -155,7 +157,8 @@ class DataManagement extends Component
 			'edit_project_name' => 'nullable|string|max:255',
 			'edit_vendor_name'  => 'nullable|string|max:255',
 			'edit_unit_code'    => 'nullable|string|max:50',
-			'edit_fiscal_year'  => 'nullable|integer|min:2000|max:2100',
+			'edit_fiscal_year'    => 'nullable|integer|min:2000|max:2100',
+			'edit_payment_status' => 'nullable|in:unpaid,in_progress,paid',
 		]);
 
 		try {
@@ -166,7 +169,8 @@ class DataManagement extends Component
 				'project_name' => $this->edit_project_name,
 				'vendor_name'  => $this->edit_vendor_name,
 				'unit_code'    => $this->edit_unit_code,
-				'fiscal_year'  => $this->edit_fiscal_year,
+				'fiscal_year'      => $this->edit_fiscal_year,
+				'payment_status'   => $this->edit_payment_status,
 			]);
 			$this->closeModals();
 			session()->flash('success', 'Project berhasil diupdate!');

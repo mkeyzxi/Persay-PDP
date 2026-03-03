@@ -73,6 +73,7 @@
                                 <th class="px-4 py-3">Vendor</th>
                                 <th class="px-4 py-3">Unit</th>
                                 <th class="px-4 py-3">Tahun</th>
+                                <th class="px-4 py-3 text-center">Pembayaran</th>
                                 <th class="px-4 py-3 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -92,6 +93,27 @@
                                     <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                                         {{ $item->fiscal_year ?? '-' }}</td>
                                     <td class="px-4 py-3 text-center">
+                                        @php
+                                            $paymentClass = match ($item->payment_status ?? 'unpaid') {
+                                                'paid'
+                                                    => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+                                                'in_progress'
+                                                    => 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                                                default
+                                                    => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                                            };
+                                            $paymentLabel = match ($item->payment_status ?? 'unpaid') {
+                                                'paid' => 'Terbayar',
+                                                'in_progress' => 'In Progress',
+                                                default => 'Belum Bayar',
+                                            };
+                                        @endphp
+                                        <span
+                                            class="{{ $paymentClass }} rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                                            {{ $paymentLabel }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
                                         <div class="flex items-center justify-center gap-2">
                                             <button wire:click="editProject({{ $item->id }})"
                                                 class="rounded-lg bg-amber-100 px-3 py-1.5 text-xs font-medium text-amber-700 transition-colors hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/50">
@@ -107,7 +129,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">
+                                    <td colspan="8" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">
                                         Tidak ada data project.</td>
                                 </tr>
                             @endforelse
@@ -349,6 +371,16 @@
                                     Pekerjaan</label>
                                 <input type="text" wire:model="edit_project_name"
                                     class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-zinc-300">Status
+                                    Pembayaran</label>
+                                <select wire:model="edit_payment_status"
+                                    class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white">
+                                    <option value="unpaid">Belum Bayar</option>
+                                    <option value="in_progress">In Progress</option>
+                                    <option value="paid">Terbayar</option>
+                                </select>
                             </div>
                         </div>
                         <div class="mt-6 flex justify-end gap-3">
