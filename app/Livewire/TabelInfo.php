@@ -115,6 +115,7 @@ class TabelInfo extends Component
 
                 'target_completion_date' => $project->target_completion_date,
                 'status' => $project->status,
+                'payment_status' => $project->payment_status,
             ];
         });
 

@@ -25,9 +25,10 @@ class UploadSap extends Component
         $this->validate();
 
         try {
-            Excel::import(new SapImport, $this->sapFile);
+            $importer = new SapImport;
+            Excel::import($importer, $this->sapFile);
             $this->reset('sapFile');
-            session()->flash('success', 'Data SAP berhasil diimport dari Excel!');
+            session()->flash('success', $importer->getSummary());
         } catch (\Exception $e) {
             session()->flash('error', 'Gagal import: ' . $e->getMessage());
         }
