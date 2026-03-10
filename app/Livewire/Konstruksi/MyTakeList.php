@@ -41,7 +41,11 @@ class MyTakeList extends Component
     public $doc_type;
     public $doc_file;
 
-    // --- 4. Dropdown Options ---
+    // --- 4. PDF Preview ---
+    public $previewDocUrl = null;
+    public $previewDocName = null;
+
+    // --- 5. Dropdown Options ---
     public $availableProjects = [];
 
     public function mount()
@@ -248,6 +252,21 @@ class MyTakeList extends Component
         session()->flash('message', 'Dokumen berhasil diupload!');
     }
 
+
+    public function previewDocument($docId)
+    {
+        $doc = ProjectDocuments::find($docId);
+        if ($doc) {
+            $this->previewDocUrl = asset('storage/' . $doc->file_path);
+            $this->previewDocName = $doc->original_filename;
+        }
+    }
+
+    public function closePreview()
+    {
+        $this->previewDocUrl = null;
+        $this->previewDocName = null;
+    }
 
     public function render()
     {

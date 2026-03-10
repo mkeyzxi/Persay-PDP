@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\Projects;
+use App\Models\OpeningBalance;
 use Illuminate\Support\Facades\DB;
 
 class GrafikProject extends Component
@@ -26,9 +27,15 @@ class GrafikProject extends Component
             ? Carbon::now()
             : Carbon::createFromDate($this->year, 12, 31)->endOfDay();
 
-        // 2. Hitung Saldo Awal Tahun (Global)
-        // Ambil Total Nilai Kontrak Semua Proyek
-        $totalBudget = Projects::sum('contract_value') ?? 0;
+        // 2. Hitung Saldo Awal Tahun (dari Opening Balance jika ada)
+        $activeBalance = OpeningBalance::getBalanceForDate($startDate);
+
+        if ($activeBalance) {
+            $totalBudget = (float) $activeBalance->amount;
+        } else {
+            // Fallback: Ambil Total Nilai Kontrak Semua Proyek
+            $totalBudget = Projects::sum('contract_value') ?? 0;
+        }
 
         // Hitung pengeluaran tahun-tahun sebelumnya (Dosa Masa Lalu)
         $previousYearsExpense = DB::table('material_issues_items')

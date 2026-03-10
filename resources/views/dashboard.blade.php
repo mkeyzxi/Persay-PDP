@@ -13,6 +13,9 @@
 
         </div>
         <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-700">
+            <livewire:dashboard-saldo-awal />
+        </div>
+        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-700">
             {{-- <livewire:grafik-project /> --}}
             <livewire:rekap-dashboard />
         </div>

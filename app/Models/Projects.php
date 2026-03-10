@@ -100,9 +100,17 @@ class Projects extends Model
     //Cjart
     public static function getGlobalTrend($year)
     {
-        // 1. Ambil TOTAL Nilai Kontrak dari SEMUA Proyek (Pagu Perusahaan)
-        // Opsional: Filter hanya proyek yang statusnya OPEN/CLOSED tahun ini
-        $totalBudget = self::sum('contract_value') ?? 0;
+        // 1. Ambil TOTAL Budget dari Opening Balance jika ada
+        $activeBalance = \App\Models\OpeningBalance::getBalanceForDate(
+            \Carbon\Carbon::createFromDate($year, 1, 1)
+        );
+
+        if ($activeBalance) {
+            $totalBudget = (float) $activeBalance->amount;
+        } else {
+            // Fallback: Ambil Total Nilai Kontrak dari SEMUA Proyek
+            $totalBudget = self::sum('contract_value') ?? 0;
+        }
 
         // 2. Ambil SEMUA Pengeluaran Material dari SEMUA Proyek
         // Hapus baris ->where('material_issues.project_id', $this->id)
