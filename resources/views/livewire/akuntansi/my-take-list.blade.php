@@ -391,7 +391,7 @@
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($uploadedDocuments as $doc)
                         <div
-                            class="flex items-center rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-700/50">
+                            class="group flex items-center rounded-lg border border-zinc-200 bg-zinc-50 p-3 transition-all hover:border-blue-400 hover:bg-blue-50 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-700/50 dark:hover:border-blue-500 dark:hover:bg-blue-900/20">
                             <svg class="mr-3 h-8 w-8 flex-shrink-0 text-blue-500" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -407,8 +407,91 @@
                                     @endif
                                 </p>
                             </div>
+                            <div class="ml-2 flex flex-shrink-0 items-center gap-1">
+                                <!-- Tombol Lihat -->
+                                <button wire:click="previewDocument({{ $doc->id }})"
+                                    class="rounded-lg p-2 text-blue-600 transition-colors hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900/50"
+                                    title="Lihat Dokumen">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
+                                <!-- Tombol Download -->
+                                <a href="{{ asset('storage/' . $doc->file_path) }}" download
+                                    class="rounded-lg p-2 text-green-600 transition-colors hover:bg-green-100 dark:text-green-400 dark:hover:bg-green-900/50"
+                                    title="Download Dokumen">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- PDF Preview Modal -->
+    @if ($previewDocUrl)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            wire:click.self="closePreview">
+            <div
+                class="relative mx-4 flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-zinc-800">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+                    <div class="flex items-center gap-3">
+                        <svg class="h-6 w-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        <h3 class="max-w-md truncate text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                            {{ $previewDocName }}
+                        </h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <!-- Open in new tab -->
+                        <a href="{{ $previewDocUrl }}" target="_blank"
+                            class="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
+                            title="Buka di Tab Baru">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                        <!-- Download -->
+                        <a href="{{ $previewDocUrl }}" download
+                            class="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
+                            title="Download">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                        </a>
+                        <!-- Close -->
+                        <button wire:click="closePreview"
+                            class="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-red-100 hover:text-red-600 dark:text-zinc-400 dark:hover:bg-red-900/50 dark:hover:text-red-400"
+                            title="Tutup">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <!-- Modal Body: PDF Viewer -->
+                <div class="flex-1 bg-zinc-100 dark:bg-zinc-900">
+                    <iframe src="{{ $previewDocUrl }}" class="h-full w-full border-0"
+                        title="PDF Preview: {{ $previewDocName }}"></iframe>
                 </div>
             </div>
         </div>

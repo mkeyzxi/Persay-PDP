@@ -69,6 +69,10 @@ class MyTakeList extends Component
     // MATERIAL
     public $material_inputs = [];
 
+    // PDF PREVIEW
+    public $previewDocUrl = null;
+    public $previewDocName = null;
+
     // OPTIONS
     public $availableProjects = [];
 
@@ -267,6 +271,21 @@ class MyTakeList extends Component
             'slo_date',
             'material_inputs',
         ]);
+    }
+
+    public function previewDocument($docId)
+    {
+        $doc = ProjectDocuments::find($docId);
+        if ($doc) {
+            $this->previewDocUrl = asset('storage/' . $doc->file_path);
+            $this->previewDocName = $doc->original_filename;
+        }
+    }
+
+    public function closePreview()
+    {
+        $this->previewDocUrl = null;
+        $this->previewDocName = null;
     }
 
     public function render()

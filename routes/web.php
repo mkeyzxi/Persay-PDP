@@ -96,6 +96,8 @@ Route::middleware(['auth'])->group(function () {
                 ->name('project-execution');
             Route::get('/project-execution-export', ProjectExecutionExport::class)
                 ->name('project-execution-export');
+            Route::get('/saldo-awal', App\Livewire\Akuntansi\SaldoAwal::class)
+                ->name('saldo-awal');
         });
 });
 

@@ -50,6 +50,10 @@
                     :current="request()->routeIs('akuntansi.data-management')" wire:navigate>
                     {{ __('Kelola Data') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="banknotes" :href="route('akuntansi.saldo-awal')"
+                    :current="request()->routeIs('akuntansi.saldo-awal')" wire:navigate>
+                    {{ __('Saldo Awal') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         @endif
 
