@@ -82,6 +82,32 @@ class OpeningBalance extends Model
 	}
 
 	/**
+	 * Hitung sisa saldo sampai tanggal tertentu
+	 * Hanya menghitung project yang contract_start_date <= $upToDate
+	 */
+	public function getRemainingBalanceUpTo($upToDate): float
+	{
+		$upToDate = Carbon::parse($upToDate);
+		$periodStart = $this->period_start;
+
+		$totalContractValue = Projects::where(function ($query) use ($upToDate, $periodStart) {
+			$query->where('contract_start_date', '<=', $upToDate)
+				->where(function ($q) use ($upToDate, $periodStart) {
+					$q->where('contract_start_date', '>=', $periodStart)
+						->orWhere(function ($inner) use ($periodStart) {
+							$inner->where('contract_start_date', '<=', $periodStart)
+								->where(function ($i) use ($periodStart) {
+									$i->whereNull('contract_end_date')
+										->orWhere('contract_end_date', '>=', $periodStart);
+								});
+						});
+				});
+		})->sum('contract_value');
+
+		return (float) $this->amount - (float) $totalContractValue;
+	}
+
+	/**
 	 * Status saldo: Aktif, Kadaluarsa, atau Belum Aktif
 	 */
 	public function getStatusAttribute(): string

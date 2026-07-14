@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-zinc-50 p-4 transition-colors md:p-6 dark:bg-zinc-900">
+<div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
     <div class="mx-auto max-w-full">
 
         <div class="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">

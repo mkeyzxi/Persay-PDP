@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class MaterialIssues extends Model
 {
-    protected $fillable = [
+    
+    use HasFactory;
+protected $fillable = [
         'project_id',
         'sap_doc_no',
         'posting_date',

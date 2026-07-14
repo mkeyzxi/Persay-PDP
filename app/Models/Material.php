@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Material extends Model
 {
-    protected $fillable = [
+    
+    use HasFactory;
+protected $fillable = [
         'sap_material_code',
         'material_description',
         'uom',

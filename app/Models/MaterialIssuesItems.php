@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class MaterialIssuesItems extends Model
 {
-    protected $fillable = [
+    
+    use HasFactory;
+protected $fillable = [
         'material_issue_id',
         'material_id',
         'quantity_sap',

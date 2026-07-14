@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-zinc-50 p-6 transition-colors dark:bg-zinc-900">
+<div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
     <div class="mx-auto max-w-4xl">
 
         <!-- Header -->
