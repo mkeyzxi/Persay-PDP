@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-zinc-50 p-6 transition-colors dark:bg-zinc-900">
+<div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
     <div class="mx-auto max-w-6xl">
 
         <!-- Header -->
@@ -169,6 +169,132 @@
                     @endif
                 </div>
             </form>
+        </div>
+
+        <!-- Perkembangan Bulanan -->
+        <div class="mb-6 rounded-xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+            <div
+                class="mb-4 flex flex-col gap-4 border-b pb-4 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-700">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
+                    Perkembangan Saldo Bulanan
+                </h2>
+                <div class="flex items-center gap-3">
+                    <label class="text-sm font-medium text-gray-600 dark:text-zinc-400">Tahun:</label>
+                    <select wire:model.live="filterYear"
+                        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-700 dark:text-white">
+                        @foreach ($availableYears as $year)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            @if ($monthlyBreakdown->isNotEmpty())
+                {{-- Summary Card --}}
+                @php
+                    $firstMonth = $monthlyBreakdown->first();
+                    $lastMonthWithData = $monthlyBreakdown->last();
+                @endphp
+                <div class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-4">
+                    <div
+                        class="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
+                        <p class="text-xs font-medium text-blue-600 dark:text-blue-400">Saldo Awal Periode</p>
+                        <p class="text-lg font-bold text-blue-900 dark:text-blue-100">
+                            Rp {{ number_format($firstMonth['saldo_awal'], 0, ',', '.') }}
+                        </p>
+                    </div>
+                    <div
+                        class="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+                        <p class="text-xs font-medium text-amber-600 dark:text-amber-400">Total Dana Terpakai</p>
+                        <p class="text-lg font-bold text-amber-900 dark:text-amber-100">
+                            Rp {{ number_format($lastMonthWithData['accumulated_value'], 0, ',', '.') }}
+                        </p>
+                    </div>
+                    <div
+                        class="rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-900/20">
+                        <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400">Sisa Saldo Terkini</p>
+                        <p
+                            class="{{ $lastMonthWithData['remaining'] >= 0 ? 'text-emerald-900 dark:text-emerald-100' : 'text-red-600 dark:text-red-400' }} text-lg font-bold">
+                            Rp {{ number_format($lastMonthWithData['remaining'], 0, ',', '.') }}
+                        </p>
+                    </div>
+                    <div
+                        class="rounded-lg border border-purple-200 bg-purple-50 p-3 dark:border-purple-800 dark:bg-purple-900/20">
+                        <p class="text-xs font-medium text-purple-600 dark:text-purple-400">Persentase Terpakai</p>
+                        <p class="text-lg font-bold text-purple-900 dark:text-purple-100">
+                            {{ $lastMonthWithData['percentage'] }}%
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Monthly Table --}}
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead
+                            class="border-b border-gray-200 text-xs uppercase text-gray-500 dark:border-zinc-700 dark:text-zinc-400">
+                            <tr>
+                                <th class="px-4 py-3">Bulan</th>
+                                <th class="px-4 py-3">Kontrak Baru</th>
+                                <th class="px-4 py-3">Akumulasi Terpakai</th>
+                                <th class="px-4 py-3">Sisa Saldo</th>
+                                <th class="min-w-[200px] px-4 py-3">Pemakaian</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-zinc-700">
+                            @foreach ($monthlyBreakdown as $data)
+                                <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-zinc-700/50">
+                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                                        {{ $data['name'] }}
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-700 dark:text-zinc-300">
+                                        @if ($data['monthly_value'] > 0)
+                                            <span class="font-semibold text-amber-600 dark:text-amber-400">
+                                                Rp {{ number_format($data['monthly_value'], 0, ',', '.') }}
+                                            </span>
+                                        @else
+                                            <span class="text-gray-400 dark:text-zinc-500">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 font-semibold text-gray-900 dark:text-white">
+                                        Rp {{ number_format($data['accumulated_value'], 0, ',', '.') }}
+                                    </td>
+                                    <td
+                                        class="{{ $data['remaining'] >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400' }} px-4 py-3 font-semibold">
+                                        Rp {{ number_format($data['remaining'], 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-2">
+                                            <div class="h-2.5 w-full rounded-full bg-gray-200 dark:bg-zinc-600">
+                                                <div class="{{ $data['percentage'] <= 50 ? 'bg-emerald-500' : ($data['percentage'] <= 80 ? 'bg-amber-500' : 'bg-red-500') }} h-2.5 rounded-full transition-all duration-500"
+                                                    style="width: {{ $data['percentage'] }}%">
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="min-w-[3rem] text-xs font-medium text-gray-600 dark:text-zinc-400">
+                                                {{ $data['percentage'] }}%
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="py-10 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-300 dark:text-zinc-600"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <p class="mt-3 text-gray-500 dark:text-zinc-400">
+                        Tidak ada data saldo untuk tahun <strong>{{ $filterYear }}</strong>.
+                    </p>
+                    <p class="mt-1 text-sm text-gray-400 dark:text-zinc-500">
+                        Pastikan ada saldo awal yang periodenya mencakup tahun ini.
+                    </p>
+                </div>
+            @endif
         </div>
 
         <!-- Data Table -->

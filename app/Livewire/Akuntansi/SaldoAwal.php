@@ -4,7 +4,9 @@ namespace App\Livewire\Akuntansi;
 
 use Livewire\Component;
 use App\Models\OpeningBalance;
+use App\Models\Projects;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class SaldoAwal extends Component
 {
@@ -20,6 +22,18 @@ class SaldoAwal extends Component
 
 	// Delete confirmation
 	public $confirmingDeleteId = null;
+
+	// Filter properties
+	public $filterYear;
+	public $filterMonth = null;
+
+	/**
+	 * Mount component
+	 */
+	public function mount()
+	{
+		$this->filterYear = date('Y');
+	}
 
 	/**
 	 * Validation rules
@@ -147,6 +161,68 @@ class SaldoAwal extends Component
 	/**
 	 * Render view
 	 */
+	/**
+	 * Generate monthly breakdown for the selected year
+	 */
+	public function getMonthlyBreakdown()
+	{
+		$year = $this->filterYear;
+		$months = [];
+		$monthNames = [
+			1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+			5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+			9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+		];
+
+		// Find the active balance that covers this year
+		$yearStart = Carbon::create($year, 1, 1);
+		$yearEnd = Carbon::create($year, 12, 31);
+
+		$balance = OpeningBalance::where('period_start', '<=', $yearEnd)
+			->where('period_end', '>=', $yearStart)
+			->first();
+
+		if (!$balance) {
+			return collect();
+		}
+
+		$saldoAwal = (float) $balance->amount;
+
+		foreach ($monthNames as $monthNum => $monthName) {
+			$monthStart = Carbon::create($year, $monthNum, 1);
+			$monthEnd = $monthStart->copy()->endOfMonth();
+
+			// Skip months outside the balance period
+			if ($monthEnd->lt($balance->period_start) || $monthStart->gt($balance->period_end)) {
+				continue;
+			}
+
+			// Contract value added in this specific month
+			$monthlyContractValue = Projects::whereBetween('contract_start_date', [$monthStart, $monthEnd])
+				->sum('contract_value');
+
+			// Accumulated contract value up to end of this month
+			$accumulatedValue = Projects::where('contract_start_date', '<=', $monthEnd)
+				->where('contract_start_date', '>=', $balance->period_start)
+				->sum('contract_value');
+
+			$sisaSaldo = $saldoAwal - (float) $accumulatedValue;
+			$percentage = $saldoAwal > 0 ? min(100, round(((float) $accumulatedValue / $saldoAwal) * 100, 1)) : 0;
+
+			$months[] = [
+				'month' => $monthNum,
+				'name' => $monthName,
+				'monthly_value' => (float) $monthlyContractValue,
+				'accumulated_value' => (float) $accumulatedValue,
+				'remaining' => $sisaSaldo,
+				'percentage' => $percentage,
+				'saldo_awal' => $saldoAwal,
+			];
+		}
+
+		return collect($months);
+	}
+
 	public function render()
 	{
 		$balances = OpeningBalance::orderBy('period_start', 'desc')->get();
@@ -158,10 +234,30 @@ class SaldoAwal extends Component
 		});
 
 		$activeBalance = OpeningBalance::getActiveBalance();
+		if ($activeBalance) {
+			$activeBalance->remaining = $activeBalance->getRemainingBalance();
+		}
+
+		// Monthly breakdown
+		$monthlyBreakdown = $this->getMonthlyBreakdown();
+
+		// Available years for filter
+		$availableYears = OpeningBalance::selectRaw('YEAR(period_start) as year')
+			->union(OpeningBalance::selectRaw('YEAR(period_end) as year'))
+			->distinct()
+			->pluck('year')
+			->sort()
+			->values();
+
+		if ($availableYears->isEmpty()) {
+			$availableYears = collect([date('Y')]);
+		}
 
 		return view('livewire.akuntansi.saldo-awal', [
 			'balances' => $balancesWithRemaining,
 			'activeBalance' => $activeBalance,
+			'monthlyBreakdown' => $monthlyBreakdown,
+			'availableYears' => $availableYears,
 		]);
 	}
 }
